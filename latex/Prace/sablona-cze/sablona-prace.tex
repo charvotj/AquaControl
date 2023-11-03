@@ -36,7 +36,7 @@
 
 \usepackage[
 	breaklinks=true,		% Hypertextové odkazy mohou obsahovat zalomení řádku
-	hypertexnames=false % Názvy hypertext. odkazů budou tvořeny nezávisle na názvech TeXu
+	hypertexnames=false, % Názvy hypertext. odkazů budou tvořeny nezávisle na názvech TeXu
 ]{hyperref}						% Balíček 'hyperref' pro sazbu hypertextových odkazů
 											% Nutné pro použití příkazu 'pdfsettings' balíčku 'thesis'
 
@@ -106,6 +106,26 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%      !!! VLASTNÍ BALÍČKY A NASTAVENÍ !!!        %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%====== Units =====
+\usepackage{siunitx}
+\sisetup{inter-unit-product =\ensuremath{\cdot}}
+\sisetup{group-digits = integer}
+\sisetup{output-decimal-marker = {,}}
+\sisetup{exponent-product = \ensuremath{\cdot}}
+\sisetup{separate-uncertainty}
+\sisetup{tight-spacing = false}
+%\sisetup{scientific-notation = true}
+%\sisetup{round-mode=places,round-precision=4}
+%\sisetup{evaluate-expression}
+
+%====== Hyperlinky ====== 
+\hypersetup{allbordercolors={1 1 1}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%      Definice informací o dokumentu             %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -169,7 +189,7 @@
 % Vysázení stránky s rozšířeným abstraktem
 % (pokud píšete práci v češtině či slovenštině, vložení rozšířeného abstraktu zrušte;
 %  pro semestrální projekt také není potřeba rozšířený abstrakt uvádět)
-\input{text/rozsireny_abstrakt}
+% \input{text/rozsireny_abstrakt}
 
 %%% Vysázení citace práce
 \makecitation
@@ -197,29 +217,27 @@
 
 \cleardoublepage\pagestyle{plain}   % zapnutí číslování stránek
 
-%Pro vkládání kapitol i příloh používejte raději \include než \input
-%%% Vložení souboru 'text/uvod.tex' s úvodem
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%            SAMOTNÉ TEXTY PRÁCE             %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \include{text/uvod}
 
-%%% Vložení souboru 'text/cile.tex' s úvodem
 \include{text/cile}
 
-%%% Vložení souboru 'text/reseni' s popisem řešení práce
-% (rozdělte na více souborů či kapitol, pokud je vhodné)
-\include{text/reseni}
+\include{text/teorie}
 
-%%% Vložení souboru 'text/vysledky' s popisem vysledků práce
-% (rozdělte na více souborů či kapitol, pokud je vhodné)
-\include{text/vysledky}
+\include{text/navrh}
 
-%%% Vložení souboru 'text/zaver' se závěrem
+\include{text/schema}
+
 \include{text/zaver}
 
-%%% Vložení souboru 'text/literatura' se seznamem zdrojů
 \include{text/literatura}
 
-%%% Vložení souboru 'text/zkratky' se seznam použitých symbolů, veličin a zkratek
 \include{text/zkratky}
+
 
 %%% Začátek příloh
 \appendix
