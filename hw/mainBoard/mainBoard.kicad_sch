@@ -1,0 +1,82 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid afbe4b5f-4e5c-4a12-a44b-208d158a3f7a)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (sheet (at 151.13 133.35) (size 24.13 20.32) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 9f509f3e-56fd-407b-8646-52f67dc756e2)
+    (property "Sheetname" "Peripherial Bus" (at 151.13 132.6384 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "peripherials.kicad_sch" (at 151.13 154.2546 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "mainBoard"
+        (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a" (page "5"))
+      )
+    )
+  )
+
+  (sheet (at 139.7 69.85) (size 40.64 40.64) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid b91751a5-b1b1-4084-8612-1e1796d0f474)
+    (property "Sheetname" "ESP32 Module" (at 139.7 69.1384 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "eps32.kicad_sch" (at 139.7 111.0746 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "mainBoard"
+        (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a" (page "2"))
+      )
+    )
+  )
+
+  (sheet (at 52.07 68.58) (size 43.18 43.18) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid d2d24d60-9ae9-4639-8ba0-76ed40df3c00)
+    (property "Sheetname" "Power Suply" (at 52.07 67.8684 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "power_suply.kicad_sch" (at 52.07 112.3446 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "mainBoard"
+        (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a" (page "3"))
+      )
+    )
+  )
+
+  (sheet (at 217.17 68.58) (size 44.45 39.37) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid e09778c5-d723-4378-b78b-5054d4eb0fd5)
+    (property "Sheetname" "Connectors" (at 217.17 67.8684 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "connectors.kicad_sch" (at 217.17 108.5346 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "mainBoard"
+        (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a" (page "4"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)
