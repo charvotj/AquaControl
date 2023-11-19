@@ -116,12 +116,40 @@
 \sisetup{exponent-product = \ensuremath{\cdot}}
 \sisetup{separate-uncertainty}
 \sisetup{tight-spacing = false}
+\DeclareSIUnit\permille{\text{\textperthousand}}
 %\sisetup{scientific-notation = true}
 %\sisetup{round-mode=places,round-precision=4}
 %\sisetup{evaluate-expression}
 
 %====== Hyperlinky ====== 
 \hypersetup{allbordercolors={1 1 1}}
+
+%====== Obrazky ========
+% \usepackage{graphicx} 
+% \usepackage[dvipsnames]{xcolor} % E: option clash for package xcolor
+% \usepackage{tikz}
+
+% ^^ už tam někde prý jsou použité
+
+\usepackage[siunitx]{circuitikz}
+\usepackage{pgf}
+\usetikzlibrary{matrix}
+\usetikzlibrary{patterns}
+\usepackage{tkz-euclide}
+\usetikzlibrary{arrows.meta, bending, patterns.meta, ducks}
+\usetikzlibrary{shapes, backgrounds, decorations.pathmorphing, calc}
+
+\usepackage{derivative} % nebude potřeba
+
+\usepackage{pgfplots}
+\pgfplotsset{width=0.8\linewidth, compat=1.17}
+\def\plotcscale{0.8}
+\usepackage{pgfplotstable}
+
+
+
+
+
 
 
 
