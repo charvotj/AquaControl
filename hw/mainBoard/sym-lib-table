@@ -1,0 +1,6 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "TLV761")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_PTLV76118DCYR/KiCADv6/2023-11-23_20-19-40.kicad_sym")(options "")(descr ""))
+  (lib (name "LM5148")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_LM5148RGYR/KiCADv6/2023-11-23_20-45-29.kicad_sym")(options "")(descr ""))
+  (lib (name "SRDA3.3-4")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_SRDA3-3-4DR2G/KiCADv6/2023-11-24_14-24-49.kicad_sym")(options "")(descr ""))
+)
