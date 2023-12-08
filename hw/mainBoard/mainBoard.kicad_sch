@@ -267,13 +267,13 @@
     (property "Sheetfile" "power_suply.kicad_sch" (at 39.37 112.3446 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
-    (pin "5.5V" output (at 71.12 88.9 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid b91d9b81-1251-4fb3-a908-493ee453cf00)
-    )
     (pin "24V" input (at 55.88 83.82 90)
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid b28d6ac5-b2d6-4074-9aac-dee3b026a1c3)
+    )
+    (pin "5.2V" output (at 71.12 88.9 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 35d08eb3-70f9-4615-b364-05b317f69942)
     )
     (instances
       (project "mainBoard"
