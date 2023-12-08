@@ -149,6 +149,7 @@
 
 
     \subsection{Počet a funkce vodičů}
+        \label{subsec:pocet-a-fce-vodicu-sbernice}
         Z hlediska datové komunikace jsou zapotřebí dva vodiče (TX a RX), kromě toho je ale nutné periferiím dodat napájení. Většina periferií by měla být v principu dosti jednoduchá a energeticky nenáročná zařízení, typicky obsahující mikrokontroler pracující s napětím 3,3 nebo \qty{5}{V} s jedním nebo několika málo připojenými senzory. Pro jejich napájení postačí další dva vodiče, jeden zemní, společný i pro datové vodiče, a druhý s napětím \qty{5.2}{V}. Periferie musí být navrženy tak, aby je drobné změny této hodnoty neovlivnily. V případě několika periferí zapojených za sebe bude na delším vedení zákonitě docházet k poklesu napětí, proto byla zvolena návrhová rezerva \qty{0.2}{V}, která na základě praktického testu bude možná v budoucnu ještě navýšena. Každá periferie musí obsahovat vlastní regulátor, kterým si pro svůj provoz vytvoří potřebné stabilní napětí 5 nebo \qty{3,3}{V}. 
         \begin{table}[h!]
             \centering

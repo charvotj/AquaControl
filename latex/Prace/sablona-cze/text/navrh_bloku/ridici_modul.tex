@@ -1,7 +1,27 @@
 \section{Řídící jednotka}
-\textit{TODO: shrnutí funkce a požadavků -- komunikace s periferiemi, napajeni, wifi, status - led + display} 
+% \textit{TODO: shrnutí funkce a požadavků -- komunikace s periferiemi, napajeni, wifi, status - led + display} 
+Jedná se o jádro celého zařízení. Její funkcí je řízení celého systému a zároveň komunikace s uživatelem za pomoci Wi-Fi. Musí v sobě nést informaci o konfiguraci systému a na jejím základě zpracovávat data z jednotlivých připojených periferií. Podle uživatelem nastavených scénářů pak dynamicky reaguje na změny hodnot měřených akvaristických veličin a ovládá akční členy (osvětlení, ohřev, filtr vody). Za pomoci displaye a LED pásku také informuje uživatele o stavu zařízení. 
+
+Řídící jednotka bude tvořena jednou speciálně navrženou DPS, které kromě samotného mikrokontroleru bude obsahovat také obvody ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí pak bude dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce.
+
+% \newlength{\schematicpdfoffset} % Definice nové délkové proměnné
+\begin{figure}[h!]
+    \centering
+    % trim=left bottom right top
+    \includegraphics
+    [
+        width=\textwidth, 
+        page=1, 
+        trim=4.5cm 7.5cm 3cm 4cm, 
+        clip
+    ]{obrazky/exportovane/main-board-schematic.pdf}
+    \caption{Blokové schéma řídící jednotky. Vytvořeno v KiCad 7.0.}
+    \label{fig:ridici-jednotka-blokove-schema}
+\end{figure}
+
     \subsection{MCU}
-        \textit{TODO: zdůvodnit výběr ESP32, informace o něm a schéma potřebných obvodů} 
+        % \textit{TODO: zdůvodnit výběr ESP32, informace o něm a schéma potřebných obvodů} 
+        Při výběru vhodného mikrokontroleru bylo potřeba zohlednit výše zmíněné požadavky, tedy zejména Wi-Fi konektivita a dostatečný výkon k její obsluze, dvě volné UART periferie a dostatek GPIO pinů pro připojení zbylých modulů v hlavním šasi (viz obr.~\ref{fig:blokove-schema}). Na trhu existuje vícero výrobců nabízejících mikrokontrolery s vhodnými parametry, z důvodu jednoduchosti použití a nízké ceny byl nakonec zvolen model ESP32 od firmy Espressif, konkrétně modul WROOM-32E s čipem ESP32-D0WDR2-V3. Tento mikrokontroler je často využíván v různých hobby projektech, ale také v komerčních aplikacích zejména v oblasti chytré domácnosti, z tohoto důvodu k němu existuje velká škála softwarových knihoven a v rámci komunity uživatelů je také sdíleno mnoho projektů, kterými je možné se inspirovat.   
     \subsection{Napájecí obvod}
         \textit{TODO: schéma, výpočet hodnot součástek} 
     \subsection{Ochrana konektorů}
