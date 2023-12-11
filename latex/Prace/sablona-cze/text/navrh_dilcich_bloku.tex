@@ -4,20 +4,17 @@
 
 \input{text/navrh_bloku/komunikacni_rozhrani}
 \input{text/navrh_bloku/ridici_modul}
+\input{text/navrh_bloku/230v}
+\input{text/navrh_bloku/obecna_periferie}
+
 
 % Zatím drbnu sem, ať zas pak nemusím mazat soubory
 
-\section{Ovládání 230V periferií}
-    \textit{    TODO: vybrán GPIO expandér (https://www.laskakit.cz/pcf8574-i2c-8bit-i-o-expander) a relé modul, řízeno přímo z ESP32 -- je to v jedné krabici, tak je zbytečně složité tam dávat další MCU. } 
-\section{Obecný modul periferie}
-    \textit{    TODO: vybrán MCU PIC16F15325 -- jednoduché zapojení + znám použití ze školy, cenově vychází nejlépe, když zohledníme požadavky na periferie (2x UART, PWM). } 
 
-    \textit{
-        Moje představa je navrhnout jednoduchou univerzální desku, která bude mít PICku, LDO a napojené vstupní a výstupní UARTy + ochrany na výstupech, k ní budou pin headery a možnost vložit shield/dauther board, který bude mít případnou další elektroniku k obsluze senzoru atd. Když nebudu stíhat, což určitě nebudu :), tak může být třeba na prototypové desce, což bude asi rozumnější než objednávat 10 různých DPS a pak v každé řešit chyby.} 
+    % Přenecháno do BP :)
 
-
-    \section{Konkrétní periferie}
-        \textit{TODO: stačí se jim věnovat až v BP a nebo je to porušení zadání, které způsobí rozložení studia? :) Jen ať vím, jak moc a na čem musím zabrat.}  
+    % \section{Konkrétní periferie}
+    %     \textit{TODO: stačí se jim věnovat až v BP a nebo je to porušení zadání, které způsobí rozložení studia? :) Jen ať vím, jak moc a na čem musím zabrat.}  
 
 
 

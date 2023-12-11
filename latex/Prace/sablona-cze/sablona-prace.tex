@@ -147,6 +147,8 @@
 \pgfplotsset{width=0.8\linewidth, compat=1.17}
 \def\plotcscale{0.8}
 \usepackage{pgfplotstable}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
 
 
 % TEMP
