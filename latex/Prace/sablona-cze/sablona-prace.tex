@@ -150,6 +150,14 @@
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
             \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
 
+\usepackage[style=iso-numeric,backend=biber]{biblatex}
+\addbibresource{text/literatura.bib}
+%making everything to match Juice citations
+\DeclareFieldFormat{labelnumberwidth}{\mkbibbrackets{#1}}
+% \usepackage{natbib}
+% \usepackage{url}
+% \DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
+
 
 % TEMP
 \usepackage{multirow}

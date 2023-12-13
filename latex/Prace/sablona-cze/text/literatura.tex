@@ -69,13 +69,18 @@
 %%2) Seznam citací pomocí BibTeXu
 % Při použití je nutné v TeXnicCenter ve výstupním profilu aktivovat spouštění BibTeXu po překladu.
 % Definice stylu seznamu
-\bibliographystyle{unsrturl}
+% \bibliographystyle{unsrturl}
 % Pro českou sazbu lze použít styl czechiso.bst ze stránek
 % http://www.fit.vutbr.cz/~martinek/latex/czechiso.tar.gz
-%\bibliographystyle{czechiso}
-% Vložení souboru se seznamem citací
-\bibliography{text/literatura}
+% \bibliographystyle{czechiso}
+% % Vložení souboru se seznamem citací
+% \bibliography{text/literatura}
 
 % Následující příkaz je pouze pro ukázku sazby literatury při použití BibTeXu.
 % Způsobí citaci všech zdrojů v souboru literatura.bib, i když nejsou citovány v textu.
-% \nocite{*}
+\nocite{*}
+
+
+% % Radek approves
+\chapter*{Literatura}
+\printbibliography[heading=none]
