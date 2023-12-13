@@ -1,60 +1,60 @@
 \section{Řídící jednotka}
 % \textit{TODO: shrnutí funkce a požadavků -- komunikace s periferiemi, napajeni, wifi, status - led + display} 
-Jedná se o jádro celého zařízení. Její funkcí je řízení celého systému a zároveň komunikace s uživatelem za pomoci Wi-Fi. Musí v sobě nést informaci o konfiguraci systému a na jejím základě zpracovávat data z jednotlivých připojených periferií. Podle uživatelem nastavených scénářů pak dynamicky reaguje na změny hodnot měřených akvaristických veličin a ovládá akční členy (osvětlení, ohřev, filtr vody). Za pomoci displaye a LED pásku také informuje uživatele o stavu zařízení. 
+    Jedná se o jádro celého zařízení. Její funkcí je řízení celého systému a zároveň komunikace s uživatelem za pomoci Wi-Fi. Musí v sobě nést informaci o konfiguraci systému a na jejím základě zpracovávat data z jednotlivých připojených periferií. Podle uživatelem nastavených scénářů pak dynamicky reaguje na změny hodnot měřených akvaristických veličin a ovládá akční členy (osvětlení, ohřev, filtr vody). Za pomoci displaye a LED pásku také informuje uživatele o momentálním stavu zařízení. 
 
-Řídící jednotka bude tvořena jednou speciálně navrženou DPS, které kromě samotného mikrokontroleru bude obsahovat také obvody ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí pak bude dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce.
+    Řídící jednotka bude tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru bude obsahovat také obvody ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí pak bude dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce. Celé schéma je k dispozici v příloze TODO REF.
 
-% \newlength{\schematicpdfoffset} % Definice nové délkové proměnné
-\begin{figure}[h!]
-    \centering
-    % trim=left bottom right top
-    \includegraphics
-    [
-        width=\textwidth, 
-        page=1, 
-        trim=4.5cm 7.5cm 3cm 4cm, 
-        clip
-    ]{obrazky/exportovane/main-board-schematic.pdf}
-    \caption{Blokové schéma řídící jednotky. Vytvořeno v KiCad 7.0.}
-    \label{fig:ridici-jednotka-blokove-schema}
-\end{figure}
+    \begin{figure}[h!]
+        \centering
+        % trim=left bottom right top
+        \includegraphics
+        [
+            width=\textwidth, 
+            page=1, 
+            trim=4.5cm 7.5cm 3cm 4cm, 
+            clip
+        ]{obrazky/exportovane/main-board-schematic.pdf}
+        \caption{Blokové schéma řídící jednotky. Vytvořeno v KiCad 7.0.}
+        \label{fig:ridici-jednotka-blokove-schema}
+    \end{figure}
 
     \subsection{MCU}
         % \textit{TODO: zdůvodnit výběr ESP32, informace o něm a schéma potřebných obvodů} 
-        Při výběru vhodného mikrokontroleru bylo potřeba zohlednit výše zmíněné požadavky, tedy zejména Wi-Fi konektivita a dostatečný výkon k její obsluze, dvě volné UART periferie a dostatek GPIO pinů pro připojení zbylých modulů v hlavním šasi (viz obr.~\ref{fig:blokove-schema}). Na trhu existuje vícero výrobců nabízejících mikrokontrolery s vhodnými parametry, z důvodu jednoduchosti použití a nízké ceny byl nakonec zvolen model ESP32 od firmy Espressif, konkrétně modul WROOM-32E~\cite{esp32-wroom-32e-datasheet} s čipem ESP32-D0WDR2-V3~\cite{esp32-datasheet}. Tento mikrokontroler je často využíván v různých hobby projektech, ale také v komerčních aplikacích zejména v oblasti chytré domácnosti. Z tohoto důvodu k němu existuje velká škála softwarových knihoven a v rámci komunity uživatelů je také sdíleno mnoho projektů, kterými je možné se inspirovat.
+        Při výběru vhodného mikrokontroleru bylo potřeba zohlednit výše zmíněné požadavky, tedy zejména Wi-Fi konektivitu a dostatečný výkon k její obsluze, dvě volné UART periferie a dostatek GPIO pinů pro připojení zbylých modulů v hlavním šasi (viz obr.~\ref{fig:blokove-schema}). Na trhu existuje vícero výrobců nabízejících mikrokontrolery s vhodnými parametry, z důvodu jednoduchosti použití a nízké ceny byl nakonec zvolen model ESP32 od firmy Espressif, konkrétně modul WROOM-32E~\cite{esp32-wroom-32e-datasheet} s čipem ESP32-D0WDR2-V3~\cite{esp32-datasheet}. Tento modul je často využíván v různých hobby projektech, ale také v komerčních aplikacích zejména v oblasti chytré domácnosti. Z tohoto důvodu k němu existuje velká škála softwarových knihoven a v rámci komunity uživatelů je také sdíleno mnoho projektů, kterými je možné se inspirovat.
 
-        \subsection{Zapojení ESP32 modulu}
-            Při tvorbě schématu bylo vycházeno z dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých vývojových desek. K zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvody je na obr.~\ref{fig:ridici-jednotka-esp-obvody}, schéma celé řídící jednotky se pak nachází v příloze (\textit{TODO reference} ). 
+    \subsection{Zapojení ESP32 modulu}
+        Při tvorbě schématu bylo vycházeno z dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých existujících vývojových desek. K zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvody je na obr.~\ref{fig:ridici-jednotka-esp-obvody}.
 
-            \begin{figure}[h!]
-                \centering
-                % trim=left bottom right top
-                \includegraphics
-                [
-                    width=0.9\textwidth, 
-                    page=2, 
-                    trim=2.5cm 6cm 15.5cm 1.5cm, 
-                    clip
-                ]{obrazky/exportovane/main-board-schematic.pdf}
-                \caption{Podpůrné obvody pro modul ESP32-WROOM-E. Vytvořeno v KiCad 7.0.}
-                \label{fig:ridici-jednotka-esp-obvody}
-            \end{figure}
+        \begin{figure}[h!]
+            \centering
+            % trim=left bottom right top
+            \includegraphics
+            [
+                width=0.9\textwidth, 
+                page=2, 
+                trim=2.5cm 6cm 15.5cm 1.5cm, 
+                clip
+            ]{obrazky/exportovane/main-board-schematic.pdf}
+            \caption{Podpůrné obvody pro modul ESP32-WROOM-E. Vytvořeno v KiCad 7.0.}
+            \label{fig:ridici-jednotka-esp-obvody}
+        \end{figure}
 
-            Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C1, C3). Ke snížení napětí z původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U4). 
-            
-            Dále je potřeba přivést kladné napětí na povolovací pin (EN), z dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený časnutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C2) s časovou konstantou \(\tau\) :
-            \begin{equation}
-                \tau=R_{1}C_{2}=\qty{10}{\kilo\ohm}\cdot \qty{1}{\micro\farad}=\qty{10}{\milli\second}
-            \end{equation} 
-            Jak je vidět, byla zvolena dostatečná návrhová rezerva. 
+        Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C1, C3). Ke snížení napětí z původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U4). 
+        
+        Dále je potřeba přivést kladné napětí na povolovací pin (EN), z dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený čas nutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C2) s časovou konstantou \(\tau\) :
+        \begin{equation}
+            \tau=R_{1}C_{2}=\qty{10}{\kilo\ohm}\cdot \qty{1}{\micro\farad}=\qty{10}{\milli\second}
+        \end{equation} 
+        Jak je vidět, byla zvolena dostatečná návrhová rezerva. 
 
-            Pro možnost resetu zařízení a nahrání nového firmware byly doplněny také dvě tlačítka (SW1, SW2)
+        Pro možnost resetu zařízení a nahrání nového firmware byla doplněna také dvě tlačítka (SW1, SW2)
 
 
     \clearpage
     \subsection{Napájecí obvod}
+        \label{sec:ridici-jendotka-napajeci-obvod}
         % \textit{TODO: schéma, výpočet hodnot součástek}
-        Pro napájení celého zařízení bude použit externí zdroj stejnosměrného napětí \qty{24}{V}, toto napětí bude rozvedeno všem připojeným periferiím (viz sekce~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Pro většinu komponent ale bude nutné napětí snížit, k tomuto účelu bude využit DC/DC měnič typu buck s požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídící jednotka nebude odebírat velký proud, není jasně dané, kolik periferí s jakými požadavky uživatel k systému připojí. Navržený měnič tak musí fungovat v širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s co nejlepší účinností. 
+        Pro napájení celého zařízení bude použit externí zdroj stejnosměrného napětí \qty{24}{V}, toto napětí bude rozvedeno všem připojeným periferiím (viz sekce~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Pro většinu komponent ale bude nutné napětí snížit, k tomuto účelu bude využit DC/DC měnič typu buck s požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídící jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s jakými výkonovými požadavky uživatel k systému připojí. Navržený měnič tak musí fungovat v širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s co nejlepší účinností. 
         
         \begin{figure}[h!]
             \centering
@@ -70,13 +70,13 @@ Jedná se o jádro celého zařízení. Její funkcí je řízení celého syst�
             \label{fig:ridici-jednotka-napajeni}
         \end{figure}
 
-        Po zvážení výše zmíněných požadavků byl jako základ regulátoru zvolen čip LM5148~\cite{lm5148-datasheet}, jedná se o moderní součástku firmy Texas Instruments s velkou výkonovou rezervou. Jelikož funguje pouze jako regulátor a je potřeba doplnit zapojení externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich a na jejich volbě závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných hodnot navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru podle zvolených hodnot. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V navrženém schématu bylo posléze provedeno několik drobných změn, aby vše odpovídalo požadavkům uvedeným v katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k volbě hodnot vybraných součástek. 
+        Po zvážení výše zmíněných požadavků byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}, jedná se o moderní součástku firmy Texas Instruments s velkou výkonovou rezervou. Jelikož funguje pouze jako regulátor a je potřeba doplnit zapojení externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a zjednodušší chlazení. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných porametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru podle zvolených hodnot. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V navrženém schématu bylo posléze provedeno několik drobných změn, aby vše odpovídalo požadavkům uvedeným v katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k volbě hodnot vybraných součástek. 
 
     \subsection{Ochrana konektorů}
         % \textit{TODO: popsat principy ochrany, schéma}
-        Při návrhu elektronických obvodů je dobré myslet na různé problémy a poruchy, které by při provozu mohly nastat. Kromě snahy problémům předejít je důležité zařízení zařízení uzpůsobit pro maximální potlačení jejich následků. Důvodů k ochraně navrhovaných obvodů je několik, na prvním místě by měla být vždy bezpečnost -- zařízení by při případné poruše např. nemělo způsobit požár, výbuch ani jinou podobnou situaci. Dalším důvodem je pak ochrana samotného zařízení a to zejména jeho drahých komponent. Přepětí na napájení nebo zkrat na konektoru nesmí mít za následek zničení procesoru popř. jiné dražší elektroniky~\cite{altium-circuit-protection}. 
+        Při návrhu elektronických obvodů je dobré myslet na různé problémy a poruchy, které by při provozu mohly nastat. Kromě snahy problémům předejít je důležité zařízení uzpůsobit pro maximální potlačení jejich následků. Důvodů k ochraně navrhovaných obvodů je několik, na prvním místě by měla být vždy bezpečnost -- zařízení by při případné poruše např. nemělo způsobit požár, výbuch ani jinou podobnou situaci. Dalším důvodem je pak ochrana samotného zařízení a to zejména jeho drahých komponent. Přepětí na napájení nebo zkrat na konektoru nesmí mít za následek zničení procesoru popř. jiné dražší elektroniky~\cite{altium-circuit-protection}. 
 
-        Citlivým místem z hlediska ochrany jsou odkryté části zařízení, typicky uživateli přístupné konektory, v případě zde popisovaného zařízení zejména konektory pro připojení periferií, vyžadují tedy při návrhu zvýšenou pozornost. Nejčastějšími problémy u konektorů jsou elektrostatický výboj (ESD) při doteku uživatele popř. zkrat mezi jednotlivými vodiči při špatné manipulaci s konektorem nebo doteku vodivým předmětem, v případě zařízení pro akvaristiku není vyloučen ani kontakt s vodou. 
+        Citlivým místem z hlediska ochrany jsou odkryté části zařízení, typicky uživateli přístupné konektory, v případě zde popisovaného zařízení zejména konektory pro připojení periferií vyžadují při návrhu zvýšenou pozornost. Největším rizikem u konektorů je elektrostatický výboj (ESD) při doteku uživatele popř. zkrat mezi jednotlivými vodiči při špatné manipulaci s konektorem nebo doteku vodivým předmětem, v případě zařízení pro akvaristiku není vyloučen ani kontakt s vodou. 
 
         \begin{figure}[h!]
             \centering
@@ -93,13 +93,13 @@ Jedná se o jádro celého zařízení. Její funkcí je řízení celého syst�
         \end{figure}
 
         \subsubsection{Princip zvolené ochrany}
-        Na obr.~\ref{fig:ridici-jednotka-konektor-ochrana} je znárorněn princip použité ochrany proti přepětí na datové lince. Toto zapojení je účinné jako proti ESD, tak i proti zkratu~\cite{altium-esd-protection}. Je tvořeno několika stupni. Předmětem ochrany je zejména datový pin mikrokontroleru (na obr. jako DATA\_PIN), v případě ESP32 je povolený rozsah napětí na datovém pinu \qty{-0.3}{V} až \qty{3.6}{V} a maximální přípustný vstupní proud \qty{28}{mA}, viz tab.~\ref{tab:esp32-elektricke-parametry}.
+        Na obr.~\ref{fig:ridici-jednotka-konektor-ochrana} je znárorněn princip použité ochrany proti přepětí na datové lince. Toto zapojení je účinné jako proti ESD, tak i proti zkratu~\cite{altium-esd-protection}. Je tvořeno několika stupni. Předmětem ochrany je zejména datový pin mikrokontroleru (na obr. jako DATA\_PIN). V případě ESP32 je povolený rozsah napětí na datovém pinu \qty{-0.3}{V} až \qty{3.6}{V} a maximální přípustný vstupní proud \qty{28}{mA}, viz tab.~\ref{tab:esp32-elektricke-parametry}.
 
-        Pokud se na pinu 2 konektoru (J1) objeví vyšší napětí, než je hodnota \(V_{CC} +V_{f} \), kdy \(V_{f} \) je prahové napětí diody (D1, resp. D2), stane se dioda (D1) propustnou, napětí se dále nezvyšuje a přebytečný proud je skrze tuto diodu odveden do napájecí větve (VCC\_3V3), obdobné chování pro záporné napětí zajistí dioda D2. Pokud by napájecí větev nebyla schopná přebytečný proud odvést a hrozil by na ní nárust napětí, dojde k ovevření stabilizační Zenerovy diody (D3) a disipaci energie v podobě tepla. Aby nedošlo k trvalému teplotnímu poškození diod, je v obvodu zařazena vratná pojistka (ang. polyfuse, PPTC; ve schématu konkrétně F2). Při překročení povoleného proudu se pojistka zahřeje a v návaznosti na to výrazně zvýší svůj odpor, čímž proud stabilizuje na pevně danou úroveň.
+        Pokud se na pinu 2 konektoru (J1) objeví vyšší napětí, než je hodnota \(V_{CC} +V_{f} \), kdy \(V_{f} \) je prahové napětí diody (D1, resp. D2), stane se dioda (D1) propustnou, napětí se dále nezvyšuje a přebytečný proud je skrze tuto diodu odveden do napájecí větve (VCC\_3V3), obdobné chování pro záporné napětí zajistí dioda D2. Pokud by napájecí větev nebyla schopná přebytečný proud odvést a hrozil by na ní nárust napětí, dojde k ovevření stabilizační Zenerovy diody (D3) a disipaci energie v podobě tepla. Aby nedošlo k trvalému tepelnému poškození diod, je v obvodu zařazena vratná pojistka (ang. polyfuse, PPTC; ve schématu konkrétně F2). Při překročení povoleného proudu se pojistka zahřeje a v návaznosti na to výrazně zvýší svůj odpor, čímž proud stabilizuje na pevně danou úroveň.
 
         Pro případ zkratu na napájení je přidána ještě jedna vratná pojistka (F1), která limituje proud napájecí větve na bezpečnou úroveň.
 
-        Ve skutečném schématu (viz příloha \textit{TODO: doplnit} jsou diody nahrazeny ekvivalentním integrovaným obvodem.
+        Ve skutečném schématu (viz příloha \textit{TODO: doplnit}) jsou diody nahrazeny ekvivalentním integrovaným obvodem.
 
         \begin{table}[h]
             \centering
@@ -107,7 +107,7 @@ Jedná se o jádro celého zařízení. Její funkcí je řízení celého syst�
             \label{tab:esp32-elektricke-parametry}
             \begin{tabular}{|l|l|l|l|l|}
             \hline
-            \textbf{Parametr} & \textbf{Popis} & \textbf{Min} & \textbf{Typ} & \textbf{Max} \\ \hline
+            \textbf{Parametr} & \textbf{Popis} & \textbf{Min} & \textbf{Typ} & \textbf{Max} \\ \hline\hline
             \(V_{IH}\) (V)   & High-level input voltage   & 2,475  & --  & 3,6          \\ \hline
             \(V_{IL}\) (V)   & Low-level input voltage    & -0,3 & --   & 0,825   \\ \hline
             \(I_{IH}\) (nA)  & High-level input current   & --   & --   & 50           \\ \hline
@@ -118,7 +118,7 @@ Jedná se o jádro celého zařízení. Její funkcí je řízení celého syst�
         \end{table}
 
         \subsubsection{Výpočet hodnot součástek}
-            Při použití diody s \(V_{f} =\qty{0.7}{V}\) je napětí v uzlu \circled{1} rovno:
+            Při použití diody s \(V_{f} =\qty{0.7}{V}\) je maximální napětí v uzlu \circled{1} rovno:
             \begin{equation}
                 V_{1} =V_{CC} +V_{f} = \num{3,3}+\num{0,7}=\qty{4}{V}
             \end{equation}
@@ -127,13 +127,13 @@ Jedná se o jádro celého zařízení. Její funkcí je řízení celého syst�
                 R_{1} =\frac{V_{1}- V_{pin}}{I_{OL} }=\frac{\num{4}-\num{3.3}}{\num{28e-3}}=\qty{25}{\ohm}
             \end{equation}
 
-            Je možné zvolit také větší hodnotu odporu a z hlediska ochrany si tak zajistit jistou návrhovou rezervu, příliž velká hodnota by však způsobila zhoršení přenosové rychlosti sběrnice. Pokud by ale došlo k opačnému problému a to ke zkratování výstupu z pinu se zemí (GND), byl by při hodnotě \qty{25}{\ohm} překročen maximální povolený výstupní proud z pinu (\(I_{OH}=\qty{40}{mA}\)). Hodnota odporu z hlediska takového zkratu by tedy musela být minimálně:
+            Je možné zvolit také větší hodnotu odporu a z hlediska ochrany si tak zajistit jistou návrhovou rezervu, příliš velká hodnota by však způsobila zhoršení přenosové rychlosti sběrnice. Pokud by ale došlo k opačnému problému a to ke zkratování výstupu z pinu se zemí (GND), byl by při hodnotě \qty{25}{\ohm} překročen maximální povolený výstupní proud z pinu (\(I_{OH}=\qty{40}{mA}\)). Hodnota odporu z hlediska takového zkratu by tedy musela být minimálně:
             \begin{equation}
                 R_{1} =\frac{V_{pin}}{I_{OH} }=\frac{\num{3.3}}{\num{40e-3}}=\qty{82.5}{\ohm}
             \end{equation}
             Pro účely této práce byla zvolena hodnota sériových odporů \qty{100}{\ohm}, která splňuje všechny výše uvedené podmínky.
 
-            Dále bylo nutné vybrat vratnou pojistku s vhodnými parametry. Maximální provozní proud, který může po sběrnici téct je limitovaný sériovým odporem a pro zvolenou hodnotu \qty{100}{\ohm} odpovídá \(I_{max} =\qty{33}{mA}\), této hodnoty ale nikdy nedosáhne stabilně ale pouze na krátký čas při změně mezi logickou nulou a jedničkou. Byla proto zvolena pojistka s hodnotou limitního proudu \(I_{trip} =\qty{60}{mA}\) a běžného provozního proudu \(I_{hold} =\qty{20}{mA}\). 
+            Dále bylo nutné vybrat vratnou pojistku s vhodnými parametry. Maximální provozní proud, který může po sběrnici téct je limitovaný sériovým odporem a pro zvolenou hodnotu \qty{100}{\ohm} odpovídá \(I_{max} =\qty{33}{mA}\), této hodnoty ale nikdy nedosáhne stabilně nýbrž pouze na krátký čas při změně mezi logickou nulou a jedničkou. Byla proto zvolena pojistka s hodnotou limitního proudu \(I_{trip} =\qty{60}{mA}\) a běžného provozního proudu \(I_{hold} =\qty{20}{mA}\). 
 
             
 

@@ -17,9 +17,9 @@ Jak vyplývá z požadavků zařízení a přehledu používané akvaristické t
     \label{fig:obrazky-230-expander-jpg}
 \end{figure}
 
-Aby uživatel mohl zařízení bezpěčně zapojit bez nutnosti odborné způsobilosti, budou se na hlavním šasi zařízení nacházet čtyři standartní zásuvky (typ E) s jednofázovým napětím \qty{230}{V}. Fázové vodiče budou uvnitř zařízení přerušeny spínacími relé. Bude použit předpřipravený modul disponující osmi relé, např. tento~\cite{eshop-laskakit-rele}, také viz obr.~\ref{fig:obrazky-230-rele-jpg}. Zbylé čtyři relé slouží jako rezerva při poškození některého z používaných relé nebo potřebě rozšíření o další zásuvky. 
+Aby uživatel mohl zařízení bezpěčně zapojit bez nutnosti odborné způsobilosti, budou se na hlavním šasi zařízení nacházet čtyři standartní zásuvky (typ E) s jednofázovým napětím \qty{230}{V}. Fázové vodiče budou uvnitř zařízení přerušeny spínacími relé. Bude použit předpřipravený modul disponující osmi relé,kupříkladu modul na obr.~\ref{fig:obrazky-230-rele-jpg}. Zbylé čtyři relé slouží jako rezerva pro případ poškození některého z používaných relé nebo při potřebě rozšíření o další zásuvky. 
 
-Z důvodu nedostatku pinů na mikrokontroleru řídící jednotky (ESP32) bude k relé modulu připojen ještě jeden externí modul a to expandér GPIO pinů komunikující přes sběrnici I\(^2\)C~\cite{eshop-laskakit-expander}, nachází se na obr.~\ref{fig:obrazky-230-expander-jpg}. Z pohledu mikrokontroleru tak budou všechny \qty{230}{V} zásuvky řízeny pomocí dvou datových pinů (SDA, SCL), které je navíc možné dále využít pro připojení jiných periferií jako např. OLED displaye pro zobrazení stavu zařízení. 
+Z důvodu nedostatku pinů na mikrokontroleru řídící jednotky (ESP32) bude k relé modulu připojen ještě jeden externí modul a to expandér GPIO pinů komunikující přes sběrnici I\(^2\)C~\cite{eshop-laskakit-expander}, ilustrační foto na obr.~\ref{fig:obrazky-230-expander-jpg}. Z pohledu mikrokontroleru tak budou všechny \qty{230}{V} zásuvky řízeny pomocí dvou datových pinů (SDA, SCL), které je navíc možné dále využít pro připojení jiných periferií jako např. OLED displaye pro zobrazení stavu zařízení. 
 
 Možným zlepšením a rozšířením práce by bylo také zahrnutí obou zmíněných modulů přímo na DPS řídící jednotky. 
 
