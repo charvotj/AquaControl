@@ -2,7 +2,7 @@
 % \textit{TODO: shrnutí funkce a požadavků -- komunikace s periferiemi, napajeni, wifi, status - led + display} 
     Jedná se o jádro celého zařízení. Její funkcí je řízení celého systému a zároveň komunikace s uživatelem za pomoci Wi-Fi. Musí v sobě nést informaci o konfiguraci systému a na jejím základě zpracovávat data z jednotlivých připojených periferií. Podle uživatelem nastavených scénářů pak dynamicky reaguje na změny hodnot měřených akvaristických veličin a ovládá akční členy (osvětlení, ohřev, filtr vody). Za pomoci displaye a LED pásku také informuje uživatele o momentálním stavu zařízení. 
 
-    Řídící jednotka bude tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru bude obsahovat také obvody ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí pak bude dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce. Celé schéma je k dispozici v příloze TODO REF.
+    Řídící jednotka bude tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru bude obsahovat také obvody ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí pak bude dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce. Celé schéma je k dispozici v příloze~\ref{priloha:schema-ridici-jednotka}.
 
     \begin{figure}[h!]
         \centering
@@ -99,7 +99,7 @@
 
         Pro případ zkratu na napájení je přidána ještě jedna vratná pojistka (F1), která limituje proud napájecí větve na bezpečnou úroveň.
 
-        Ve skutečném schématu (viz příloha \textit{TODO: doplnit}) jsou diody nahrazeny ekvivalentním integrovaným obvodem.
+        Ve skutečném schématu (viz příloha~\ref{priloha:schema-ridici-jednotka-periferie}) jsou diody nahrazeny ekvivalentním integrovaným obvodem.
 
         \begin{table}[h]
             \centering

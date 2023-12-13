@@ -1,7 +1,6 @@
-\contentsline {chapter}{\numberline {A}Některé příkazy balíčku \texttt {thesis} }{59}{chapter.75}%
-\contentsline {section}{\numberline {A.1}Příkazy pro sazbu veličin a jednotek }{59}{section.76}%
-\contentsline {section}{\numberline {A.2}Příkazy pro sazbu symbolů }{59}{section.78}%
-\contentsline {chapter}{\numberline {B}Druhá příloha }{61}{chapter.80}%
-\contentsline {chapter}{\numberline {C}Příklad sazby zdrojových kódů }{63}{chapter.82}%
-\contentsline {section}{\numberline {C.1}Balíček \texttt {listings} }{63}{section.83}%
-\contentsline {chapter}{\numberline {D}Obsah elektronické přílohy }{67}{chapter.152}%
+\contentsline {chapter}{\numberline {A}Schéma řídící jednotky }{59}{chapter.75}%
+\contentsline {section}{\numberline {A.1}Blokové schéma }{59}{section.76}%
+\contentsline {section}{\numberline {A.2}Zapojení MCU }{60}{section.77}%
+\contentsline {section}{\numberline {A.3}Napájecí obvod }{61}{section.78}%
+\contentsline {section}{\numberline {A.4}Konektory }{62}{section.79}%
+\contentsline {section}{\numberline {A.5}Sběrnice periferií }{63}{section.80}%
