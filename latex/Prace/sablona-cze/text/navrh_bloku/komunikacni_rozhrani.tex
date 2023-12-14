@@ -1,12 +1,12 @@
 \section{Komunikační rozhraní}
 \label{sec:komunikacni-rozhrani}
-    Komunikační rozhraní mezi řídícím modulem a periferiemi není samo o sobě funkčním modulem, ale je zde rozebráno jako první, protože právě od jeho specifikace se následně odvíjí tvorba zbytku zařízení. 
+    Komunikační rozhraní mezi řídícím modulem a periferiemi není samo o~sobě funkčním modulem, ale je zde rozebráno jako první, protože právě od jeho specifikace se následně odvíjí tvorba zbytku zařízení. 
 
-    Úkolem rozhraní je obousměrně komunikovat s periferiemi, tedy např. stahovat data z připojených sensorů a zároveň za pomoci přikazů periferie řídit. Kromě datové komunikace musí rozhraní periferie také napájet a to i v případě energeticky náročnějších obvodů jako např. osvětlení. 
+    Úkolem rozhraní je obousměrně komunikovat s~periferiemi, tedy např. stahovat data z~připojených sensorů a zároveň za pomoci přikazů periferie řídit. Kromě datové komunikace musí rozhraní periferie také napájet a to i v~případě energeticky náročnějších obvodů jako např. osvětlení. 
     
     \subsection{Výběr datové sběrnice}
     \subsubsection{Srovnání sběrnic}
-        Existuje celá řada datových sběrnic, které jsou v elektrotechnice hojně využívány. Každá z nich má své výhody a nevýhody stejně jako jisté limitace použití. V tab.~\ref{tab:porovnani-sbernic} se nachází výčet různých sběrnic, které byly při výběru uvažovány. 
+        Existuje celá řada datových sběrnic, které jsou v~elektrotechnice hojně využívány. Každá z~nich má své výhody a nevýhody stejně jako jisté limitace použití. V~tab.~\ref{tab:porovnani-sbernic} se nachází výčet různých sběrnic, které byly při výběru uvažovány. 
 
         \begin{table}
             \centering
@@ -79,14 +79,14 @@
 
 
         Protože hlavní šasi zařízení nabízí dva konektory, ale žádoucí je připojit větší předem nedefinovaný počet periferií, je potřeba, aby sběrnice umožnila připojení více zařízení. 
-        Obecný problém všech sběrnic je omezení jejich maximální délky, s rostoucí délkou se sběrnice snáze zaruší, navíc z důvodu parazitních vlastností vedení dochází k zaoblení ostrých hran signálu, dlouhé vedení se chová jako filtr typu dolní propust. V důsledku toho se snižuje maximální rychlost sběrnice.
+        Obecný problém všech sběrnic je omezení jejich maximální délky, s~rostoucí délkou se sběrnice snáze zaruší, navíc z~důvodu parazitních vlastností vedení dochází k~zaoblení ostrých hran signálu, dlouhé vedení se chová jako filtr typu dolní propust. V~důsledku toho se snižuje maximální rychlost sběrnice.
         
-        Sběrnice SPI nebo \acs{i2c} je obecně doporučeno používat pouze v rámci DPS, tedy na krátké vzdálenosti. Při snížení rychlosti je možné je používat i na větší vzdálenost, ovšem modulární scénář vytvářeného systému teoreticky nestanovuje žádný délkový limit a bylo by velmi obtížné spolehlivě určit, kolik periferií uživatel může za sebe zapojit při zachování spolehlivé komunikace.
+        Sběrnice SPI nebo \acs{i2c} je obecně doporučeno používat pouze v~rámci DPS, tedy na krátké vzdálenosti. Při snížení rychlosti je možné je používat i na větší vzdálenost, ovšem modulární scénář vytvářeného systému teoreticky nestanovuje žádný délkový limit a bylo by velmi obtížné spolehlivě určit, kolik periferií uživatel může za sebe zapojit při zachování spolehlivé komunikace.
 
-        Sběrnice CAN je určena pro provoz v průmyslovém prostředí (zejména je používána v automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Velkou nevýhodou je ale její složitá a drahá implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak třeba připojit externí ovladač připojený např. přes SPI, dále je vhodné přidat i řadič, aby sběrnice mohla pracovat s vyšším provozním napětí, 12 nebo \qty{24}{V}. 
+        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Velkou nevýhodou je ale její složitá a drahá implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak třeba připojit externí ovladač připojený např. přes SPI, dále je vhodné přidat i řadič, aby sběrnice mohla pracovat s~vyšším provozním napětí, 12 nebo \qty{24}{V}. 
 
     \subsubsection{Zvolené řešení}
-        Po důkladné rešerši a zvážení zmíněných problémů bylo zvoleno řešení ispirované adresovatelnými LED pásky (např. NEOPIXEL). Princip spočívá v řetězení jednotlivých zařízení za sebe. Nejsou ale připojeny ke stejné sběrnici, každé z nich je zvlášť připojeno ke svým dvěma sousedním zařízením, se kterými komunikuje pomocí rozhraní UART. Uživatel tak může do série zapojit libovolné množství zařízení a na kvalitu komunikace to nebude mít vliv. Jednotlivé úseky jsou definované délky, pro kterou je komunikace řádně otestována. Znázornění se nachází na obr.~\ref{fig:sbernice}.
+        Po důkladné rešerši a zvážení zmíněných problémů bylo zvoleno řešení ispirované adresovatelnými LED pásky (např. NEOPIXEL). Princip spočívá v~řetězení jednotlivých zařízení za sebe. Nejsou ale připojeny ke stejné sběrnici, každé z~nich je zvlášť připojeno ke svým dvěma sousedním zařízením, se kterými komunikuje pomocí rozhraní UART. Uživatel tak může do série zapojit libovolné množství zařízení a na kvalitu komunikace to nebude mít vliv. Jednotlivé úseky jsou definované délky, pro kterou je komunikace řádně otestována. Znázornění se nachází na obr.~\ref{fig:sbernice}.
 
         \begin{figure}[h!]
             \centering
@@ -145,14 +145,14 @@
             \label{fig:sbernice}
         \end{figure}
         
-        Pro komunikaci mezi jednotlivými zařízeními byl zvolen UART z důvodu velmi snadné implementace a flexibilního nastavení rychlosti. Při výběru mikrokontroleru pro periferie stačí zvolit libovolný model se dvěma UART rozhraními, toto kritérium splňuje většina mikrokontrolerů.
+        Pro komunikaci mezi jednotlivými zařízeními byl zvolen UART z~důvodu velmi snadné implementace a flexibilního nastavení rychlosti. Při výběru mikrokontroleru pro periferie stačí zvolit libovolný model se dvěma UART rozhraními, toto kritérium splňuje většina mikrokontrolerů.
 
         Adresace jednotlivých periferií bude řešena protokolárně, na úrovni firmwaru použitých mikrokontrolerů.
 
 
     \subsection{Počet a funkce vodičů}
         \label{subsec:pocet-a-fce-vodicu-sbernice}
-        Z hlediska datové komunikace jsou zapotřebí dva vodiče (TX a RX), kromě toho je ale nutné periferiím dodat napájení. Většina periferií by měla být v principu dosti jednoduchá a energeticky nenáročná zařízení, typicky obsahující mikrokontroler pracující s napětím 3,3 nebo \qty{5}{V} s jedním nebo několika málo připojenými senzory. Pro jejich napájení postačí další dva vodiče, jeden zemní, společný i pro datové vodiče, a druhý s napětím \qty{5.2}{V}. Periferie musí být navrženy tak, aby je drobné změny této hodnoty neovlivnily. V případě několika periferí zapojených za sebe bude na delším vedení zákonitě docházet k poklesu napětí, proto byla zvolena návrhová rezerva \qty{0.2}{V}, která na základě praktického testu bude možná v budoucnu ještě navýšena. Každá periferie musí obsahovat vlastní regulátor, kterým si pro svůj provoz vytvoří potřebné stabilní napětí 5 nebo \qty{3,3}{V}. 
+        Z~hlediska datové komunikace jsou zapotřebí dva vodiče (TX a RX), kromě toho je ale nutné periferiím dodat napájení. Většina periferií by měla být v~principu dosti jednoduchá a energeticky nenáročná zařízení, typicky obsahující mikrokontroler pracující s~napětím 3,3 nebo \qty{5}{V} s~jedním nebo několika málo připojenými senzory. Pro jejich napájení postačí další dva vodiče, jeden zemní, společný i pro datové vodiče, a druhý s~napětím \qty{5.2}{V}. Periferie musí být navrženy tak, aby je drobné změny této hodnoty neovlivnily. V~případě několika periferí zapojených za sebe bude na delším vedení zákonitě docházet k~poklesu napětí, proto byla zvolena návrhová rezerva \qty{0.2}{V}, která na základě praktického testu bude možná v~budoucnu ještě navýšena. Každá periferie musí obsahovat vlastní regulátor, kterým si pro svůj provoz vytvoří potřebné stabilní napětí 5 nebo \qty{3,3}{V}. 
         \begin{table}[h!]
             \centering
             \caption{Popis vodičů komunikačního rozhraní periferií.}
@@ -161,7 +161,7 @@
                 \hline
                 \textbf{Č.} & \textbf{Zkratka} & \textbf{Popis} & \textbf{Napětí} \\
                 \hline\hline
-                1 & 24V & Napájení z externího zdroje, pro náročné periferie & \qty{24}{V} \\
+                1 & 24V & Napájení z~externího zdroje, pro náročné periferie & \qty{24}{V} \\
                 \hline
                 2 & GND0 & Zem pro výkonové napájení & \qty{0}{V}\\
                 \hline
@@ -176,13 +176,13 @@
             \end{tabular}
         \end{table}
 
-        Některé periferie mohou mít vyšší výkonové nároky a navržené nízkonapěťové napájení by jim nemuselo stačit, zároveň by vysokým odběrem proudu klesala stabilita celé sběrnice. Pro tyto periferie je proto potřeba přivést další napájecí větev, opět o dvou vodičích. Krom zemního vodiče přivedeme napájení \qty{24}{V}, které pochází přímo z externího zdroje v hlavním šasi zařízení. Daná periferie pak musí obsahovat vlastní měnič, kterým si vytvoří napětí o potřebné velikosti. 
+        Některé periferie mohou mít vyšší výkonové nároky a navržené nízkonapěťové napájení by jim nemuselo stačit, zároveň by vysokým odběrem proudu klesala stabilita celé sběrnice. Pro tyto periferie je proto potřeba přivést další napájecí větev, opět o~dvou vodičích. Krom zemního vodiče přivedeme napájení \qty{24}{V}, které pochází přímo z~externího zdroje v~hlavním šasi zařízení. Daná periferie pak musí obsahovat vlastní měnič, kterým si vytvoří napětí o~potřebné velikosti. 
 
-        Všechny zmíněné vodiče jsou pro lepší přehlednost shrnuty v tab.~\ref{tab:sbernice-popis-vodicu}.
+        Všechny zmíněné vodiče jsou pro lepší přehlednost shrnuty v~tab.~\ref{tab:sbernice-popis-vodicu}.
     
     \subsection{Konektor}
-        Hlavní šasi bude disponovat dvěma konektory typu samice. Každá periferie bude mít napevno připevněn kabel zakončený konektorem typu samce a na své krabičce pak opět jeden konektor typu samice. Periferie tedy bude možné připojit buďto přímo do jednoho ze slotů hlavního šasi anebo do série s některou jinou již připojenou periferií. 
+        Hlavní šasi bude disponovat dvěma konektory typu samice. Každá periferie bude mít napevno připevněn kabel zakončený konektorem typu samce a na své krabičce pak opět jeden konektor typu samice. Periferie tedy bude možné připojit buďto přímo do jednoho ze slotů hlavního šasi anebo do série s~některou jinou již připojenou periferií. 
 
-        V principu lze zvolit jakýkoliv typ konektoru disponující alespoň šesti piny, musí však být možné konektor pohodlně použít jak na zakončení kabelu, tak i jako montovaný do panelu, např. na hlavním šasi. Volba konkrétního typu dosud nebyla provedena.
+        V~principu lze zvolit jakýkoliv typ konektoru disponující alespoň šesti piny, musí však být možné konektor pohodlně použít jak na zakončení kabelu, tak i jako montovaný do panelu, např. na hlavním šasi. Volba konkrétního typu dosud nebyla provedena.
 
         % \textit{   TODO: vybrat teda něco, co jde namontovat do panelu a nestojí granát...} 
