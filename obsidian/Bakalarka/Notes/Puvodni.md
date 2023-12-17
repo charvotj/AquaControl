@@ -1,5 +1,3 @@
-% !TeX encoding = UTF-8
-
 # Bakalářská práce -- poznámky
 
 ## Cíl
