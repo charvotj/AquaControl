@@ -4,21 +4,18 @@
     "type": "split",
     "children": [
       {
-        "id": "b81fc9f18e49aa3d",
+        "id": "0bd9eec750a4655b",
         "type": "tabs",
         "children": [
           {
-            "id": "667bac7181266418",
+            "id": "7815fcefacca1919",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "Canvases/Main box.canvas",
-                "viewState": {
-                  "x": 35,
-                  "y": -99.41838270882428,
-                  "zoom": -1.1211955764451775
-                }
+                "file": "Notes/Puvodni.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -88,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Canvases/Main box.canvas",
+                "file": "Notes/Puvodni.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Canvases/Main box.canvas",
+                "file": "Notes/Puvodni.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -128,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Canvases/Main box.canvas"
+                "file": "Notes/Puvodni.md"
               }
             }
           }
@@ -149,10 +146,18 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "667bac7181266418",
+  "active": "7815fcefacca1919",
   "lastOpenFiles": [
-    "Main board/Main board schematic.md",
+    "Notes/img/svetla.jpg",
+    "Notes/img/moduly.jpg",
+    "Notes/img/krmitko.jpg",
+    "Notes/img/filtr.jpg",
+    "Notes/img/akvarko.jpg",
+    "Notes/img",
+    "Notes/Puvodni.md",
+    "Notes/Random notes.md",
     "Canvases/Main box.canvas",
+    "Main board/Main board schematic.md",
     "Canvases/block schematic.canvas",
     "Bakalárka Check list.md",
     "Notes/freeRTOS notes.md",
