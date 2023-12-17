@@ -1,0 +1,13 @@
+{
+	"nodes":[
+		{"id":"67863002cf42941a","type":"text","text":"# Peripherial bus","x":40,"y":-60,"width":320,"height":60},
+		{"id":"8bf51fb00d55db1a","x":640,"y":-144,"width":800,"height":584,"type":"file","file":"Canvases/Peripherials.canvas"},
+		{"id":"6030fe6036ba2f0c","x":915,"y":-204,"width":250,"height":60,"type":"text","text":"# Peripherials"},
+		{"id":"6df609801d01aec2","type":"file","file":"Canvases/Main box.canvas","x":-520,"y":-230,"width":400,"height":400},
+		{"id":"d2584435634acfef","x":-370,"y":-290,"width":250,"height":60,"type":"text","text":"# Main box"}
+	],
+	"edges":[
+		{"id":"bfd98e24b282597c","fromNode":"6df609801d01aec2","fromSide":"right","toNode":"67863002cf42941a","toSide":"left"},
+		{"id":"792f211ba9791a36","fromNode":"67863002cf42941a","fromSide":"right","toNode":"8bf51fb00d55db1a","toSide":"left"}
+	]
+}

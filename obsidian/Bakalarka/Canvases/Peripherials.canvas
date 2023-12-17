@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"ded13905ee3129da","type":"text","text":"# Template peripherial","x":20,"y":-180,"width":367,"height":72},
+		{"id":"25e1330e93c5da22","type":"text","text":"# Sensors\n## Temperature\n## pH\n## Water level\n## Light","x":64,"y":-64,"width":280,"height":460},
+		{"id":"82dc955d1bb70ede","type":"text","text":"# Action parts\n## LED controller\n## Feeder\n","x":387,"y":-64,"width":280,"height":460}
+	],
+	"edges":[
+		{"id":"cad74af4e6df7d36","fromNode":"ded13905ee3129da","fromSide":"bottom","toNode":"25e1330e93c5da22","toSide":"top"},
+		{"id":"cacf662dc1577961","fromNode":"ded13905ee3129da","fromSide":"right","toNode":"82dc955d1bb70ede","toSide":"top"}
+	]
+}

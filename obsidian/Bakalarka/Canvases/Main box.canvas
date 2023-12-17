@@ -1,0 +1,16 @@
+{
+	"nodes":[
+		{"id":"edb32217db35371d","type":"group","x":-360,"y":-160,"width":400,"height":400,"label":"Main board"},
+		{"id":"e3a7418f5a219979","type":"file","file":"Main board/Main board FW.md","subpath":"#FW","x":-340,"y":10,"width":240,"height":50},
+		{"id":"46006efb82efda77","type":"text","text":"# PCB layout","x":-340,"y":-61,"width":250,"height":60},
+		{"id":"ded1d28e8481efba","type":"text","text":"# Relays","x":231,"y":-110,"width":250,"height":60},
+		{"id":"ca13fba65e56e831","type":"text","text":"# 230V sockets","x":600,"y":-110,"width":330,"height":60},
+		{"id":"9158d9b4d8075ca8","type":"text","text":"# Power source","x":-860,"y":31,"width":322,"height":79},
+		{"id":"a06fb1a909f30f2d","type":"file","file":"Main board/Main board schematic.md","subpath":"#Schematic","x":-340,"y":-140,"width":250,"height":60}
+	],
+	"edges":[
+		{"id":"1d7a250e07946445","fromNode":"edb32217db35371d","fromSide":"right","toNode":"ded1d28e8481efba","toSide":"left"},
+		{"id":"c17c4b52245e99a7","fromNode":"ded1d28e8481efba","fromSide":"right","toNode":"ca13fba65e56e831","toSide":"left"},
+		{"id":"ca25cfba493b8170","fromNode":"9158d9b4d8075ca8","fromSide":"right","toNode":"edb32217db35371d","toSide":"left"}
+	]
+}

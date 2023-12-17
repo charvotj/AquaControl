@@ -1,0 +1,167 @@
+{
+  "main": {
+    "id": "2b16a4b3a31ab637",
+    "type": "split",
+    "children": [
+      {
+        "id": "b81fc9f18e49aa3d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "667bac7181266418",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Canvases/Main box.canvas",
+                "viewState": {
+                  "x": 35,
+                  "y": -99.41838270882428,
+                  "zoom": -1.1211955764451775
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6d63056ca215a409",
+    "type": "split",
+    "children": [
+      {
+        "id": "bcbe607bd07f027f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9bdd9a4c73a8879b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "4dfb3c1e23c77c7d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "228b58c5708e3e94",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "9558c0c9fd34ae1f",
+    "type": "split",
+    "children": [
+      {
+        "id": "a952af1abcc6a4b0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3dd645d376a55dff",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Canvases/Main box.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "03c4b1e463e8da1c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Canvases/Main box.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "b6c159592de10419",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "8c1859b07c8f18b5",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Canvases/Main box.canvas"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "667bac7181266418",
+  "lastOpenFiles": [
+    "Main board/Main board schematic.md",
+    "Canvases/Main box.canvas",
+    "Canvases/block schematic.canvas",
+    "Bakalárka Check list.md",
+    "Notes/freeRTOS notes.md",
+    "Notes",
+    "Main board/Main board FW.md",
+    "Main board",
+    "Canvases/Plán práce na baka.canvas",
+    "Canvases/Untitled.canvas",
+    "Canvases/Peripherials.canvas",
+    "Canvases"
+  ]
+}
