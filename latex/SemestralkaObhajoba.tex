@@ -50,6 +50,10 @@
 \input{nastaveni}      % v tomto souboru doplňte údaje o sobě, o názvu práce...
                        % (tento soubor je sdílený s textem práce)
 
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,6 +76,68 @@
 %\usetheme{Darmstadt} \usecolortheme{default2}
 \logoheader					% vytvoření zkráceného loga VUT FEKT v hlavičce slajdu, nechte odkomentované
 
+
+
+
+					   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%      !!! VLASTNÍ BALÍČKY A NASTAVENÍ !!!        %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%====== Units =====
+% \usepackage{siunitx}
+% \sisetup{inter-unit-product =\ensuremath{\cdot}}
+% \sisetup{group-digits = integer}
+% \sisetup{output-decimal-marker = {,}}
+% \sisetup{exponent-product = \ensuremath{\cdot}}
+% \sisetup{separate-uncertainty}
+% \sisetup{tight-spacing = false}
+% \DeclareSIUnit\permille{\text{\textperthousand}}
+%\sisetup{scientific-notation = true}
+%\sisetup{round-mode=places,round-precision=4}
+%\sisetup{evaluate-expression}
+
+%====== Hyperlinky ====== 
+% \hypersetup{allbordercolors={1 1 1}}
+
+%====== Obrazky ========
+% \usepackage{graphicx} 
+% \usepackage[dvipsnames]{xcolor} % E: option clash for package xcolor
+% \usepackage{tikz}
+
+% ^^ už tam někde prý jsou použité
+
+\usepackage[siunitx]{circuitikz}
+% \usepackage{pgf}
+% \usetikzlibrary{matrix}
+\usetikzlibrary{fit}
+% \usetikzlibrary{patterns}
+% \usepackage{tkz-euclide}
+% \usetikzlibrary{arrows.meta, bending, patterns.meta, ducks}
+% \usetikzlibrary{shapes, backgrounds, decorations.pathmorphing, calc}
+\usetikzlibrary{positioning}
+
+% % \usepackage{derivative} % nebude potřeba 
+
+% \usepackage{pgfplots}
+% \pgfplotsset{width=0.8\linewidth, compat=1.17}
+% \def\plotcscale{0.8}
+% \usepackage{pgfplotstable}
+% \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+%             \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+
+% \usepackage[style=iso-numeric,backend=biber]{biblatex}
+% \addbibresource{text/literatura.bib}
+%making everything to match Juice citations
+% \DeclareFieldFormat{labelnumberwidth}{\mkbibbrackets{#1}}
+% \usepackage{natbib}
+% \usepackage{url}
+% \DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
+
+
+% TEMP
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{calc}
 
 
 \begin{document}
@@ -101,14 +167,7 @@
 				\end{itemize}
 			\item Návrh vlastního zařízení
 				\begin{itemize}
-					\item Požadavky
-					\begin{itemize}
-						\item Cílová skupina -- hobby akvaristé
-						\item Jednoduchost instalace a obsluhy
-						\item Rozšiřitenost systému
-						\item Bezpečnost a spolehlivost
-						\item Nízká cena
-					\end{itemize}
+					\item Upřesnění požadavků
 					\item Návrh architektury
 					\item Tvorba schématu
 				\end{itemize}
@@ -182,10 +241,11 @@
 				\item Vnitřní / vnější filtr
 			\end{itemize}
 
-			\vspace{lcm}%
+			\vspace{4ex}%
 			Řízení:\\[2ex]
 			%
 			\begin{itemize}
+				\item Kontinuální běh
 				\item 230\,V
 			\end{itemize}
 		\end{column}
@@ -205,15 +265,28 @@
 
 %%%%%%%%%%%%%
 \begin{frame} 
-	\frametitle{Vybavení akvária}
+	\frametitle{Vybavení akvária -- Osvětlení}
 	
 	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
 		\begin{column}{0.4\textwidth}		% první sloupec
-			Základní parametry:\\[2ex]
+			Typy:\\[2ex]
 			%
 			\begin{itemize}
-				\item Velikost nádrže
-				\item Sladká / slaná voda
+				\item Zářivka
+				\item Výbojka
+				\item LED svítidlo
+			\end{itemize}
+
+			\vspace{4ex}%
+			Řízení:\\[2ex]
+			%
+			\begin{itemize}
+				\item Svícení během dne 
+				\begin{itemize}
+					\item Plynulý přechod (LED)
+				\end{itemize}
+				\item 230\,V -- Zářivky a výbojky
+				\item 0 až 5/12/24\,V -- LED
 			\end{itemize}
 		\end{column}
 		%
@@ -221,7 +294,7 @@
 			\begin{figure}%	
 				\centering
 				% \vspace{1cm}	              % horizontální mezera
-				\includegraphics[width=\columnwidth]{obrazky/prezentace/vybaveni-akvaria/01-prazdne.png}
+				\includegraphics[width=\columnwidth]{obrazky/prezentace/vybaveni-akvaria/04-svetlo.png}
 				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
 				%\caption{Popisek obrázku}%
 				%\label{obr:ukazka}
@@ -232,15 +305,23 @@
 
 %%%%%%%%%%%%%
 \begin{frame} 
-	\frametitle{Vybavení akvária}
+	\frametitle{Vybavení akvária -- Ohřev vody}
 	
 	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
 		\begin{column}{0.4\textwidth}		% první sloupec
-			Základní parametry:\\[2ex]
+			Typy:\\[2ex]
 			%
 			\begin{itemize}
-				\item Velikost nádrže
-				\item Sladká / slaná voda
+				\item Ponorné odporové těleso
+				\item Topný kabel
+			\end{itemize}
+
+			\vspace{4ex}%
+			Řízení:\\[2ex]
+			%
+			\begin{itemize}
+				\item Vlastní termostat 
+				\item 230\,V
 			\end{itemize}
 		\end{column}
 		%
@@ -248,7 +329,7 @@
 			\begin{figure}%	
 				\centering
 				% \vspace{1cm}	              % horizontální mezera
-				\includegraphics[width=\columnwidth]{obrazky/prezentace/vybaveni-akvaria/01-prazdne.png}
+				\includegraphics[width=\columnwidth]{obrazky/prezentace/vybaveni-akvaria/05-topeni.png}
 				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
 				%\caption{Popisek obrázku}%
 				%\label{obr:ukazka}
@@ -259,15 +340,27 @@
 
 %%%%%%%%%%%%%
 \begin{frame} 
-	\frametitle{Vybavení akvária}
+	\frametitle{Vybavení akvária -- Sensory}
 	
 	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
 		\begin{column}{0.4\textwidth}		% první sloupec
-			Základní parametry:\\[2ex]
+			Účel:\\[0ex]
 			%
 			\begin{itemize}
-				\item Velikost nádrže
-				\item Sladká / slaná voda
+				\item Kontrola funkce použité techniky
+				\item Předcházení škodám
+			\end{itemize}
+
+			\vspace{2ex}%
+			Měřené veličiny / parametry:\\[0ex]
+			%
+			\begin{itemize}
+				\item Teplota 
+				\item Výška hladiny
+				\item pH (a návazně CO\(_{2}\))
+				\item Únik vody
+				\item Osvětlení
+				\item Amoniak
 			\end{itemize}
 		\end{column}
 		%
@@ -275,7 +368,7 @@
 			\begin{figure}%	
 				\centering
 				% \vspace{1cm}	              % horizontální mezera
-				\includegraphics[width=\columnwidth]{obrazky/prezentace/vybaveni-akvaria/01-prazdne.png}
+				\includegraphics[width=\columnwidth]{obrazky/prezentace/vybaveni-akvaria/06-sensory.png}
 				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
 				%\caption{Popisek obrázku}%
 				%\label{obr:ukazka}
@@ -286,6 +379,224 @@
 
 
 % endregion
+
+%%%%%%%%%%%%%
+\begin{frame}[fragile]
+	\frametitle{Průzkum trhu -- existující řešení automatizace}
+	
+	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
+		\begin{column}{0.5\textwidth}		% první sloupec
+			Nabídka:\\[1ex]
+			%
+			\begin{itemize}
+				\item Převážně velmi komplexní systémy
+				\item Firmy GHL, NeptuneSystems
+			\end{itemize}
+
+			\vspace{1.5ex}%
+			Výhody:\\[1ex]
+			%
+			\begin{itemize}
+				\item Dlouholeté působení na trhu 
+				\item Vyhoví i náročným požadavkům
+			\end{itemize}
+			
+			\vspace{1.5ex}%
+			Nevýhody:\\[1ex]
+			%
+			\begin{itemize}
+				\item Vysoká cena 
+				\item Náročné nastavení systému
+			\end{itemize}
+			
+		\end{column}
+		%
+		\begin{column}{0.5\textwidth}		% druhý sloupec
+			\begin{figure}%	
+				\centering
+				\vspace{-0.8cm}	              % horizontální mezera
+				\includegraphics[width=\columnwidth]{obrazky/prezentace/ghl-from-forum.jpg}
+				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
+				%\caption{Popisek obrázku}%
+				%\label{obr:ukazka}
+			\end{figure}
+		\end{column}
+	\end{columns}											% ukončení prostředí sloupce
+\end{frame}
+
+%%%%%%%%%%%%%
+\begin{frame}[fragile]
+	\frametitle{Průzkum trhu -- existující řešení automatizace}
+	
+	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
+		\begin{column}{0.5\textwidth}		% první sloupec
+			Jednodušší varianty:\\[1ex]
+			%
+			\begin{itemize}
+				\item Firma CoralVue
+			\end{itemize}
+
+			\vspace{3ex}%
+			\begin{figure}%	
+				\centering
+				\vspace{-0.8cm}	              % horizontální mezera
+				\includegraphics[width=\columnwidth]{obrazky/hydros.jpg}
+				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
+				%\caption{Popisek obrázku}%
+				%\label{obr:ukazka}
+			\end{figure}
+			
+		\end{column}
+		%
+		\begin{column}{0.5\textwidth}		% druhý sloupec
+			\begin{figure}%	
+				\centering
+				\vspace{-0.5cm}	              % horizontální mezera
+				\includegraphics[width=\columnwidth]{obrazky/prezentace/hydros-x2-starter-pack.jpg}
+				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
+				%\caption{Popisek obrázku}%
+				%\label{obr:ukazka}
+			\end{figure}
+		\end{column}
+	\end{columns}											% ukončení prostředí sloupce
+\end{frame}
+
+%%%%%%%%%%%%%
+\begin{frame}[fragile]
+	\frametitle{Návrh vlastního zařízení -- Specifikace požadavků}
+	
+	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
+		\begin{column}{0.8\textwidth}		% první sloupec
+			Určení zařízení:\\[1ex]
+			%
+			\begin{itemize}
+				\item Cílová skupina -- hobby akvaristé
+				\begin{itemize}
+					\item Malá sladkovodní akvária bez specifických potřeb
+				\end{itemize}
+			\end{itemize}
+			\vspace{1.5ex}%
+			Klíčové parametry:\\[1ex]
+			\begin{itemize}
+				\item Jednoduchost instalace a obsluhy
+				\item Rozšiřitenost systému
+				\item Bezpečnost a spolehlivost
+				\item Nízká cena
+			\end{itemize}
+		\end{column}
+		%
+		\begin{column}{0.2\textwidth}		% druhý sloupec
+			\begin{figure}%	
+				\centering
+				\vspace{2cm}	              % horizontální mezera
+				\hspace{-4cm}
+				\includegraphics[width=5cm]{obrazky/prezentace/icons.png}
+				%lze vložit popisek, ale povetšinou je to v prezentaci zbytečné
+				%\caption{Popisek obrázku}%
+				%\label{obr:ukazka}
+			\end{figure}
+		\end{column}
+	\end{columns}											% ukončení prostředí sloupce
+\end{frame}
+
+%%%%%%%%%%%%%
+\begin{frame}[fragile]
+	\frametitle{Návrh vlastního zařízení -- Blokové schéma}
+	\vspace{-0.8cm}
+	\begin{figure}%	
+		\centering
+		\scalebox{0.6}
+		{
+		\begin{tikzpicture}[
+			% scale=0.6, every node/.style={scale=0.6},
+			shift={(30,30)},
+			node distance=2cm,
+			blok/.style={draw, rectangle, rounded corners=8pt, minimum height=1.5cm, minimum width=3cm},
+			rect/.style={draw, dashed, blue, inner sep=15pt, fit={#1}},
+			label/.style={blue}
+		]
+			% barvičky
+			\definecolor{barva-silove}{RGB}{220, 220, 220}
+			\definecolor{barva-ridici}{RGB}{241, 196, 15}
+			% \draw (0,0) -- (4,0);
+			\begin{scope}[]
+				\node (napajeni) [blok, ] {Napájecí zdroj 24V};
+				\node (ridici) [blok, below of = napajeni, align=center, fill=barva-ridici] {Řídící jednotka \\ (ESP32)};
+				\node (rele) [blok, right=0.5 of ridici, fill=barva-silove] {Relé modul};
+				\node (zasuvky) [blok, right=0.5 of rele, fill=barva-silove] {Zásuvky 230VAC};
+				\node (uzel) [style={draw, circle, minimum size=0.1cm, fill}, above=1cm of zasuvky] {};
+				\node (sit) [blok, right=3 of uzel, fill=barva-silove ] {Přívod 230VAC};
+				\node (display) [blok, below left=-0.5cm and 0.65cm of ridici] {Status display};
+				\node (ledstrip) [blok, above left=-0.5cm and 0.65cm of ridici] {Status LED pásek};
+	
+				\node (konektor1) [blok, align=center, below left=1.5cm and -1.2cm of ridici] {Konektor pro periferie \\ \#1};
+				\node (konektor2) [blok, align=center, below right=1.5cm and -1.2cm of ridici] {Konektor pro periferie \\ \#2};
+	
+				% Periferie
+				\node (per1-1) [blok, align=center, below=1.2cm of konektor1] {Periferie \\ \#1.1};
+				\node (per1-x) [blok, align=center, below=1cm of per1-1] {Periferie \\ \#1.X};
+			
+				\node (per2-1) [blok, align=center, below=1.2cm of konektor2] {Periferie \\ \#2.1};
+				\node (per2-y) [blok, align=center, below=1cm of per2-1] {Periferie \\ \#2.Y};
+	
+				% Popisek
+				\node (vlastovka) [font=\fontsize{35}{14}\selectfont, yscale=3,  above right=-4.2cm and 0.6cm of per2-1] {\}}; 
+	
+				\node (popisek1) [font=\fontsize{18}{20}\selectfont,right=0.5cm of vlastovka,yshift=0cm, align=left] {Připojení senzorů: \\ -- teploměr \\ -- výška hladiny \\ -- pH \\ -- ...};
+				\node (popisek2) [font=\fontsize{18}{20}\selectfont,right=1cm of popisek1.north east, anchor=north west, align=left] {Připojení akčních členů: \\ -- řízení LED svícení \\ -- automatické krmítko \\ -- ...};
+				% \node (popisek3) [below=1cm of popisek2.south west, anchor=south west, align=left] {...};
+	
+				% Spojovací linie
+				\draw[-] (sit) -- (uzel);
+				\draw[-] (uzel) -- (napajeni);
+				\draw[-] (uzel) -- (zasuvky);
+				\draw[-] (napajeni) -- (ridici);
+				\draw[-] (ridici) -- (napajeni);
+				\draw[-] (ridici) -- (display);
+				\draw[-] (ridici) -- (ledstrip);
+				\draw[-] (ridici) -- (konektor1);
+				\draw[-] (ridici) -- (konektor2);
+				\draw[-] (ridici) -- (rele);
+				\draw[-] (rele) -- (zasuvky);
+		
+				\draw[-] (konektor1) -- (per1-1);
+				\draw[dashed] (per1-1) -- (per1-x);
+				
+				\draw[-] (konektor2) -- (per2-1);
+				\draw[dashed] (per2-1) -- (per2-y);
+				
+			
+				% Obdélník, který obklopí vybrané uzly
+				\node (hlavni-cast) [rect={(napajeni) (display) (ledstrip) (konektor1) (zasuvky)}] {};
+				\node[label,above left=0.2cm and -3.6cm of hlavni-cast] {Hlavní šasi zařízení};
+			\end{scope}
+		\end{tikzpicture}
+		}
+	\end{figure}
+
+	% \begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
+	% 	\begin{column}{0.4\textwidth}		% první sloupec
+	% 		Typy:\\[2ex]
+	% 		%
+	% 		\begin{itemize}
+	% 			\item Ponorné odporové těleso
+	% 			\item Topný kabel
+	% 		\end{itemize}
+
+	% 		\vspace{4ex}%
+	% 		Řízení:\\[2ex]
+	% 		%
+	% 		\begin{itemize}
+	% 			\item Vlastní termostat 
+	% 			\item 230\,V
+	% 		\end{itemize}
+	% 	\end{column}
+	% 	%
+	% 	\begin{column}{0.6\textwidth}		% druhý sloupec
+			
+	% 	\end{column}
+	% \end{columns}											% ukončení prostředí sloupce
+\end{frame}
 
 %%%%%%%%%%%%%
 \begin{frame} 
