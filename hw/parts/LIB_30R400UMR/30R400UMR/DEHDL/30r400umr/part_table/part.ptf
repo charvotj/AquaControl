@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART '30R400UMR'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "LITTELFUSE", "30R400UMR" (!) = "", "30R400UMR", "Other", "576-30R400UMR", "https://www.mouser.co.uk/ProductDetail/Littelfuse/30R400UMR?qs=PWhpLWeW8wcamUEdDq33Sg%3D%3D", "PTC Resettable Fuse 4A(hold) 8A(trip) 30VDC 40A 2.5W 12.7s 0.01Ohm Radial 14 X 3 X 22mm Ammo Automotive", "", "22 mm"
+END_PART
+
+END.

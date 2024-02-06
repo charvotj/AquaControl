@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'G17C0900132EU'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Amphenol", "G17C0900132EU" (!) = "", "G17C0900132EU", "Other", "523-G17C0900132EU", "https://www.mouser.co.uk/ProductDetail/Amphenol-Commercial-Products/G17C0900132EU?qs=JZ%252BiKJYxjZWsw7teGjwdZQ%3D%3D", "D Sub G17C Series Standard Density Right Angle PCB Mount", "https://4donline.ihs.com/images/VipMasterIC/IC/AMPH/AMPHS14020/AMPHS14020-1.pdf?hkey=EF798316E3902B6ED9A73243A3159BB0", "12.93 mm"
+END_PART
+
+END.

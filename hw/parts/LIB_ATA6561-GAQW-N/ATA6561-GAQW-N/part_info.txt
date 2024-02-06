@@ -1,0 +1,9 @@
+Manufacturer=Microchip
+PartNumber=ATA6561-GAQW-N
+PartCategory=Integrated Circuit
+PackageCategory=Small Outline Packages
+PinCount=8
+Version=2.1
+Released=2019-01-19 15:03:27
+Downloaded=2024-01-28 11:10:59
+3D=Y

@@ -1,0 +1,16 @@
+.ATA6561-GAQW-N :1 ;MICROCHIP - ATA6561-GAQW-N - CAN TRANSCEIVER, 5MBPS, -40 TO 150DEG C
+SOIC127P600X175-8N
+*STM IC
+*NGS
+*PLB 1="TXD" 2="GND" 3="VCC" 4="RXD" 5="VIO" 6="CANL" 7="CANH" 8="STBY"
+*MXP 8
+*DFN ATA6561-GAQW-N
+~!Mouser Part Number (579-ATA6561-GAQW-N)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Microchip-Technology/ATA6561-GAQW-N?qs=y6ZabgHbY%252BwGbm2JCZMHKQ%3D%3D)
+~!Manufacturer_Name (Microchip)
+~!Manufacturer_Part_Number (ATA6561-GAQW-N)
+~!Link Datasheet (http://ww1.microchip.com/downloads/en/DeviceDoc/ATA6560-ATA6561-High-Speed-CAN-Transceiver-DS20005991A.pdf)
+~!Height (1.75mm)
+~!3D_Model (ATA6561-GAQW-N)
+ATA6561-GAQW-N
+1.1!U 2.1!U 3.1!U 4.1!U 8.1!U 7.1!U 6.1!U 5.1!U 

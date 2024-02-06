@@ -1,0 +1,9 @@
+Manufacturer=LITTELFUSE
+PartNumber=30R400UMR
+PartCategory=Fuse
+PackageCategory=Other
+PinCount=2
+Version=1.1
+Released=2019-04-18 10:12:43
+Downloaded=2024-01-28 14:23:18
+3D=Y

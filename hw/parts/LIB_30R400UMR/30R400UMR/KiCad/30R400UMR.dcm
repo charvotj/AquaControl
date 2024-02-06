@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 30R400UMR
+D PTC Resettable Fuse 4A(hold) 8A(trip) 30VDC 40A 2.5W 12.7s 0.01Ohm Radial 14 X 3 X 22mm Ammo Automotive
+K
+F 
+$ENDCMP
+#
+#End Doc Library

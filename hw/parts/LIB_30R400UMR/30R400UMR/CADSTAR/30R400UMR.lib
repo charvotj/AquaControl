@@ -1,0 +1,16 @@
+.30R400UMR :1 ;PTC Resettable Fuse 4A(hold) 8A(trip) 30VDC 40A 2.5W 12.7s 0.01Ohm Radial 14 X 3 X 22mm Ammo Automotive
+"30R400UMR"
+*STM F
+*NGS
+*PLB 1="1" 2="2"
+*MXP 2
+*DFN 30R400UMR
+~!Mouser Part Number (576-30R400UMR)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Littelfuse/30R400UMR?qs=PWhpLWeW8wcamUEdDq33Sg%3D%3D)
+~!Manufacturer_Name (LITTELFUSE)
+~!Manufacturer_Part_Number (30R400UMR)
+~!Link Datasheet (-)
+~!Height (22mm)
+~!3D_Model (30R400UMR)
+"30R400UMR"
+1.1!U 2.1!U 

@@ -1,0 +1,9 @@
+Manufacturer=Amphenol
+PartNumber=G17C0900132EU
+PartCategory=Capacitor
+PackageCategory=Other
+PinCount=11
+Version=1.2
+Released=2022-10-18 06:00:33
+Downloaded=2024-01-29 16:40:39
+3D=Y

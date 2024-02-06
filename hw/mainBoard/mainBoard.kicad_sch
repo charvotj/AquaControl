@@ -7,6 +7,7 @@
   (lib_symbols
   )
 
+  (bus_alias "CAN" (members "CAN_RX" "CAN_TX" "CAN_STBY"))
   (junction (at 223.52 50.8) (diameter 0) (color 0 0 0 0)
     (uuid 240b50a0-8d51-4e64-a528-64ffdc211eae)
   )
@@ -19,6 +20,8 @@
   (junction (at 220.98 53.34) (diameter 0) (color 0 0 0 0)
     (uuid f8a4b0ed-1a65-4b65-aca0-16d5e923e1f1)
   )
+
+  (no_connect (at 71.12 93.98) (uuid fa7ff385-4248-4b39-8edb-5b119f62f470))
 
   (wire (pts (xy 83.82 88.9) (xy 83.82 53.34))
     (stroke (width 0) (type default))
@@ -64,10 +67,6 @@
   (bus (pts (xy 165.1 81.28) (xy 231.0402 81.28))
     (stroke (width 0) (type default))
     (uuid 40b3fbe8-3a85-4634-abdf-20fdecaa5ea0)
-  )
-  (bus (pts (xy 137.16 121.92) (xy 231.14 121.92))
-    (stroke (width 0) (type default))
-    (uuid 45f3c5d8-841a-4fb6-bc0e-acd279a31d13)
   )
   (bus (pts (xy 154.94 60.96) (xy 231.0402 60.96))
     (stroke (width 0) (type default))
@@ -189,13 +188,9 @@
       (effects (font (size 1.27 1.27)) (justify left))
       (uuid 162deedb-286d-4a3e-8e3c-0ab0fd7b1f6a)
     )
-    (pin "{UART1}" bidirectional (at 231.14 119.38 180)
+    (pin "{CAN}" bidirectional (at 231.14 119.38 180)
       (effects (font (size 1.27 1.27)) (justify left))
-      (uuid 77cc1e6e-e79a-4b73-8eda-3a7db8b7b1d5)
-    )
-    (pin "{UART2}" bidirectional (at 231.14 121.92 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid 7ab0fe3a-5085-4607-845e-3736ec96004c)
+      (uuid 8695c5fa-396e-4935-b2c5-74ad54ea54cc)
     )
     (instances
       (project "mainBoard"
@@ -242,13 +237,9 @@
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid e45d33d7-9b6c-49f6-b6fb-74d051f54741)
     )
-    (pin "{UART2}" bidirectional (at 137.16 121.92 0)
+    (pin "{CAN}" bidirectional (at 137.16 119.38 0)
       (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 5037e73a-fd7d-486d-9175-48e91027afef)
-    )
-    (pin "{UART1}" bidirectional (at 137.16 119.38 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 16a63afc-21ed-4ce7-a25d-a885cdb313d1)
+      (uuid dd57432b-29d0-47d9-9047-3a0bc2b0f024)
     )
     (instances
       (project "mainBoard"
@@ -274,6 +265,10 @@
     (pin "5.2V" output (at 71.12 88.9 0)
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 35d08eb3-70f9-4615-b364-05b317f69942)
+    )
+    (pin "LM_POWER_GOOD" output (at 71.12 93.98 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 45b8567f-c60d-4866-90a9-738b020e8cb0)
     )
     (instances
       (project "mainBoard"

@@ -4,4 +4,8 @@
   (lib (name "LM5148")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_LM5148RGYR/KiCADv6/2023-11-23_20-45-29.kicad_sym")(options "")(descr ""))
   (lib (name "SRDA3.3-4")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_SRDA3-3-4DR2G/KiCADv6/2023-11-24_14-24-49.kicad_sym")(options "")(descr ""))
   (lib (name "TXU0101")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_TXU0101DBVR/KiCADv6/2023-12-03_12-25-54.kicad_sym")(options "")(descr ""))
+  (lib (name "ATA6561-GAQW-N")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/LIB_ATA6561-GAQW-N/ATA6561-GAQW-N/KiCad/ATA6561-GAQW-N.kicad_sym")(options "")(descr ""))
+  (lib (name "DSUB-G17C9001")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/LIB_G17C0900132EU/G17C0900132EU/KiCad/G17C0900132EU.kicad_sym")(options "")(descr ""))
+  (lib (name "NMOS-CSD18514")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_CSD18514Q5A/KiCADv6/2024-01-29_18-30-39.kicad_sym")(options "")(descr ""))
+  (lib (name "NMOS-CSD18534")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_CSD18534Q5A/KiCADv6/2024-01-29_18-29-02.kicad_sym")(options "")(descr ""))
 )

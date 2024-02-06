@@ -13,8 +13,8 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Random notes.md",
-                "mode": "preview",
+                "file": "Notes/JLC PCB.md",
+                "mode": "source",
                 "source": false
               }
             }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/Random notes.md",
+                "file": "Notes/JLC PCB.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/Random notes.md",
+                "file": "Notes/JLC PCB.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Random notes.md"
+                "file": "Notes/JLC PCB.md"
               }
             }
           }
@@ -148,25 +148,28 @@
   },
   "active": "b234ebdc017cfa3d",
   "lastOpenFiles": [
+    "Notes/CAN.md",
+    "Notes/JLC PCB.md",
+    "Pasted image 20240128115930.png",
+    "Bakalárka Check list.md",
+    "Canvases/Main box.canvas",
+    "Canvases/Peripherials.canvas",
+    "Main board/Main board schematic.md",
+    "Main board/Main board FW.md",
+    "Notes/freeRTOS notes.md",
+    "Notes/Random notes.md",
     "Notes/Puvodni.md",
+    "Canvases/block schematic.canvas",
+    "Canvases/Untitled.canvas",
+    "Canvases/Plán práce na baka.canvas",
     "Notes/img/svetla.jpg",
     "Notes/img/moduly.jpg",
     "Notes/img/krmitko.jpg",
     "Notes/img/filtr.jpg",
     "Notes/img/akvarko.jpg",
     "Notes/img",
-    "Notes/Random notes.md",
-    "Canvases/Main box.canvas",
-    "Main board/Main board schematic.md",
-    "Canvases/block schematic.canvas",
-    "Bakalárka Check list.md",
-    "Notes/freeRTOS notes.md",
     "Notes",
-    "Main board/Main board FW.md",
     "Main board",
-    "Canvases/Plán práce na baka.canvas",
-    "Canvases/Untitled.canvas",
-    "Canvases/Peripherials.canvas",
     "Canvases"
   ]
 }
