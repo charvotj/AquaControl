@@ -34,9 +34,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.762,
-          "height": 1.524,
-          "width": 1.524
+          "drill": 0.0,
+          "height": 0.8128,
+          "width": 0.254
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -136,10 +136,10 @@
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 5,
           "td_on_pad_in_zone": false,
-          "td_onpadsmd": true,
+          "td_onpadsmd": false,
           "td_onroundshapesonly": false,
-          "td_ontrackend": false,
-          "td_onviapad": true
+          "td_ontrackend": true,
+          "td_onviapad": false
         }
       ],
       "teardrop_parameters": [
@@ -173,6 +173,7 @@
       ],
       "track_widths": [
         0.0,
+        0.25,
         0.5,
         1.0
       ],
