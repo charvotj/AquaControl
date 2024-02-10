@@ -96,10 +96,10 @@
       )
     )
     (symbol "PCM_Espressif:ESP32-WROOM-E" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at -30.48 27.94 0)
+      (property "Reference" "U1" (at 2.1941 27.94 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
-      (property "Value" "ESP32-WROOM-E" (at -30.48 25.4 0)
+      (property "Value" "ESP32-WROOM-E" (at 2.1941 25.4 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
       (property "Footprint" "PCM_Espressif:ESP32-WROOM-32E" (at 0 -35.56 0)
@@ -118,6 +118,36 @@
         (rectangle (start -30.48 22.86) (end 30.48 -22.86)
           (stroke (width 0) (type default))
           (fill (type background))
+        )
+      )
+      (symbol "ESP32-WROOM-E_1_0"
+        (pin no_connect line (at 12.7 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "17" (effects (font (size 1.27 1.27))))
+        )
+        (pin no_connect line (at 15.24 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "18" (effects (font (size 1.27 1.27))))
+        )
+        (pin no_connect line (at 17.78 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "19" (effects (font (size 1.27 1.27))))
+        )
+        (pin no_connect line (at 20.32 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "20" (effects (font (size 1.27 1.27))))
+        )
+        (pin no_connect line (at 22.86 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "21" (effects (font (size 1.27 1.27))))
+        )
+        (pin no_connect line (at 25.4 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "22" (effects (font (size 1.27 1.27))))
+        )
+        (pin no_connect line (at 27.94 -25.4 90) (length 2.54) hide
+          (name "NC" (effects (font (size 1.27 1.27))))
+          (number "32" (effects (font (size 1.27 1.27))))
         )
       )
       (symbol "ESP32-WROOM-E_1_1"
@@ -1754,6 +1784,13 @@
     (pin "16" (uuid 3532f215-00ed-4a49-82b8-0cc76d2ed699))
     (pin "14" (uuid 23a47d8f-bbcb-48a0-b9d5-016b506a6b65))
     (pin "1" (uuid f7309d17-6b7d-4e04-a5a4-09d3cd9a410d))
+    (pin "19" (uuid e3d3272f-cda0-424b-aa45-b21c1eb4832d))
+    (pin "32" (uuid dc06fcc1-1994-4b03-8ac8-e5308d69c408))
+    (pin "21" (uuid bedb8a5d-6b38-4490-b2b7-b726628cf502))
+    (pin "18" (uuid 1c870943-5a7f-444d-b75a-877a2c631abf))
+    (pin "17" (uuid 6f123b6a-399b-4809-b031-b79c8ff7527f))
+    (pin "20" (uuid 50346a06-0fa8-4012-b766-aa14d4d03a89))
+    (pin "22" (uuid 07a86f4b-de9b-48b2-9832-d88710590b62))
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
