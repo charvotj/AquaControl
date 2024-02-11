@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_849615"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2019-01-09-17:58:39)
+    (utime 2023-03-07-16:10:32)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "SRN8040-101M")
+)
+
+
+(pinAssign "ECS_849615"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2019-01-09-17:58:39)
+    (utime 2023-03-07-16:10:32)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_849615")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "SRN8040-101M")
+)
+
+
+(part "SRN8040-101M"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2019-01-09-17:58:39)
+    (utime 2023-03-07-16:10:32)
+    (packageRef "SRN8040-101M")
+    (pinAssignRef "ECS_849615")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "L")
+    (property "description" "Bourns SRN8040 Series Type 8040 Shielded Wire-wound SMD Inductor with a Ferrite Core, 100 uH +/-20% Wire-Wound 1A Idc")
+    (property "Mouser_Part_Number" "652-SRN8040-101M")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/Bourns/SRN8040-101M?qs=opBjA1TV902pEUqOZBsqAg%3D%3D")
+    (property "Manufacturer_Name" "Bourns")
+    (property "Manufacturer_Part_Number" "SRN8040-101M")
+    (property "Datasheet_Link" "https://www.bourns.com/pdfs/SRN8040.pdf")
+    (property "compAreaTopHeight" 4)
+)
+
+

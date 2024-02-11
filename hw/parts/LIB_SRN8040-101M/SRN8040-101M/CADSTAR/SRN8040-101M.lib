@@ -1,0 +1,16 @@
+.SRN8040-101M :1 ;Bourns SRN8040 Series Type 8040 Shielded Wire-wound SMD Inductor with a Ferrite Core, 100 uH +/-20% Wire-Wound 1A Idc
+SRN80408R2Y
+*STM L
+*NGS
+*PLB 1="1" 2="2"
+*MXP 2
+*DFN SRN8040-101M
+~!Mouser Part Number (652-SRN8040-101M)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Bourns/SRN8040-101M?qs=opBjA1TV902pEUqOZBsqAg%3D%3D)
+~!Manufacturer_Name (Bourns)
+~!Manufacturer_Part_Number (SRN8040-101M)
+~!Link Datasheet (https://www.bourns.com/pdfs/SRN8040.pdf)
+~!Height (4mm)
+~!3D_Model (SRN8040-101M)
+SRN8040-101M
+1.1!U 2.1!U 

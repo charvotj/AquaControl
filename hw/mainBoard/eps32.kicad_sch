@@ -1428,7 +1428,7 @@
   (symbol (lib_id "Device:C") (at 93.98 116.84 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 144bafaa-3c19-4867-92a3-78c0fee5585e)
-    (property "Reference" "C7" (at 93.98 120.65 90)
+    (property "Reference" "C2" (at 93.98 120.65 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "0.1uF" (at 93.98 123.19 90)
@@ -1445,7 +1445,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "C7") (unit 1)
+          (reference "C2") (unit 1)
         )
       )
     )
@@ -1479,7 +1479,7 @@
   (symbol (lib_id "Device:C") (at 68.58 38.1 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 443c2c5d-00ac-456c-b099-b4ecec1c9071)
-    (property "Reference" "C4" (at 72.39 36.83 0)
+    (property "Reference" "C9" (at 72.39 36.83 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "22uF" (at 72.39 39.37 0)
@@ -1496,7 +1496,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "C4") (unit 1)
+          (reference "C9") (unit 1)
         )
       )
     )
@@ -1531,7 +1531,7 @@
   (symbol (lib_id "Device:C") (at 45.72 116.84 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6ed191fb-1c82-4d64-85dd-1f3a85d524f2)
-    (property "Reference" "C6" (at 45.72 120.65 90)
+    (property "Reference" "C1" (at 45.72 120.65 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "0.1uF" (at 45.72 123.19 90)
@@ -1548,7 +1548,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "C6") (unit 1)
+          (reference "C1") (unit 1)
         )
       )
     )
@@ -1608,7 +1608,7 @@
   (symbol (lib_id "Device:C") (at 93.98 81.28 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 87ac5b7d-a28e-4548-84f2-fbd18df959aa)
-    (property "Reference" "C2" (at 97.79 80.01 0)
+    (property "Reference" "C5" (at 97.79 80.01 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1uF" (at 97.79 82.55 0)
@@ -1625,7 +1625,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "C2") (unit 1)
+          (reference "C5") (unit 1)
         )
       )
     )
@@ -1634,13 +1634,13 @@
   (symbol (lib_id "TLV761:PTLV76118DCYR") (at 54.61 27.94 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 87e802ab-cf5f-46c2-8f0e-4c3d9ea336f3)
-    (property "Reference" "U4" (at 85.09 20.32 0)
+    (property "Reference" "U2" (at 85.09 20.32 0)
       (effects (font (size 1.524 1.524)))
     )
     (property "Value" "TLV76133DCYR" (at 85.09 22.86 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Footprint" "SOT_8DCYR_TEX" (at 54.61 27.94 0)
+    (property "Footprint" "TLV761:SOT_8DCYR_TEX" (at 54.61 27.94 0)
       (effects (font (size 1.27 1.27) italic) hide)
     )
     (property "Datasheet" "PTLV76118DCYR" (at 54.61 27.94 0)
@@ -1653,7 +1653,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "U4") (unit 1)
+          (reference "U2") (unit 1)
         )
       )
     )
@@ -1688,7 +1688,7 @@
   (symbol (lib_id "Device:C") (at 111.76 35.56 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9c7c6736-7951-40e9-9733-e491d53970c7)
-    (property "Reference" "C5" (at 115.57 34.29 0)
+    (property "Reference" "C8" (at 115.57 34.29 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "2.2uF" (at 115.57 36.83 0)
@@ -1705,7 +1705,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "C5") (unit 1)
+          (reference "C8") (unit 1)
         )
       )
     )
@@ -1714,7 +1714,7 @@
   (symbol (lib_id "Device:C") (at 45.72 68.58 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ab5b8d08-d0ac-41f8-b84b-7134c9c45649)
-    (property "Reference" "C1" (at 49.53 67.31 0)
+    (property "Reference" "C4" (at 49.53 67.31 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "22uF" (at 49.53 69.85 0)
@@ -1731,7 +1731,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/b91751a5-b1b1-4084-8612-1e1796d0f474"
-          (reference "C1") (unit 1)
+          (reference "C4") (unit 1)
         )
       )
     )

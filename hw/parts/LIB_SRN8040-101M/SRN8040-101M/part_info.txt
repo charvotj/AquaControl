@@ -1,0 +1,9 @@
+Manufacturer=Bourns
+PartNumber=SRN8040-101M
+PartCategory=Inductor
+PackageCategory=Other
+PinCount=2
+Version=1.2
+Released=2019-01-09 17:58:39
+Downloaded=2024-02-11 13:34:12
+3D=Y

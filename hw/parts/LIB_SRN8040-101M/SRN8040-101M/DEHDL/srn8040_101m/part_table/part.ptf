@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'SRN8040_101M'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Bourns", "SRN8040-101M" (!) = "", "SRN80408R2Y", "Other", "652-SRN8040-101M", "https://www.mouser.co.uk/ProductDetail/Bourns/SRN8040-101M?qs=opBjA1TV902pEUqOZBsqAg%3D%3D", "Bourns SRN8040 Series Type 8040 Shielded Wire-wound SMD Inductor with a Ferrite Core, 100 uH +/-20% Wire-Wound 1A Idc", "https://www.bourns.com/pdfs/SRN8040.pdf", "4 mm"
+END_PART
+
+END.

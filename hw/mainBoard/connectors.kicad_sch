@@ -1854,7 +1854,7 @@
   (symbol (lib_id "Connector_Generic:Conn_01x04") (at 180.34 88.9 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 390213a3-e5bc-45b7-a042-e067d7c37bdc)
-    (property "Reference" "J6" (at 182.88 88.9 0)
+    (property "Reference" "J3" (at 182.88 88.9 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Display" (at 182.88 91.44 0)
@@ -1873,7 +1873,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/e09778c5-d723-4378-b78b-5054d4eb0fd5"
-          (reference "J6") (unit 1)
+          (reference "J3") (unit 1)
         )
       )
     )
@@ -1963,7 +1963,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x05_Odd_Even") (at 158.75 40.64 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 4806cbdc-0e24-4ec7-9fc1-743f4aea2938)
-    (property "Reference" "J3" (at 160.02 29.21 0)
+    (property "Reference" "J6" (at 160.02 29.21 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "JTAG" (at 160.02 31.75 0)
@@ -1988,7 +1988,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/e09778c5-d723-4378-b78b-5054d4eb0fd5"
-          (reference "J3") (unit 1)
+          (reference "J6") (unit 1)
         )
       )
     )
@@ -2047,7 +2047,7 @@
   (symbol (lib_id "Device:C") (at 203.2 138.43 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 83ea749d-dcda-4473-9f78-235c9d469eb8)
-    (property "Reference" "C14" (at 205.74 138.43 0)
+    (property "Reference" "C20" (at 205.74 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "0.1uF" (at 205.74 140.97 0)
@@ -2064,7 +2064,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/e09778c5-d723-4378-b78b-5054d4eb0fd5"
-          (reference "C14") (unit 1)
+          (reference "C20") (unit 1)
         )
       )
     )
@@ -2152,7 +2152,7 @@
   (symbol (lib_id "Device:C") (at 193.04 138.43 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid cddcf7cf-801e-45da-b957-8a005eeb8997)
-    (property "Reference" "C13" (at 195.58 138.43 0)
+    (property "Reference" "C19" (at 195.58 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "0.1uF" (at 195.58 140.97 0)
@@ -2169,7 +2169,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/e09778c5-d723-4378-b78b-5054d4eb0fd5"
-          (reference "C13") (unit 1)
+          (reference "C19") (unit 1)
         )
       )
     )
@@ -2203,7 +2203,7 @@
   (symbol (lib_id "Connector_Generic:Conn_01x03") (at 241.3 121.92 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e5dbe977-7e55-434c-a4cb-2b3e8609b4b6)
-    (property "Reference" "J1" (at 243.84 120.65 0)
+    (property "Reference" "J4" (at 243.84 120.65 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "LED strip" (at 243.84 123.19 0)
@@ -2221,7 +2221,7 @@
     (instances
       (project "mainBoard"
         (path "/afbe4b5f-4e5c-4a12-a44b-208d158a3f7a/e09778c5-d723-4378-b78b-5054d4eb0fd5"
-          (reference "J1") (unit 1)
+          (reference "J4") (unit 1)
         )
       )
     )
