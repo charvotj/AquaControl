@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "7.0.10-7.0.10~ubuntu23.10.1"
     },
-    "CreationDate": "2024-02-11T17:41:30+01:00"
+    "CreationDate": "2024-02-11T21:25:11+01:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -43,68 +43,63 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "mainBoard-F_Cu.gbr",
+      "Path": "mainBoard-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-In1_Cu.gbr",
+      "Path": "mainBoard-In1_Cu.g2",
       "FileFunction": "Copper,L2,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-In2_Cu.gbr",
+      "Path": "mainBoard-In2_Cu.g3",
       "FileFunction": "Copper,L3,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-B_Cu.gbr",
+      "Path": "mainBoard-B_Cu.gbl",
       "FileFunction": "Copper,L4,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-F_Paste.gbr",
+      "Path": "mainBoard-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-B_Paste.gbr",
+      "Path": "mainBoard-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-F_Silkscreen.gbr",
+      "Path": "mainBoard-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-B_Silkscreen.gbr",
+      "Path": "mainBoard-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "mainBoard-F_Mask.gbr",
+      "Path": "mainBoard-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "mainBoard-B_Mask.gbr",
+      "Path": "mainBoard-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "mainBoard-Edge_Cuts.gbr",
+      "Path": "mainBoard-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     },
     {
       "Path": "mainBoard-F_Fab.gbr",
       "FileFunction": "AssemblyDrawing,Top",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "mainBoard-B_Fab.gbr",
-      "FileFunction": "AssemblyDrawing,Bot",
       "FilePolarity": "Positive"
     }
   ],
