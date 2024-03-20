@@ -9,4 +9,6 @@
   (lib (name "NMOS-CSD18514")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_CSD18514Q5A/KiCADv6/2024-01-29_18-30-39.kicad_sym")(options "")(descr ""))
   (lib (name "NMOS-CSD18534")(type "KiCad")(uri "/run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive - Vysoké učení technické v Brně/Bakalarka/AquaControl/hw/parts/ul_CSD18534Q5A/KiCADv6/2024-01-29_18-29-02.kicad_sym")(options "")(descr ""))
   (lib (name "FASTON")(type "KiCad")(uri "${MY_PARTS}/LIB_726386-2/726386-2/KiCad/726386-2.kicad_sym")(options "")(descr ""))
+  (lib (name "L7986A")(type "KiCad")(uri "${MY_PARTS}/LIB_L7986A/L7986A/KiCad/L7986A.kicad_sym")(options "")(descr ""))
+  (lib (name "STPS3L40")(type "KiCad")(uri "${MY_PARTS}/LIB_STPS3L40UF/STPS3L40UF/KiCad/STPS3L40UF.kicad_sym")(options "")(descr ""))
 )

@@ -1,0 +1,9 @@
+Manufacturer=STMicroelectronics
+PartNumber=STPS3L40UF
+PartCategory=Diode
+PackageCategory=Small Outline Diode Flat Lead
+PinCount=2
+Version=1.2
+Released=2017-10-23 13:38:28
+Downloaded=2024-03-19 14:55:41
+3D=Y

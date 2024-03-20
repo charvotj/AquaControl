@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP L7986A
+D STMICROELECTRONICS - L7986A - DC-DC Switching Buck Step Down Regulator, Adjustable, 4.5V-38V in, 3A out, 275kHz, HSOP-8
+K
+F http://www.st.com/web/en/resource/technical/document/datasheet/DM00041568.pdf
+$ENDCMP
+#
+#End Doc Library
