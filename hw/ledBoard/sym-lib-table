@@ -11,4 +11,5 @@
   (lib (name "FASTON")(type "KiCad")(uri "${MY_PARTS}/LIB_726386-2/726386-2/KiCad/726386-2.kicad_sym")(options "")(descr ""))
   (lib (name "L7986A")(type "KiCad")(uri "${MY_PARTS}/LIB_L7986A/L7986A/KiCad/L7986A.kicad_sym")(options "")(descr ""))
   (lib (name "STPS3L40")(type "KiCad")(uri "${MY_PARTS}/LIB_STPS3L40UF/STPS3L40UF/KiCad/STPS3L40UF.kicad_sym")(options "")(descr ""))
+  (lib (name "buck-lib")(type "KiCad")(uri "${KIPRJMOD}/buck-lib.kicad_sym")(options "")(descr ""))
 )

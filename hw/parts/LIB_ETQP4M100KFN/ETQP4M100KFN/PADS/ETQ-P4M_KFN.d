@@ -1,0 +1,38 @@
+*PADS-LIBRARY-PCB-DECALS-V9*
+
+ETQ-P4M_KFN M 0 0 0 2 5 0 2 1 0
+TIMESTAMP 2021.09.21.14.41.13
+0 0 0 0 1.27 0.127 1 0 34 "Regular <Romansim Stroke Font>"
+REF-DES
+0 0 0 0 1.27 0.127 1 32 35 "Regular <Romansim Stroke Font>"
+PART-TYPE
+CLOSED 5 0.2 27 -1
+-3 3
+3 3
+3 -3
+-3 -3
+-3 3
+OPEN 2 0.1 26 -1
+-3 3
+3 3
+OPEN 2 0.1 26 -1
+3 -3
+-3 -3
+CIRCLE 2 0.2 26 -1
+-5.25 0
+-5.15 0
+CLOSED 5 0.05 20 -1
+-6.1 4
+5 4
+5 -4
+-6.1 -4
+-6.1 4
+T-2.85 0 -2.85 0 1
+T2.85 0 2.85 0 2
+PAD 0 3 N 0
+-2 2.2 RF 0 0 2.7 0
+-1 0 R
+0 0 R
+*END*
+*REMARK* AP
+ETQP4M100KFN.stp/90/0/0/0/0/3.609999895095825

@@ -1,0 +1,16 @@
+.ETQP4M100KFN :1 ;Power Choke Coil, Automotive Grade, 10uF
+ETQ-P4M_KFN
+*STM L
+*NGS
+*PLB 1="1" 2="2"
+*MXP 2
+*DFN ETQP4M100KFN
+~!TME Electronic Components Part Number (-)
+~!TME Electronic Components Price/Stock (-)
+~!Manufacturer_Name (Panasonic)
+~!Manufacturer_Part_Number (ETQP4M100KFN)
+~!Link Datasheet (http://industrial.panasonic.com/cdbs/www-data/pdf/AGL0000/AGL0000C73.pdf)
+~!Height (4.8mm)
+~!3D_Model (ETQP4M100KFN)
+ETQP4M100KFN
+1.1!U 2.1!U 

@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ETQP4M100KFN
+D Power Choke Coil, Automotive Grade, 10uF
+K
+F http://industrial.panasonic.com/cdbs/www-data/pdf/AGL0000/AGL0000C73.pdf
+$ENDCMP
+#
+#End Doc Library

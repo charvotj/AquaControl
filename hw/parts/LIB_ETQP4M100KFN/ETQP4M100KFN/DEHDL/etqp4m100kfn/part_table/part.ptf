@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'ETQP4M100KFN'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "TME_ELECTRONIC_COMPONENTS_PART_NUMBER", "TME_ELECTRONIC_COMPONENTS_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Panasonic", "ETQP4M100KFN" (!) = "", "ETQ-P4M_KFN", "Other", "", "", "Power Choke Coil, Automotive Grade, 10uF", "http://industrial.panasonic.com/cdbs/www-data/pdf/AGL0000/AGL0000C73.pdf", "4.8 mm"
+END_PART
+
+END.

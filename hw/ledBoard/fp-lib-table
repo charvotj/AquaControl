@@ -12,4 +12,5 @@
   (lib (name "LS9B6A")(type "KiCad")(uri "${MY_PARTS}/LIB_L7986A/L7986A/KiCad")(options "")(descr ""))
   (lib (name "STPS3L40")(type "KiCad")(uri "${MY_PARTS}/LIB_STPS3L40UF/STPS3L40UF/KiCad")(options "")(descr ""))
   (lib (name "Library")(type "KiCad")(uri "${KIPRJMOD}/Library.pretty")(options "")(descr ""))
+  (lib (name "civka")(type "KiCad")(uri "${MY_PARTS}/LIB_ETQP4M100KFN/ETQP4M100KFN/KiCad")(options "")(descr ""))
 )
