@@ -1,0 +1,34 @@
+- Úvod
+
+- 1 Základní teorie akvaristiky
+	- 1.1 Historie
+		- 1.1.1 Počátky
+		- 1.1.2 Věda a technika
+	- 1.2 Rozdělení akvárií
+	- 1.3 Technické vybavení akvária
+		- 1.3.1 Filtrace vody
+		- 1.3.2 Osvětlení
+		- 1.3.3 Ohřev
+		- 1.3.4 Monitorování
+		- 1.3.5 Dostupná komplexní řešení
+- 2 Systémový návrh
+	- 2.1 Požadavky
+	- 2.2 Blokové schéma
+- 3 Návrh dílčích bloků
+	- 3.1 Komunikační rozhraní
+		- 3.1.1 Výběr datové sběrnice
+		- 3.1.2 Počet a funkce vodičů
+		- 3.1.3 Konektor
+	- 3.2 Řídící jednotka
+		- 3.2.1 MCU
+		- 3.2.2 Zapojení ESP32 modulu
+		- 3.2.3 Napájecí obvod
+		- 3.2.4 Ochrana konektorů
+	- 3.3 Ovládání 230V periferií
+	- 3.4 Obecný modul periferie
+		- 3.4.1 MCU
+- Závěr
+- Literatura
+- Seznam symbolů a zkratek
+- Seznam příloh
+

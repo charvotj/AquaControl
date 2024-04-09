@@ -1,0 +1,63 @@
+- Úvod
+
+- 1 Základní teorie akvaristiky
+	- 1.1 Historie
+		- 1.1.1 Počátky
+		- 1.1.2 Věda a technika
+	- 1.2 Rozdělení akvárií
+	- 1.3 Technické vybavení akvária
+		- 1.3.1 Filtrace vody
+		- 1.3.2 Osvětlení
+		- 1.3.3 Ohřev
+		- 1.3.4 Monitorování
+		- 1.3.5 Dostupná komplexní řešení
+- 2 Systémový návrh
+	- 2.1 Požadavky
+	- 2.2 Blokové schéma
+	- 2.3 Komunikační rozhraní
+		- 3.3.1 Výběr datové sběrnice
+		- 2.3.2 Sběrnice CAN
+- 3 Návrh řídící jednotky
+	- 3.1 Mikrokontroler
+		- *+-ze semetrálky - důvod volby ESP32, zapojení, programování (JTAG)*
+	- 3.2 Návrh zapojení a tvorba DPS
+		- 3.2.1 Napájecí obvod
+			- *Výpočty pro LM5148 - hodnoty součástek, výstupní ripple, ... ; layout DSP*
+		- 3.2.2 Konektivita
+			- *Popis zvolených konektorů a jejich funkce - DSUB pro periferie + pinout, debug header, zdroj, relé modul, display, sigalizační led*
+- 4 Obecný modul periferie
+	- 4.1 Mikrokontroler
+		- - *důvod volby PIC, zapojení, programování (JTAG)*
+	- 4.2 Návrh zapojení a tvorba DPS
+- 5 Volba a návrh periferií *- pořadí podkapitol možná změním podle jejich obsahu*
+	- *na začátku přehledová tabulka senzorů a akčních členů s odkazy k dalším kapitolám, jejich požadavky na napájení a periferie MCU, zda byly realizovány a nebo jsou vizí budoucnosti*
+	- 5.1 LED osvětlení
+		- Požadavky
+			- *Dle komerční nabídky pásků stanoven maximální proud každým kanálem, také krátké zhodnocení reálné spotřeby za provozu.*
+		- Návrh zapojení a tvorba DPS
+			- *Výpočty pro buck měnič, interakce MCU do zpětnovazební smyčky, optimální layout*
+	- 5.2 Senzor teploty
+		- *typy snímání a volba senzoru*
+		- *zapojení*
+	- 5.3 Senzor výšky hladiny
+	- 5.4 Senzor pH
+		- *princip*
+		- *zapojení*
+	- 5.4 Ovládání 230V periferií
+		- *Volba a zapojení modulů*
+- 6 Software
+	- 6.1 Architektura
+		- *blokové schéma co dělá co - řídící jednotka vs periferie vs webserver*
+	- 6.2 Firmware řídící jednotky
+		- *RTOS, Over The Air update, CAN komunikace *
+	- 6.3 Firmware periferií
+	- 6.4 Webové rozhraní
+- 7 Sestavení a testování
+	- *Výsledná podoba zařízení, šasi*
+	- *Testovací provoz - záleží co se stihne*
+- 
+- Závěr
+- Literatura
+- Seznam symbolů a zkratek
+- Seznam příloh
+

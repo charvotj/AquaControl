@@ -11,10 +11,56 @@
             "id": "b234ebdc017cfa3d",
             "type": "leaf",
             "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Canvases/Main box.canvas",
+                "viewState": {
+                  "x": 35,
+                  "y": 40,
+                  "zoom": -0.3211955764451776
+                }
+              }
+            }
+          },
+          {
+            "id": "275438143cb693cb",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/JLC PCB.md",
+                "file": "Text prace/Semestralka Obsah.md",
                 "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "d1de93b125fb7060",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Text prace/Bakalarka Obsah.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      },
+      {
+        "id": "10d6ee26a531077c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "97e52163e6a176c3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Text prace/Bakalarka Obsah.md",
+                "mode": "preview",
                 "source": false
               }
             }
@@ -85,7 +131,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/JLC PCB.md",
+                "file": "Text prace/Bakalarka Obsah.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +148,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/JLC PCB.md",
+                "file": "Text prace/Bakalarka Obsah.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +171,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/JLC PCB.md"
+                "file": "Text prace/Bakalarka Obsah.md"
               }
             }
           }
@@ -146,22 +192,25 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b234ebdc017cfa3d",
+  "active": "97e52163e6a176c3",
   "lastOpenFiles": [
+    "Text prace/Semestralka Obsah.md",
+    "Text prace/Bakalarka Obsah.md",
+    "Canvases/Plán práce na baka.canvas",
+    "Main board/Main board FW.md",
+    "Main board/Main board schematic.md",
+    "Canvases/Main box.canvas",
+    "Text prace",
+    "Canvases/Peripherials.canvas",
+    "Canvases/block schematic.canvas",
     "Notes/CAN.md",
-    "Notes/JLC PCB.md",
     "Pasted image 20240128115930.png",
     "Bakalárka Check list.md",
-    "Canvases/Main box.canvas",
-    "Canvases/Peripherials.canvas",
-    "Main board/Main board schematic.md",
-    "Main board/Main board FW.md",
+    "Notes/JLC PCB.md",
     "Notes/freeRTOS notes.md",
     "Notes/Random notes.md",
     "Notes/Puvodni.md",
-    "Canvases/block schematic.canvas",
     "Canvases/Untitled.canvas",
-    "Canvases/Plán práce na baka.canvas",
     "Notes/img/svetla.jpg",
     "Notes/img/moduly.jpg",
     "Notes/img/krmitko.jpg",
