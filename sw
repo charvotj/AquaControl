@@ -1,1 +1,0 @@
-/run/media/jakub/DATA/Jakub/ESP_Projects/AquaControl/sw
