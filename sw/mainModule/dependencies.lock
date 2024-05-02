@@ -1,0 +1,15 @@
+dependencies:
+  espressif__led_strip:
+    component_hash: null
+    source:
+      path: /run/media/jakub/DATA/Jakub/ESP_Projects/AquaControl/sw/mainModule/components/espressif__led_strip
+      type: local
+    version: 2.5.3
+  idf:
+    component_hash: null
+    source:
+      type: idf
+    version: 5.2.0
+manifest_hash: 01aa072390c28b43fed6accddf12524422e16253bd1e6d96c0c72022ae2b9692
+target: esp32
+version: 1.0.0

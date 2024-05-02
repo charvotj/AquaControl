@@ -1,48 +1,194 @@
-/* Blink Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
+/* 
+   TODO: License or other funny thing
 */
-#include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 
-static const char *TAG = "example";
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "esp_err.h"
 
-/* Use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
-   or you can edit the following line and set a number here.
-*/
-#define BLINK_GPIO GPIO_NUM_4
-#define BLINK2_GPIO GPIO_NUM_33
-#define CONFIG_BLINK_PERIOD 1100
+#include "pins.h"
+#include "debug_functions.h"
+#include "status_leds_driver.h"
+#include "status_control.h"
+
+
+
+#define STATS_TASK_PRIO     3
+#define STATS_TICKS         pdMS_TO_TICKS(1000)
+
+
+static SemaphoreHandle_t sync_control_task;
+static SemaphoreHandle_t sync_status_update_task;
+static SemaphoreHandle_t sync_status_task_init_done;
+static SemaphoreHandle_t sync_fw_OTA_task;
+static SemaphoreHandle_t sync_wifi_task;
+static SemaphoreHandle_t sync_can_bus_task;
+static SemaphoreHandle_t sync_stats_task;
+static SemaphoreHandle_t sync_display_task;
+
+static const char *TAG = "mainBoard - main.c";
+
+
+#define CONFIG_BLINK_PERIOD 500
 
 static uint8_t s_led_state = 0;
 
 
-static void blink_led(void)
+static void control_task(void *arg)
 {
-    /* Set the GPIO level according to the state (LOW or HIGH)*/
-    gpio_set_level(BLINK_GPIO, s_led_state);
-    gpio_set_level(BLINK2_GPIO, s_led_state);
+    xSemaphoreTake(sync_control_task, portMAX_DELAY);
+
+    xSemaphoreGive(sync_status_update_task);
+    // Wait for status control init
+    xSemaphoreTake(sync_status_task_init_done, portMAX_DELAY);
+    // Start other tasks 
+    xSemaphoreGive(sync_wifi_task);
+    xSemaphoreGive(sync_fw_OTA_task);
+    xSemaphoreGive(sync_can_bus_task);
+
+    while (1) {
+        // TODO
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
 }
 
 
 
-void app_main(void)
+static void status_update_task(void *arg)
 {
-    gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
-    gpio_set_direction(BLINK2_GPIO, GPIO_MODE_OUTPUT);
+    xSemaphoreTake(sync_status_update_task, portMAX_DELAY);
+    printf("Status update task started\n");
+    ESP_ERROR_CHECK(status_control_init());
+    // Notify about init done - unblock other tasks
+    xSemaphoreGive(sync_status_task_init_done);
+    ESP_ERROR_CHECK(status_leds_init());
+
 
     while (1) {
-        ESP_LOGI(TAG, "Turning the LED %s!", s_led_state == true ? "ON" : "OFF");
-        blink_led();
-        /* Toggle the LED state */
-        s_led_state = !s_led_state;
-        vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS);
+        // TODO
+        printf("Status update task loop\n");
+        device_status_t old_status = STATUS_device;
+        process_device_status();
+        if(old_status != STATUS_device)
+        {
+            printf("Device status changed to %d\n", STATUS_device);
+            status_leds_update(STATUS_device);
+        }
     }
+}
+
+static void fw_OTA_task(void *arg)
+{
+    xSemaphoreTake(sync_fw_OTA_task, portMAX_DELAY);
+    // initialization
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    set_ota_module_status(MODST_READY);
+
+    while (1) {
+        // TODO
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+static void wifi_task(void *arg)
+{
+    xSemaphoreTake(sync_wifi_task, portMAX_DELAY);
+
+    while (1) {
+        // TODO
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+static void can_bus_task(void *arg)
+{
+    xSemaphoreTake(sync_can_bus_task, portMAX_DELAY);
+    // initialization
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    set_can_module_status(MODST_READY);
+
+    while (1) {
+        // TODO
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+static void display_task(void *arg)
+{
+    xSemaphoreTake(sync_can_bus_task, portMAX_DELAY);
+    // initialization
+    vTaskDelay(6000 / portTICK_PERIOD_MS);
+    set_display_module_status(MODST_READY);
+
+    while (1) {
+        // TODO
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+
+static void stats_task(void *arg)
+{
+    xSemaphoreTake(sync_stats_task, portMAX_DELAY);
+    
+
+    //Print real time stats periodically
+    while (1) {
+        printf("\n\nGetting real time stats over %"PRIu32" ticks\n", STATS_TICKS);
+        esp_err_t statusCode = print_real_time_stats(STATS_TICKS); 
+        if (statusCode == ESP_OK) {
+            printf("Real time stats obtained\n");
+        } 
+        else if (statusCode == ESP_ERR_INVALID_SIZE){
+            printf("Invalid size :(\n");
+        }
+        
+        else {
+            printf("Error getting real time stats: %d\n",statusCode);
+        }
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+
+
+void app_main(void)
+{
+    //Allow other core to finish initialization
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    //Create semaphores to synchronize
+    sync_stats_task = xSemaphoreCreateBinary();
+    sync_status_update_task = xSemaphoreCreateBinary();
+    sync_wifi_task = xSemaphoreCreateBinary();
+    sync_fw_OTA_task = xSemaphoreCreateBinary();
+    sync_can_bus_task = xSemaphoreCreateBinary();
+    sync_display_task = xSemaphoreCreateBinary();
+    sync_control_task = xSemaphoreCreateBinary();
+    sync_status_task_init_done = xSemaphoreCreateBinary();
+
+
+    // TODO: update priorities
+    //Create stats task
+    xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //Create status task
+    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //Create wifi task
+    xTaskCreatePinnedToCore(wifi_task, "wifi", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //Create OTA task
+    xTaskCreatePinnedToCore(fw_OTA_task, "fw_OTA_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //Create CAN task
+    xTaskCreatePinnedToCore(can_bus_task, "can_bus_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //Create status task
+    xTaskCreatePinnedToCore(display_task, "display_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+
+    
+    //Start control task
+    xSemaphoreGive(sync_control_task);
+    xSemaphoreGive(sync_stats_task);
 }
