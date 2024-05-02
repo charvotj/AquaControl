@@ -1,6 +1,6 @@
 \section{Komunikační rozhraní}
 \label{sec:komunikacni-rozhrani}
-    Komunikační rozhraní mezi řídícím modulem a periferiemi není samo o~sobě funkčním modulem, ale je zde rozebráno jako první, protože právě od jeho specifikace se následně odvíjí tvorba zbytku zařízení. 
+    Před návrhem jednotlivých částí zařízení je zapotřebí definovat komunikační rozhraní mezi řídícím modulem a periferiemi, protože právě od jeho specifikace se následně odvíjí tvorba zbytku zařízení. 
 
     Úkolem rozhraní je obousměrně komunikovat s~periferiemi, tedy např. stahovat data z~připojených sensorů a zároveň za pomoci přikazů periferie řídit. Kromě datové komunikace musí rozhraní periferie také napájet a to i v~případě energeticky náročnějších obvodů jako např. osvětlení. 
     
@@ -84,10 +84,10 @@
 
         UART je výhodný svou jednoduchou implementací a umožňuje obousměrnou asynchronní komunikaci. Nevýhodou je že funguje pouze pro dvě zařízení. Jednou z možností jak tuto limitaci obejít by bylo zavedení řetězového způsobu komunikace, kdy by každé zařízení komunikovalo se dvěmi sousedními a informace by se postupně předávala dále až k cílovému zařízení. Tento systém je relativně jednoduchý, ale například v případě poruchy jednoho zařízení se odpojí všechna následující zařízení, což může mít neočekávané následky.
 
-        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitěkší a dražší implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontroler nebo připojit externí ovladač řízený např. přes SPI, dále je nutné přidat i řadič, který převede signál na diferenční pár a umožní také zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde ještě k lepšímu potlačení šumu.
+        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitěkší a dražší implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontroler nebo připojit externí ovladač řízený např. přes SPI, dále je nutné přidat i řadič, který převede signál na diferenční a zároveň umožní zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde ještě k lepšímu potlačení šumu.
 
     \subsection{Sběrnice CAN}
-        Po důkladné rešerši a zvážení zmíněných kladů a záporů byla  zvolena sběrnice CAN. ESP32 jakožto mikrokontroler řídící jednotky obsahuje vestavený CAN kontroler a pro moduly periferií byl na základě tohoto rozhodnutí zvolen také vhodný mikrokontroler. Co se týče nutnosti přidání řadiče, jedná se sice o další součástku, která na první pohled navyšuje cenu zařízení, kromě převodu signálu na diferenční pár ale zajišťuje také ochranu konektorů proti mnoha nežádoucím jevům jako je zkrat, ESD výboj nebo přepětí. Tímto se ve výsledku celé zapojení zlevní a zjednoduší.
+        Po důkladné rešerši a zvážení zmíněných kladů a záporů byla  zvolena sběrnice CAN. ESP32 jakožto již zvolený mikrokontroler řídící jednotky obsahuje vestavený CAN kontroler a pro moduly periferií byl na základě tohoto rozhodnutí zvolen také vhodný mikrokontroler. Co se týče nutnosti přidání řadiče, jedná se sice o další součástku, která na první pohled navyšuje cenu zařízení, kromě převodu signálu na diferenční ale zajišťuje také ochranu konektorů proti mnoha nežádoucím jevům jako je zkrat, ESD výboj nebo přepětí. Tímto se ve výsledku celé zapojení zlevní a zjednoduší.
 
 
    

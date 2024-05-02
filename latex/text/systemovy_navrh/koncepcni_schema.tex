@@ -1,5 +1,5 @@
 \section{Blokové schéma}
-    Blokové schéma zařízení se nachází na obr.~\ref{fig:blokove-schema}. Pro pohodlné použití je hlavní část zařízení soustředěna do jedné krabičky napájené přívodním síťovým kabelem. Uživatel pak dle potřeby připojí příslušenství pracující s~napětím \qty{230}{V} do integrovaných síťových zásuvek a veškeré další periferie za pomoci jednoho z~univerzálních konektorů. O~stavu zařízení bude uživatel informován sérií notifikačních LED a malým displayem. Pro ilustraci je na obr.~\ref{fig:obrazky-hydros-control} uveden jeden z~produktů řady HYDROS, který zvolil podobnou koncepci.
+    Blokové schéma zařízení se nachází na obr.~\ref{fig:blokove-schema}. Pro pohodlné použití je hlavní část zařízení soustředěna do jedné krabičky napájené přívodním síťovým kabelem. Uživatel pak dle potřeby připojí příslušenství pracující s~napětím \qty{230}{V} do integrovaných síťových zásuvek a veškeré další periferie za pomoci jednoho z~univerzálních konektorů. O~stavu zařízení bude uživatel informován sérií notifikačních LED a malým displayem. 
 
     % Blokove schema
     \begin{figure}[h!]
@@ -69,19 +69,9 @@
         \label{fig:blokove-schema}
     \end{figure}
     
-    Pro napájení vlastní elektroniky zařízení bude v~šasi umístěn hotový modul spínaného zdroje převádějící síťové napětí \qty{230}{V} na stejnosměrných \qty{24}{V} se kterými pak zařízení dále pracuje (viz sekce~\ref{sec:ridici-jendotka-napajeci-obvod}).  
-
-
-    \begin{figure}[h!]
-        \centering
-        \includegraphics[width=0.7\textwidth]{obrazky/hydros.jpg}
-        \caption{Ilustrační obrázek pro vzhled zařízení. CoralVue HYDROS Control XP8. Převzato z~\cite{coralvuehydros}. }
-        \label{fig:obrazky-hydros-control}
-    \end{figure}
-
+    Pro napájení vlastní elektroniky zařízení bude v~šasi umístěn hotový modul spínaného zdroje převádějící síťové napětí \qty{230}{V} na stejnosměrných \qty{24}{V} se kterými pak zařízení dále pracuje (viz sekce~\ref{sec:ridici-jendotka-napajeci-obvod}).   
     
-    
-    Z~hlediska bezpečnosti je potřeba zajistit, aby se uživatel ani samotná nízkonapěťová část obvodu nemohli dostat do kontaktu s~nebezpečným napětím. Toho bude dosaženo galvanickým oddělením částí zařízení pracujících se síťovým napětím. V~blokovém schématu (obr.~\ref{fig:blokove-schema}) jsou všechny tyto části podbarveny šedou barvou. Galvanického oddělení bude zajištěno použitím vhodných komerčně dostupných modulů, které již mají tento problém vyřešen. U~relé modulu je potřeba zvolit variantu s~optočlenem a pro napájecí zdroj s~výstupem \qty{24}{V} pak zkontrolovat v~dokumentaci přítomnost galvanického oddělení. 
+    Z~hlediska bezpečnosti je potřeba zajistit, aby se uživatel ani samotná nízkonapěťová část obvodu nemohli dostat do kontaktu s~nebezpečným napětím. Toho bude dosaženo galvanickým oddělením částí zařízení pracujících se síťovým napětím. V~blokovém schématu (obr.~\ref{fig:blokove-schema}) jsou všechny tyto části podbarveny šedou barvou. Galvanického oddělení bude dosaženo použitím vhodných komerčně dostupných modulů, které již mají tento problém vyřešen. U~relé modulu je potřeba zvolit variantu s~optočlenem a pro napájecí zdroj s~výstupem \qty{24}{V} pak zkontrolovat v~dokumentaci přítomnost galvanického oddělení. 
     
 
 
