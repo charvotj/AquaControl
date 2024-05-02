@@ -59,8 +59,8 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md",
-                "mode": "preview",
+                "file": "Notes/CAN.md",
+                "mode": "source",
                 "source": false
               }
             }
@@ -131,7 +131,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md",
+                "file": "Notes/CAN.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -148,7 +148,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md",
+                "file": "Notes/CAN.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -171,7 +171,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md"
+                "file": "Notes/CAN.md"
               }
             }
           }
@@ -194,23 +194,27 @@
   },
   "active": "97e52163e6a176c3",
   "lastOpenFiles": [
-    "Text prace/Semestralka Obsah.md",
-    "Text prace/Bakalarka Obsah.md",
-    "Canvases/Plán práce na baka.canvas",
+    "Notes/Nákupní seznam.md",
+    "Notes/Random notes.md",
+    "Notes/CAN.md",
+    "Pasted image 20240426132611.png",
     "Main board/Main board FW.md",
+    "Canvases/block schematic.canvas",
+    "Canvases/Plán práce na baka.canvas",
+    "Canvases/Untitled.canvas",
+    "Canvases/Peripherials.canvas",
+    "Pasted image 20240426132536.png",
+    "Notes/Web server.md",
+    "Text prace/Bakalarka Obsah.md",
+    "Text prace/Semestralka Obsah.md",
+    "Bakalárka Check list.md",
     "Main board/Main board schematic.md",
     "Canvases/Main box.canvas",
     "Text prace",
-    "Canvases/Peripherials.canvas",
-    "Canvases/block schematic.canvas",
-    "Notes/CAN.md",
     "Pasted image 20240128115930.png",
-    "Bakalárka Check list.md",
     "Notes/JLC PCB.md",
     "Notes/freeRTOS notes.md",
-    "Notes/Random notes.md",
     "Notes/Puvodni.md",
-    "Canvases/Untitled.canvas",
     "Notes/img/svetla.jpg",
     "Notes/img/moduly.jpg",
     "Notes/img/krmitko.jpg",

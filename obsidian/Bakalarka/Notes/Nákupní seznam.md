@@ -1,0 +1,9 @@
+- Zásuvky do panelu 4x
+- vodiče 1.5 měď tři barvy
+- svorkovnice
+- AC konektor na vstup
+- (jiná krabice)
+- UTP kabel 20 m na periferie
+- display i2c
+- adresovatelný led pásek RGB
+- 

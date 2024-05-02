@@ -1,0 +1,19 @@
+nutné funkce:
+- registrace
+- login
+- přidání systému
+	- zadá číslo na krabičce
+	- zadá čísla z displaye krabičky
+	- hotovo
+- Nastavení systému
+	- seznam připojených periferií
+		- každá má své sériové číslo (na krabičce a webu napsáno jako utf8)
+		- možnosti
+			- přejmenovat
+			- umístit na obrázek
+			- nastavit limity pro upozornění
+- Použití systému
+	- Obrázek systému + nastavení
+	- Grafy ze senzorů
+	- Přímé ovládání akčních členů
+	- Rutiny

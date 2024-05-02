@@ -6,3 +6,4 @@ ATA6561:
 TWAI section:
 - [ ] [esp32_technical_reference_manual_en.pdf](file:///run/media/jakub/DATA/Jakub/Dokumenty/VUT/OneDrive%20-%20Vysoké%20učení%20technické%20v%20Brně/Bakalarka/Materiály/Datasheets/ESP/esp32_technical_reference_manual_en.pdf)
 
+![[Pasted image 20240426132611.png]]
