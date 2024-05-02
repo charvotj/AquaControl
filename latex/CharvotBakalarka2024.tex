@@ -200,8 +200,8 @@
 \pagestyle{empty} %vypnutí číslování stránek
 
 %%% Vložení desek -- od září 2021 na žádost fakulty nepoužíváno
-\includepdf[pages=1]%  buďto generovaných informačním systémem
-  {pdf/student-desky}% název souboru nesmí obsahovat mezery!
+% \includepdf[pages=1]%  buďto generovaných informačním systémem
+%   {pdf/student-desky}% název souboru nesmí obsahovat mezery!
 %%% NEBO vytvoření desek z balíčku
 %%\makecover
 %%%
@@ -210,16 +210,16 @@
 \setcounter{page}{1} %resetovaní čítače stránek -- desky do číslování nezahrnujeme
 
 %% Vložení titulního listu
-\includepdf[pages=1]%    buďto generovaného informačním systémem
-  {pdf/student-titulka}% název souboru nesmí obsahovat mezery!
+% \includepdf[pages=1]%    buďto generovaného informačním systémem
+%   {pdf/student-titulka}% název souboru nesmí obsahovat mezery!
 %% NEBO vytvoření titulní stránky z balíčku
 %\maketitle
 %%
 \oddpage  % při dvojstranném tisku se přidá prázdná stránka
    
 %% Vložení zadání
-\includepdf[pages=1]%   buďto generovaného informačním systémem
-  {pdf/student-zadani}% název souboru nesmí obsahovat mezery!
+% \includepdf[pages=1]%   buďto generovaného informačním systémem
+%   {pdf/student-zadani}% název souboru nesmí obsahovat mezery!
 %% NEBO lze vytvořit prázdný list příkazem ze šablony
 %\patternpage{}%
 %	{\sffamily\Huge\centering ZDE VLOŽIT LIST ZADÁNÍ}%
@@ -228,7 +228,7 @@
 \oddpage% při dvojstranném tisku se přidá prázdná stránka
 
 %% Vysázení stránky s abstraktem
-\makeabstract
+% \makeabstract
 
 % Vysázení stránky s rozšířeným abstraktem
 % (pokud píšete práci v češtině či slovenštině, vložení rozšířeného abstraktu zrušte;
@@ -236,24 +236,24 @@
 % \input{text/rozsireny_abstrakt}
 
 %%% Vysázení citace práce
-\makecitation
+% \makecitation
 
 %%% Vysázení prohlášení o samostatnosti
-\makedeclaration
+% \makedeclaration
 
 %%% Vysázení poděkování
-\makeacknowledgement
+% \makeacknowledgement
 
 %%% Vysázení obsahu
 \tableofcontents
 
 %%% Vysázení seznamu obrázků
 % (vynechejte, pokud máte dva nebo méně obrázků)
-\listoffigures
+% \listoffigures
 
 %%% Vysázení seznamu tabulek
 % (vynechejte, pokud máte dvě nebo méně tabulek)
-\listoftables
+% \listoftables
 
 %%% Vysázení seznamu výpisů kódu
 % (vynechejte, pokud máte dva nebo méně výpisů)
@@ -266,21 +266,29 @@
 %%%%%%%%%            SAMOTNÉ TEXTY PRÁCE             %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{text/uvod}
+% \include{text/uvod}
 
-\include{text/teorie}
+% \include{text/teorie}
 
 \include{text/systemovy_navrh}
 
-\include{text/navrh_dilcich_bloku}
+\include{text/ridici_jednotka}
+
+\include{text/modul_periferie}
+
+\include{text/periferie}
+
+\include{text/software}
+
+\include{text/testovani}
 
 % \include{text/schema}
 
-\include{text/zaver}
+% \include{text/zaver}
 
-\include{text/literatura}
+% \include{text/literatura}
 
-\include{text/zkratky}
+% \include{text/zkratky}
 
 
 %%% Začátek příloh
@@ -292,6 +300,6 @@
 
 %%% Vložení souboru 'text/prilohy' s přílohami
 % Obvykle je přítomen alespoň popis co najdeme na přiloženém médiu
-\include{text/prilohy}
+% \include{text/prilohy}
 
 \end{document}

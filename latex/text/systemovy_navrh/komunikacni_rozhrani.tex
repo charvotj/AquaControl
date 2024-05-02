@@ -1,0 +1,93 @@
+\section{Komunikační rozhraní}
+\label{sec:komunikacni-rozhrani}
+    Komunikační rozhraní mezi řídícím modulem a periferiemi není samo o~sobě funkčním modulem, ale je zde rozebráno jako první, protože právě od jeho specifikace se následně odvíjí tvorba zbytku zařízení. 
+
+    Úkolem rozhraní je obousměrně komunikovat s~periferiemi, tedy např. stahovat data z~připojených sensorů a zároveň za pomoci přikazů periferie řídit. Kromě datové komunikace musí rozhraní periferie také napájet a to i v~případě energeticky náročnějších obvodů jako např. osvětlení. 
+    
+    \subsection{Výběr datové sběrnice}
+        Existuje celá řada datových sběrnic, které jsou v~elektrotechnice hojně využívány. Každá z~nich má své výhody a nevýhody stejně jako jisté limitace použití. V~tab.~\ref{tab:porovnani-sbernic} se nachází výčet různých sběrnic, které byly při výběru uvažovány. 
+
+        \begin{table}[h]
+            \centering
+            \caption{Datové sběrnice, porovnání~\cite{prodigy-spi-i2c}.}
+            \label{tab:porovnani-sbernic}
+            \begin{tabularx}{\textwidth}{|p{1.3cm}|X|X|X|}
+            \hline
+            \textbf{Typ} & \textbf{Výhody} & \textbf{Nevýhody} & \textbf{Limitace} \\
+            \hline\hline
+            SPI & 
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Více zařízení na sběrnici \\
+            - Vysoká rychlost přenosu dat \\
+            - Jednoduchý protokol \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Nutný CS pin pro každé zařízení \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Určeno na krátkou vzdálenost \\
+            \end{tabular} \\
+            \hline
+            I\(^{2}\)C &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Pouze 2 piny \\
+            - Více zařízení -- 128 adres \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Riziko kolize adres \\
+            - Nižší rychlost přenosu dat proti SPI \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Určeno na krátkou vzdálenost \\
+            \end{tabular} \\
+            \hline
+            CAN &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Vysoká spolehlivost \\
+            - Dlouhé propojení \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Vyšší náklady na implementaci \\
+            - Nižší rychlost přenosu dat \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Nepodporovano běžnými MCU -- nutný externí řadič \\
+            \end{tabular} \\
+            \hline
+            UART &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Jednoduchá implementace \\
+            - Možnost asynchronní komunikace \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Nižší rychlost přenosu dat proti SPI \\
+            - Pouze 2 zařízení \\
+            \end{tabular} &
+            \begin{tabular}[t]{@{}p{4cm}@{}}
+            - Pouze 2 zařízení \\
+            - Určeno na krátkou vzdálenost \\
+            \end{tabular} \\
+            \hline
+            \end{tabularx}
+            
+        \end{table}
+
+
+
+
+
+
+        Protože hlavní šasi zařízení nabízí dva konektory, ale žádoucí je připojit větší předem nedefinovaný počet periferií, je potřeba, aby sběrnice umožnila připojení více zařízení. 
+        Obecný problém všech sběrnic je omezení jejich maximální délky, s~rostoucí délkou se sběrnice snáze zaruší, navíc z~důvodu parazitních vlastností vedení dochází k~zaoblení ostrých hran signálu, dlouhé vedení se chová jako filtr typu dolní propust. V~důsledku toho se snižuje maximální rychlost sběrnice.
+        
+        Sběrnice SPI nebo \acs{i2c} je obecně doporučeno používat pouze v~rámci DPS, tedy na krátké vzdálenosti. Při snížení rychlosti je možné je používat i na větší vzdálenost, ovšem modulární scénář vytvářeného systému teoreticky nestanovuje žádný délkový limit a bylo by velmi obtížné spolehlivě určit, kolik periferií uživatel může za sebe zapojit při zachování spolehlivé komunikace.
+
+        UART je výhodný svou jednoduchou implementací a umožňuje obousměrnou asynchronní komunikaci. Nevýhodou je že funguje pouze pro dvě zařízení. Jednou z možností jak tuto limitaci obejít by bylo zavedení řetězového způsobu komunikace, kdy by každé zařízení komunikovalo se dvěmi sousedními a informace by se postupně předávala dále až k cílovému zařízení. Tento systém je relativně jednoduchý, ale například v případě poruchy jednoho zařízení se odpojí všechna následující zařízení, což může mít neočekávané následky.
+
+        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitěkší a dražší implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontroler nebo připojit externí ovladač řízený např. přes SPI, dále je nutné přidat i řadič, který převede signál na diferenční pár a umožní také zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde ještě k lepšímu potlačení šumu.
+
+    \subsection{Sběrnice CAN}
+        Po důkladné rešerši a zvážení zmíněných kladů a záporů byla  zvolena sběrnice CAN. ESP32 jakožto mikrokontroler řídící jednotky obsahuje vestavený CAN kontroler a pro moduly periferií byl na základě tohoto rozhodnutí zvolen také vhodný mikrokontroler. Co se týče nutnosti přidání řadiče, jedná se sice o další součástku, která na první pohled navyšuje cenu zařízení, kromě převodu signálu na diferenční pár ale zajišťuje také ochranu konektorů proti mnoha nežádoucím jevům jako je zkrat, ESD výboj nebo přepětí. Tímto se ve výsledku celé zapojení zlevní a zjednoduší.
+
+
+   

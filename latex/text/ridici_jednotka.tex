@@ -1,4 +1,4 @@
-\section{Řídící jednotka}
+\chapter{Návrh řídící jednotky}
 % \textit{TODO: shrnutí funkce a požadavků -- komunikace s periferiemi, napajeni, wifi, status - led + display} 
     Jedná se o~jádro celého zařízení. Její funkcí je řízení celého systému a zároveň komunikace s~uživatelem za pomoci Wi-Fi. Musí v~sobě nést informaci o~konfiguraci systému a na jejím základě zpracovávat data z~jednotlivých připojených periferií. Podle uživatelem nastavených scénářů pak dynamicky reaguje na změny hodnot měřených akvaristických veličin a ovládá akční členy (osvětlení, ohřev, filtr vody). Za pomoci displaye a LED pásku také informuje uživatele o~momentálním stavu zařízení. 
 
@@ -18,10 +18,12 @@
         \label{fig:ridici-jednotka-blokove-schema}
     \end{figure}
 
-    \subsection{MCU}
+    \section{Mikrokontrolér}
         % \textit{TODO: zdůvodnit výběr ESP32, informace o něm a schéma potřebných obvodů} 
-        Při výběru vhodného mikrokontroleru bylo potřeba zohlednit výše zmíněné požadavky, tedy zejména Wi-Fi konektivitu a dostatečný výkon k~její obsluze, dvě volné UART periferie a dostatek GPIO pinů pro připojení zbylých modulů v~hlavním šasi (viz obr.~\ref{fig:blokove-schema}). Na trhu existuje vícero výrobců nabízejících mikrokontrolery s~vhodnými parametry, z~důvodu jednoduchosti použití a nízké ceny byl nakonec zvolen model ESP32 od firmy Espressif, konkrétně modul WROOM-32E~\cite{esp32-wroom-32e-datasheet} s~čipem ESP32-D0WDR2-V3~\cite{esp32-datasheet}. Tento modul je často využíván v~různých hobby projektech, ale také v~komerčních aplikacích zejména v~oblasti chytré domácnosti. Z~tohoto důvodu k~němu existuje velká škála softwarových knihoven a v~rámci komunity uživatelů je také sdíleno mnoho projektů, kterými je možné se inspirovat.
+        Při výběru vhodného mikrokontroleru bylo potřeba zohlednit výše zmíněné požadavky, tedy zejména Wi-Fi konektivitu a dostatečný výkon k~její obsluze, periferii CAN a dostatek GPIO pinů pro připojení zbylých modulů v~hlavním šasi (viz obr.~\ref{fig:blokove-schema}). Na trhu existuje vícero výrobců nabízejících mikrokontrolery s~vhodnými parametry, z~důvodu jednoduchosti použití a nízké ceny byl nakonec zvolen model ESP32 od firmy Espressif, konkrétně modul WROOM-32E~\cite{esp32-wroom-32e-datasheet} s~čipem ESP32-D0WDR2-V3~\cite{esp32-datasheet}. Tento modul je často využíván v~různých hobby projektech, ale také v~komerčních aplikacích zejména v~oblasti chytré domácnosti. Z~tohoto důvodu k~němu existuje velká škála softwarových knihoven a v~rámci komunity uživatelů je také sdíleno mnoho projektů, kterými je možné se inspirovat.
 
+    \clearpage
+    \section{Návrh zapojení a tvorba DPS}
     \subsection{Zapojení ESP32 modulu}
         Při tvorbě schématu bylo vycházeno z~dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých existujících vývojových desek. K~zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvody je na obr.~\ref{fig:ridici-jednotka-esp-obvody}.
 
@@ -47,14 +49,14 @@
         \end{equation} 
         Jak je vidět, byla zvolena dostatečná návrhová rezerva. 
 
-        Pro možnost resetu zařízení a nahrání nového firmware byla doplněna také dvě tlačítka (SW1, SW2)
+        Pro možnost resetu zařízení a vstupu do bootloaderu byla doplněna také dvě tlačítka (SW1, SW2).
 
 
-    \clearpage
+
     \subsection{Napájecí obvod}
         \label{sec:ridici-jendotka-napajeci-obvod}
         % \textit{TODO: schéma, výpočet hodnot součástek}
-        Pro napájení celého zařízení bude použit externí zdroj stejnosměrného napětí \qty{24}{V}, toto napětí bude rozvedeno všem připojeným periferiím (viz sekce~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Pro většinu komponent ale bude nutné napětí snížit, k~tomuto účelu bude využit DC/DC měnič typu buck s~požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v~tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídící jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s~jakými výkonovými požadavky uživatel k~systému připojí. Navržený měnič tak musí fungovat v~širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s~co nejlepší účinností. 
+        Pro napájení celého zařízení byl použit externí zdroj stejnosměrného napětí \qty{24}{V}, toto napětí bude rozvedeno všem připojeným periferiím (viz sekce~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Pro většinu komponent ale bude nutné napětí snížit. K~tomuto účelu byl navržen DC/DC měnič typu buck s~požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v~tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídící jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s~jakými výkonovými požadavky uživatel k~systému připojí. Navržený měnič tak musí fungovat v~širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s~co nejlepší účinností. 
         
         \begin{figure}[h!]
             \centering
@@ -70,7 +72,9 @@
             \label{fig:ridici-jednotka-napajeni}
         \end{figure}
 
-        Po zvážení výše zmíněných požadavků byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}, jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Jelikož funguje pouze jako regulátor a je potřeba doplnit zapojení externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a zjednodušší chlazení. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných porametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru podle zvolených hodnot. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik drobných změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V~obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k~volbě hodnot vybraných součástek. 
+        Aby bylo vyhověno zmíněným požadavkům a zachována návrhová rezerva, byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}. Jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Tento čip funguje pouze jako buck kontroler a je potřeba doplnit zapojení dvěma externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a generované teplo se lépe rozloží. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných porametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru podle zvolených hodnot. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V~obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k~volbě hodnot vybraných součástek. 
+
+        TODO: výpočty a layout
 
     \subsection{Ochrana konektorů}
         % \textit{TODO: popsat principy ochrany, schéma}
@@ -118,7 +122,7 @@
         \end{table}
 
         \newpage
-        \subsubsection{Výpočet hodnot součástek}
+        \subsection{Výpočet hodnot součástek}
             Při použití diody s~\(V_{f} =\qty{0.7}{V}\) je maximální napětí v~uzlu \circled{1} rovno:
             \begin{equation}
                 V_{1} =V_{CC} +V_{f} = \num{3,3}+\num{0,7}=\qty{4}{V}
@@ -135,6 +139,40 @@
             Pro účely této práce byla zvolena hodnota sériových odporů \qty{100}{\ohm}, která splňuje všechny výše uvedené podmínky.
 
             Dále bylo nutné vybrat vratnou pojistku s~vhodnými parametry. Maximální provozní proud, který může po sběrnici téct je limitovaný sériovým odporem a pro zvolenou hodnotu \qty{100}{\ohm} odpovídá \(I_{max} =\qty{33}{mA}\), této hodnoty ale nikdy nedosáhne stabilně nýbrž pouze na krátký čas při změně mezi logickou nulou a jedničkou. Byla proto zvolena pojistka s~hodnotou limitního proudu \(I_{trip} =\qty{60}{mA}\) a běžného provozního proudu \(I_{hold} =\qty{20}{mA}\). 
+
+    \section{Konektivita}
+    \label{subsec:pocet-a-fce-vodicu-sbernice}
+    Z~hlediska datové komunikace jsou zapotřebí dva vodiče (TX a RX), kromě toho je ale nutné periferiím dodat napájení. Většina periferií by měla být v~principu dosti jednoduchá a energeticky nenáročná zařízení, typicky obsahující mikrokontroler pracující s~napětím 3,3 nebo \qty{5}{V} s~jedním nebo několika málo připojenými senzory. Pro jejich napájení postačí další dva vodiče, jeden zemní, společný i pro datové vodiče, a druhý s~napětím \qty{5.2}{V}. Periferie musí být navrženy tak, aby je drobné změny této hodnoty neovlivnily. V~případě několika periferí zapojených za sebe bude na delším vedení zákonitě docházet k~poklesu napětí, proto byla zvolena návrhová rezerva \qty{0.2}{V}, která na základě praktického testu bude možná v~budoucnu ještě navýšena. Každá periferie musí obsahovat vlastní regulátor, kterým si pro svůj provoz vytvoří potřebné stabilní napětí 5 nebo \qty{3,3}{V}. 
+    \begin{table}[h!]
+        \centering
+        \caption{Přiřazení vodičů pro konektor D-sub.}
+        \label{tab:sbernice-popis-vodicu}
+        \begin{tabular}{|l|l|l|l|}
+            \hline
+            \textbf{Č.} & \textbf{Zkratka} & \textbf{Popis} & \textbf{Napětí} \\
+            \hline\hline
+            2, 7 & 24V & Napájení z~externího zdroje, pro náročné periferie & \qty{24}{V} \\
+            \hline
+            1, 5, 6, 9 & GND & Společná zem & \qty{0}{V}\\
+            \hline
+            8 & 5V & Napájení pro MCU periferií & \qty{5.2}{V}\\
+            \hline
+            3 & CANH & Kladný vodič diferenční datové linky & 0 až \qty{3.3}{V}\\
+            \hline
+            4 & CANL & Záporný vodič diferenční datové linky & 0 až \qty{3.3}{V}\\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    Některé periferie mohou mít vyšší výkonové nároky a navržené nízkonapěťové napájení by jim nemuselo stačit, zároveň by vysokým odběrem proudu klesala stabilita celé sběrnice. Pro tyto periferie je proto potřeba přivést další napájecí větev, opět o~dvou vodičích. Krom zemního vodiče přivedeme napájení \qty{24}{V}, které pochází přímo z~externího zdroje v~hlavním šasi zařízení. Daná periferie pak musí obsahovat vlastní měnič, kterým si vytvoří napětí o~potřebné velikosti. 
+
+    Všechny zmíněné vodiče jsou pro lepší přehlednost shrnuty v~tab.~\ref{tab:sbernice-popis-vodicu}.
+
+\section{Konektor - TODO: pryč}
+    Hlavní šasi bude disponovat dvěma konektory typu samice. Každá periferie bude mít napevno připevněn kabel zakončený konektorem typu samce a na své krabičce pak opět jeden konektor typu samice. Periferie tedy bude možné připojit buďto přímo do jednoho ze slotů hlavního šasi anebo do série s~některou jinou již připojenou periferií. 
+
+    V~principu lze zvolit jakýkoliv typ konektoru disponující alespoň šesti piny, musí však být možné konektor pohodlně použít jak na zakončení kabelu, tak i jako montovaný do panelu, např. na hlavním šasi. Volba konkrétního typu dosud nebyla provedena.
+
 
             
 
