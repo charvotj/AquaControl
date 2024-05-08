@@ -28,9 +28,9 @@
                      // GPIO_NUM_21   /*!< GPIO21, input and output */
                      // GPIO_NUM_22   /*!< GPIO22, input and output */
                      // GPIO_NUM_23   /*!< GPIO23, input and output */
-                     // GPIO_NUM_25   /*!< GPIO25, input and output */
-                     // GPIO_NUM_26   /*!< GPIO26, input and output */
-                     // GPIO_NUM_27   /*!< GPIO27, input and output */
+#define CAN_STBY_GPIO   GPIO_NUM_25   /*!< GPIO25, input and output */
+#define CAN_RX_GPIO     GPIO_NUM_26   /*!< GPIO26, input and output */
+#define CAN_TX_GPIO     GPIO_NUM_27   /*!< GPIO27, input and output */
                      // GPIO_NUM_28   /*!< GPIO28, input and output */
                      // GPIO_NUM_29   /*!< GPIO29, input and output */
                      // GPIO_NUM_30   /*!< GPIO30, input and output */

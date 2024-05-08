@@ -47,7 +47,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       },
       {
         "id": "10d6ee26a531077c",
@@ -131,7 +131,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/CAN.md",
+                "file": "Text prace/Bakalarka Obsah.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -148,7 +148,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/CAN.md",
+                "file": "Text prace/Bakalarka Obsah.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -171,7 +171,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/CAN.md"
+                "file": "Text prace/Bakalarka Obsah.md"
               }
             }
           }
@@ -192,11 +192,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "97e52163e6a176c3",
+  "active": "d1de93b125fb7060",
   "lastOpenFiles": [
+    "Notes/CAN.md",
     "Notes/Nákupní seznam.md",
     "Notes/Random notes.md",
-    "Notes/CAN.md",
     "Pasted image 20240426132611.png",
     "Main board/Main board FW.md",
     "Canvases/block schematic.canvas",

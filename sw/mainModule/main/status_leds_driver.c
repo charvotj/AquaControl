@@ -82,9 +82,12 @@ esp_err_t status_leds_update(device_status_t devst)
         break;
     case DEVST_STARTUP:
         status_leds_set_color(POWER_LED, COLOR_ORANGE);
-    
-    default:
         break;
+    case DEVST_UNDEFINED:
+        status_leds_set_color(POWER_LED, COLOR_BLUE);
+        break;
+    default:
+        return ESP_FAIL;
     }
 
     return ESP_OK;
