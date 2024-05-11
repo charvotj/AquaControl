@@ -21,6 +21,7 @@
 #include "status_leds_driver.h"
 #include "status_control.h"
 #include "CAN_driver.h"
+#include "temp_sensor_driver.h"
 
 
 #define STATS_TASK_PRIO     3
@@ -91,6 +92,7 @@ static void status_update_task(void *arg)
             status_leds_update(STATUS_device);
         }
         vTaskDelay(300 / portTICK_PERIOD_MS);
+        // status_leds_update(STATUS_device);
     }
 }
 
@@ -129,7 +131,9 @@ static void can_bus_task(void *arg)
 
     while (1) 
     {
-        can_proccess_rx(100 / portTICK_PERIOD_MS);
+        // Procces rx each 300 ms or on demand
+        xSemaphoreTake(can_rx_sem,300/portTICK_PERIOD_MS);
+        can_proccess_rx();
     }
 
     ESP_ERROR_CHECK(can_driver_deinit());
@@ -194,7 +198,7 @@ void app_main(void)
     //Create stats task
     xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
     //Create status task
-    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, 4, NULL, tskNO_AFFINITY);
     //Create wifi task
     xTaskCreatePinnedToCore(wifi_task, "wifi", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
     //Create OTA task
@@ -210,4 +214,27 @@ void app_main(void)
     //Start control task
     xSemaphoreGive(sync_control_task);
     // xSemaphoreGive(sync_stats_task);
+
+    // debug 
+    uint8_t cmd_num = 0;
+    uint8_t data[7] = {0, 0 , 0 ,0 ,0 ,0 ,0};
+    uint8_t dlc = 0;
+    uint8_t slave_adr = 4;
+    float temp_from_sensor = 0;
+    can_node_t temp_node = {
+        .can_address = slave_adr,
+        .node_type = NODE_TYPE_TEMP_SENSOR,
+        .SN = 512,
+        .status = NODEST_NORMAL
+    };
+
+    esp_err_t st;
+    while (1)
+    {
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        st = temp_sensor_get_temperature(&temp_node, &temp_from_sensor);
+        if(st == ESP_OK)
+            printf("Temperature from sensor: %f ˚C\n",temp_from_sensor);
+    }
+    
 }

@@ -12,6 +12,8 @@
                 <sourceRootElem>led_board_driver</sourceRootElem>
                 <sourceRootElem>mcc_generated_files</sourceRootElem>
                 <sourceRootElem>../shared</sourceRootElem>
+                <sourceRootElem>can_driver</sourceRootElem>
+                <sourceRootElem>temp_sensor_driver</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

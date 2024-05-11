@@ -504,18 +504,17 @@ static void CAN1_RX_FIFO_FilterMaskConfiguration(void)
     
     // message stored in FIFO1
     C1FLTCON0Lbits.F0BP =  1;
-    // SID 17; 
-    C1FLTOBJ0L = 0x00;
-    // SID 1; EID 0; 
-    C1FLTOBJ0H = 0x1;
+    // SID 0; 
+    C1FLTOBJ0L = CAN_BROADCAST;
+    // SID 4; EID 0; 
+    C1FLTOBJ0H = 0x7 & (CAN_BROADCAST >> 8);
     // EID 0; 
     C1FLTOBJ0U = 0x0;
     // EID 0; SID11 disabled; EXIDE disabled; 
     C1FLTOBJ0T = 0x0;
-    // MSID 255; 
-    C1MASK0L = 0xFF;
-    // MSID 7; MEID 0; 
-    C1MASK0H = 0x7;
+    // MSID 0x700; MEID 0; 
+    C1MASK0L = CAN_CMD_TYPE_MASK;
+    C1MASK0H = 0x7 & (CAN_CMD_TYPE_MASK >> 8);
     // MEID 0; 
     C1MASK0U = 0x0;
     // MEID 0; MSID11 disabled; MIDE enabled; 
@@ -523,20 +522,19 @@ static void CAN1_RX_FIFO_FilterMaskConfiguration(void)
     // Enable the filter 0
     C1FLTCON0Lbits.FLTEN0 = 1;
     
-    // message stored in FIFO1
-    C1FLTCON0Hbits.F1BP =  1;
-    // SID 133; 
-    C1FLTOBJ1L = 0x85;
-    // SID 5; EID 0; 
-    C1FLTOBJ1H = 0x5;
+    // message stored in FIFO2
+    C1FLTCON0Hbits.F1BP =  2;
+    // SID 0; 
+    C1FLTOBJ1L = CAN_TO_SLAVE;
+    // SID 4; EID 0; 
+    C1FLTOBJ1H = 0x7 & (CAN_TO_SLAVE >> 8);
     // EID 0; 
     C1FLTOBJ1U = 0x0;
     // EID 0; SID11 disabled; EXIDE disabled; 
     C1FLTOBJ1T = 0x0;
-    // MSID 255; 
-    C1MASK1L = 0xFF;
-    // MSID 7; MEID 0; 
-    C1MASK1H = 0x7;
+    // MSID 0x700; MEID 0; 
+    C1MASK1L = CAN_CMD_TYPE_MASK;
+    C1MASK1H = 0x7 & (CAN_CMD_TYPE_MASK >> 8);
     // MEID 0; 
     C1MASK1U = 0x0;
     // MEID 0; MSID11 disabled; MIDE enabled; 

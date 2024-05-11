@@ -28,26 +28,27 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef LED_BOARD_DRIVER_H
-#define	LED_BOARD_DRIVER_H
+#ifndef TEMP_SENSOR_DRIVER_H
+#define	TEMP_SENSOR_DRIVER_H
 
+#include "../device_type.h"
 #include "../mcc_generated_files/system/system.h"
+#include "../mcc_generated_files/system/pins.h"
 #include <stdint.h>
 
-#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+#if DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
 
-typedef enum
-{
-    LED_CH_0 = 0,
-    LED_CH_1 = 1,        
-} led_channel_t;
-
-void led_enable_channel(led_channel_t channel);
-void led_disable_channel(led_channel_t channel);
-void led_set_brightness(led_channel_t channel, uint8_t brightness);
-
-
-
+__bit ds18b20_start();
+ 
+void ds18b20_write_bit(uint8_t value);
+ 
+void ds18b20_write_byte(uint8_t value);
+ 
+__bit ds18b20_read_bit(void);
+ 
+uint8_t ds18b20_read_byte(void);
+ 
+__bit ds18b20_read(uint8_t *raw_temp_value);
 
 
 #ifdef	__cplusplus
@@ -61,7 +62,7 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif /* DEVICE_TYPE == DEVICE_TYPE_LED_BOARD */
+#endif /* DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR */
 
-#endif	/* LED_BOARD_DRIVER_H */
+#endif	/* TEMP_SENSOR_DRIVER_H */
 

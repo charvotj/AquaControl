@@ -36,17 +36,28 @@
 #include "../system.h"
 
 
-
+volatile uint64_t counter_second = 0;
 
 void SYSTEM_Initialize(void)
 {
     CLOCK_Initialize();
     PIN_MANAGER_Initialize();
-//    CAN1_Initialize();
-    DAC1_Initialize();
+    UART1_Initialize();    
     Timer0_Initialize();
-    UART1_Initialize();
     INTERRUPT_Initialize();
+    
+    CAN1_Initialize();
+    CAN1_FIFO1NotEmptyCallbackRegister(CAN1_RX_BR_FIFOHandler);
+    CAN1_FIFO2NotEmptyCallbackRegister(CAN1_RX_TS_FIFOHandler);
+    UART1_println("CAN init\0");
+    
+#ifndef DEVICE_TYPE
+    #error "Device type not defined in this context"
+#endif
+#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+    DAC1_Initialize();
+#endif
+    
 }
 
 

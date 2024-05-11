@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="65">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="can_driver" displayName="can_driver" projectFiles="true">
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>can_driver/src/can_driver.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
@@ -61,6 +66,13 @@
                    displayName="Source Files"
                    projectFiles="true">
     </logicalFolder>
+    <logicalFolder name="temp_sensor_driver"
+                   displayName="temp_sensor_driver"
+                   projectFiles="true">
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>temp_sensor_driver/src/temp_sensor_driver.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
     <itemPath>device_type.h</itemPath>
     <itemPath>main.c</itemPath>
   </logicalFolder>
@@ -68,6 +80,8 @@
     <Elem>led_board_driver</Elem>
     <Elem>mcc_generated_files</Elem>
     <Elem>../shared</Elem>
+    <Elem>can_driver</Elem>
+    <Elem>temp_sensor_driver</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

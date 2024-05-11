@@ -28,23 +28,19 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef LED_BOARD_DRIVER_H
-#define	LED_BOARD_DRIVER_H
+#ifndef CAN_DRIVER_H
+#define	CAN_DRIVER_H
 
 #include "../mcc_generated_files/system/system.h"
 #include <stdint.h>
+#include "string.h"
 
-#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+#define MY_CAN_ADDRESS 4
 
-typedef enum
-{
-    LED_CH_0 = 0,
-    LED_CH_1 = 1,        
-} led_channel_t;
-
-void led_enable_channel(led_channel_t channel);
-void led_disable_channel(led_channel_t channel);
-void led_set_brightness(led_channel_t channel, uint8_t brightness);
+void CAN_SendDebugPrint(const char* txData);
+void CAN_SendTMCmd(uint8_t cmd_num, uint8_t data_len, uint8_t data[7]);
+void CAN1_RX_BR_FIFOHandler(void);
+void CAN1_RX_TS_FIFOHandler(void);
 
 
 
@@ -61,7 +57,5 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif /* DEVICE_TYPE == DEVICE_TYPE_LED_BOARD */
-
-#endif	/* LED_BOARD_DRIVER_H */
+#endif	/* CAN_DRIVER_H */
 

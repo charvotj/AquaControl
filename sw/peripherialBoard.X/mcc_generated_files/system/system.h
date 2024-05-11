@@ -39,6 +39,9 @@
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
+
+#include "../../device_type.h"
+#include "../../../shared/common_types.h"
 #include "../system/config_bits.h"
 #include "../system/clock.h"
 #include "../system/pins.h"
@@ -46,7 +49,14 @@
 #include "../timer/tmr0.h"
 #include "../uart/uart1.h"
 #include "../system/interrupt.h"
-#include "../dac/dac1.h"
+#include "../../can_driver/can_driver.h"
+
+#ifndef DEVICE_TYPE
+    #error "Device type not defined in this context"
+#endif
+#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+    #include "../dac/dac1.h"
+#endif
 
 /**
  * @ingroup systemdriver
@@ -54,6 +64,8 @@
  * @param None.
  * @return None.
 */
+
+extern volatile uint64_t counter_second;
 void SYSTEM_Initialize(void);
 
 #endif	/* SYSTEM_H */

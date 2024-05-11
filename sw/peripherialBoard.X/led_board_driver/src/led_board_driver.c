@@ -6,6 +6,7 @@
  */
 
 #include "../led_board_driver.h"
+#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
 
 void led_enable_channel(led_channel_t channel)
 {
@@ -28,3 +29,5 @@ void led_set_brightness(led_channel_t channel, uint8_t brightness)
 //    TODO: this is temp
     DAC1_SetOutput(brightness);
 }
+
+#endif

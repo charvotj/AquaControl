@@ -40,6 +40,8 @@
 #include "can_types.h"
 #include "can_interface.h"
 
+#include "../../../shared/CAN_definitions.h"
+
 /**
  @ingroup  can_driver
  @brief    Structure object of type CAN_INTERFACE with the custom name given by
@@ -55,12 +57,12 @@ extern const struct CAN_INTERFACE CAN1;
  @ingroup  can_driver
  @brief    CAN1 Receive FIFO 1 Custom Name.
 */
-#define CAN1_RX_FIFO1   CAN1_FIFO_1   /**< Defines the custom name of CAN1_FIFO_1 used for Receive functionality. */
+#define CAN1_RX_BR_FIFO   CAN1_FIFO_1   /**< Defines the custom name of CAN1_FIFO_1 used for Receive functionality. */
 /**
  @ingroup  can_driver
  @brief    CAN1 Receive FIFO 2 Custom Name.
 */
-#define CAN1_RX_FIFO2   CAN1_FIFO_2   /**< Defines the custom name of CAN1_FIFO_2 used for Receive functionality. */
+#define CAN1_RX_TS_FIFO   CAN1_FIFO_2   /**< Defines the custom name of CAN1_FIFO_2 used for Receive functionality. */
 /**
  * @ingroup  can_driver
  * @brief    Defines the Custom Name for CAN1_Tasks() API.

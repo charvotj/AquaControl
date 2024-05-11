@@ -47,17 +47,32 @@ void PIN_MANAGER_Initialize(void)
     /**
     TRISx registers
     */
-    TRISA = 0xF0;
-    TRISB = 0x6B;
+    TRISA = 0xFF;
+    TRISB = 0xEB;
     TRISC = 0xF7;
     TRISE = 0x8;
+#ifndef DEVICE_TYPE
+    #error "Device type not defined in this context"
+#endif
+#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+    TRISA &= 0xF0;
+    TRISB &= 0x7F;
+#elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
+    TRISC &= 0x7F;
+#endif
 
     /**
     ANSELx registers
     */
-    ANSELA = 0xE0;
-    ANSELB = 0xC0;
+    ANSELA = 0xFF;
+    ANSELB = 0xE3;
     ANSELC = 0xF3;
+#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+    ANSELA &= 0xE0;
+    ANSELB &= 0xDF;
+#elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
+    ANSELC &= 0x7F;
+#endif  
 
     /**
     WPUx registers
