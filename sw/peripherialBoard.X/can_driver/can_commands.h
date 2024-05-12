@@ -26,37 +26,32 @@
  * Revision history: 
  */
 
-
-
-
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef DEVICE_TYPE_H
-#define	DEVICE_TYPE_H
+#ifndef CAN_COMMANDS_H
+#define	CAN_COMMANDS_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
-#include "../shared/common_types.h"
+#include "../mcc_generated_files/system/system.h"
+#include "can_driver.h"
+#include <stdint.h>
+#include "string.h"
 
-// Choose only values defined in common_types.h
-// ?????????????????????????????????????????
-#define DEVICE_TYPE DEVICE_TYPE_TEMP_SENSOR
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#define FW_VERSION_MAJOR    0
-#define FW_VERSION_MINOR    1
-
-node_type_t GLOBAL_device_type = DEVICE_TYPE;
-node_status_t GLOBAL_device_status = NODEST_UNDEFINED;
+void can_cmd_reset();
 
 
 
-// SPECIFIC INCLUDES
-#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
-    #include  "led_board_driver/led_board_driver.h"
-#elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
-    #include "temp_sensor_driver/temp_sensor_driver.h"
 
-#else
-    #error "Not supported DEVICE_TYPE"
-#endif
-#endif	/* DEVICE_TYPE_H */
+
+#ifdef	__cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+    // TODO If C++ is being used, regular C code needs function names to have C 
+    // linkage so the functions can be used by the c code. 
+
+#ifdef	__cplusplus
+}
+#endif /* __cplusplus */
+
+#endif	/* CAN_COMMANDS_H */
 

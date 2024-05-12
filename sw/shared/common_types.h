@@ -1,6 +1,7 @@
 // Need to be defined explicitely that way because of PIC compiler... 
 // enum is then using this definition
-#define DEVICE_TYPE_UNKNOWN               0       
+#define DEVICE_TYPE_UNKNOWN              -1       
+#define DEVICE_TYPE_MASTER                0
 #define DEVICE_TYPE_UNSUPPORTED           1
 #define DEVICE_TYPE_LED_BOARD             2
 #define DEVICE_TYPE_TEMP_SENSOR           3
@@ -16,6 +17,7 @@
 typedef enum
 {
     NODE_TYPE_UNKNOWN = DEVICE_TYPE_UNKNOWN,
+    NODE_TYPE_MASTER = DEVICE_TYPE_MASTER,
     NODE_TYPE_UNSUPPORTED = DEVICE_TYPE_UNSUPPORTED,
     NODE_TYPE_LED_BOARD = DEVICE_TYPE_LED_BOARD,
     NODE_TYPE_TEMP_SENSOR = DEVICE_TYPE_TEMP_SENSOR,

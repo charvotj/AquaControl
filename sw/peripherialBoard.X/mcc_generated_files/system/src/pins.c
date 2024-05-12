@@ -81,6 +81,9 @@ void PIN_MANAGER_Initialize(void)
     WPUB = 0x0;
     WPUC = 0x0;
     WPUE = 0x0;
+#if DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
+    WPUC &= 0x80;
+#endif
 
     /**
     ODx registers

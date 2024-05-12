@@ -32,10 +32,12 @@
 #define	CAN_DRIVER_H
 
 #include "../mcc_generated_files/system/system.h"
+#include "can_commands.h"
 #include <stdint.h>
 #include "string.h"
 
-#define MY_CAN_ADDRESS 4
+// Temporary assigned according to the device type
+#define MY_CAN_ADDRESS DEVICE_TYPE
 
 void CAN_SendDebugPrint(const char* txData);
 void CAN_SendTMCmd(uint8_t cmd_num, uint8_t data_len, uint8_t data[7]);

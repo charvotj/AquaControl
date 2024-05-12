@@ -119,29 +119,26 @@ void CAN1_RX_TS_FIFOHandler(void)
                 sprintf(formattedData, "REC TS CMD %d", cmd_number);
                 CAN_SendDebugPrint(formattedData);
 
-//                 proccess commands
-                uint8_t data[7] = {0,0,0,0,0,0,0};
+                
+//              Proccess commands
                 switch(cmd_number)
                 {
                     case CAN_TS_RST:
-                        CAN_SendTMCmd(CAN_TM_RST_RES,0,data);
-                        // wait for rewsponse to send
-                        while(CAN_TX_FIFO_AVAILABLE != CAN1_TransmitFIFOStatusGet(CAN1_TXQ));//ensure that the TXQ has space for a message
-                        __delay_ms(2000);
-                        Reset();
+                        can_cmd_reset();
                         break;
                         
+                    #ifndef DEVICE_TYPE
+                        #error "Device type not defined in this context"
+                    #endif
+                    #if DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
                     case CAN_TS_TEMP_SENS_GET_TEMP:
-                         if(ds18b20_read(&data[0]))
-                            {
-//                                sprintf(formattedData, "tmp 0x%04X ", raw_temp);
-//                                CAN_SendDebugPrint(formattedData);
-                                  CAN_SendTMCmd(CAN_TM_TEMP_SENS_GET_TEMP_RES,2,data);
-                            }
-                            else
-                            {
-                                CAN_SendDebugPrint("temp error...");
-                            }
+                        temp_sensor_can_send_temp();
+                        break;
+                    #endif
+
+                    default:
+                        CAN_SendDebugPrint("Unknown CMD");
+                        break;
                 }
                 break;
             }

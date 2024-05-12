@@ -31,6 +31,6 @@ esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperatur
         return ESP_FAIL;
     }
     printf("0:%d, 1:%d \n",rx_data[0],rx_data[1]);
-    *temperature = ((uint16_t)(rx_data[1] << 8) | (rx_data[0])) / 16.0;
+    *temperature = ((int16_t)(rx_data[1] << 8) | (rx_data[0])) / 16.0;
     return ESP_OK;
 }

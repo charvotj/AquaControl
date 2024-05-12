@@ -34,9 +34,16 @@
 #include "../device_type.h"
 #include "../mcc_generated_files/system/system.h"
 #include "../mcc_generated_files/system/pins.h"
+#include "../can_driver/can_driver.h"
 #include <stdint.h>
 
 #if DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
+
+#define TEMP_SENSOR_MAX_NUM_ERRORS  5
+#define TEMP_SENSOR_LIMIT_LOW       (int16_t)(3<<4)  // 3 degC
+#define TEMP_SENSOR_LIMIT_HIGH      (int16_t)(83<<4) // 83 degC, God bless your fish :) ...85degC is deafult value after sensor init
+
+//function for interfacing sensor
 
 __bit ds18b20_start();
  
@@ -49,6 +56,11 @@ __bit ds18b20_read_bit(void);
 uint8_t ds18b20_read_byte(void);
  
 __bit ds18b20_read(uint8_t *raw_temp_value);
+
+// functions for whole modul abstraction level
+
+node_status_t temp_sensor_routine();
+void temp_sensor_can_send_temp();
 
 
 #ifdef	__cplusplus

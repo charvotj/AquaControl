@@ -82,7 +82,13 @@ void main(void)
     
     while(1)
     {
-       
+        #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+            #
+        #elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
+            GLOBAL_device_status = temp_sensor_routine();
+        #else
+            #error "Not supported DEVICE_TYPE"
+        #endif
         __delay_ms(1000);
     }    
     return;

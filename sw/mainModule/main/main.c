@@ -16,6 +16,7 @@
 #include "freertos/semphr.h"
 #include "esp_err.h"
 
+#include "globals.h"
 #include "pins.h"
 #include "debug_functions.h"
 #include "status_leds_driver.h"
@@ -222,7 +223,7 @@ void app_main(void)
     uint8_t slave_adr = 4;
     float temp_from_sensor = 0;
     can_node_t temp_node = {
-        .can_address = slave_adr,
+        .can_address = NODE_TYPE_TEMP_SENSOR,
         .node_type = NODE_TYPE_TEMP_SENSOR,
         .SN = 512,
         .status = NODEST_NORMAL

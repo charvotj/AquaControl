@@ -4,6 +4,7 @@
     <logicalFolder name="can_driver" displayName="can_driver" projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
         <itemPath>can_driver/src/can_driver.c</itemPath>
+        <itemPath>can_driver/src/can_commands.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
@@ -279,24 +280,6 @@
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>
       </XC8-CO>
-      <XC8-config-global>
-        <property key="advanced-elf" value="true"/>
-        <property key="constdata-progmem" value="false"/>
-        <property key="gcc-opt-driver-new" value="true"/>
-        <property key="gcc-opt-std" value="-std=c99"/>
-        <property key="gcc-output-file-format" value="dwarf-3"/>
-        <property key="mapped-progmem" value="false"/>
-        <property key="omit-pack-options" value="false"/>
-        <property key="omit-pack-options-new" value="1"/>
-        <property key="output-file-format" value="-mcof,+elf"/>
-        <property key="smart-io-format" value=""/>
-        <property key="stack-size-high" value="auto"/>
-        <property key="stack-size-low" value="auto"/>
-        <property key="stack-size-main" value="auto"/>
-        <property key="stack-type" value="compiled"/>
-        <property key="user-pack-device-support" value=""/>
-        <property key="wpo-lto" value="false"/>
-      </XC8-config-global>
       <pk4hybrid>
         <property key="AutoSelectMemRanges" value="auto"/>
         <property key="Freeze Peripherals" value="true"/>
@@ -334,6 +317,8 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="/run/media/jakub/DATA/Jakub/ESP_Projects/AquaControl/sw/peripherialBoard.X/debug/default/peripherialBoard_ptg"/>
         <property key="programmerToGoImageName" value="peripherialBoard_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
