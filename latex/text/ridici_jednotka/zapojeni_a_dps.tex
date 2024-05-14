@@ -1,5 +1,5 @@
 \section{Návrh zapojení a tvorba DPS}
-    Řídící jednotka je tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru obsahuje také měnič napětí typu BUCK ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v~sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí pak bude dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-ridici-jednotka}.
+    Řídící jednotka je tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru obsahuje také měnič napětí typu BUCK ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v~sekci~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Toto napětí je pak dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-ridici-jednotka}.
 
     \begin{figure}[h!]
         \centering
@@ -15,8 +15,10 @@
         \label{fig:ridici-jednotka-blokove-schema}
     \end{figure}
     % TODO: jiná blokovka než z kicadu
+
     \subsection{Zapojení ESP32 modulu}
-        Při tvorbě schématu bylo vycházeno z~dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých existujících vývojových desek. K~zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvody je na obr.~\ref{fig:ridici-jednotka-esp-obvody}.
+    \label{sec:ridici-jendotka-esp32-modul}
+        Při tvorbě schématu bylo vycházeno z~dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých existujících vývojových desek. K~zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvodypro ESP32 modul je na obr.~\ref{fig:ridici-jednotka-esp-obvody}.
 
         \begin{figure}[h!]
             \centering
@@ -32,9 +34,9 @@
             \label{fig:ridici-jednotka-esp-obvody}
         \end{figure}
 
-        Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C1, C3). Ke snížení napětí z~původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U4). 
+        Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C1, C3). Ke snížení napětí z~původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U4). %TODO jiný part number asi
         
-        Dále je potřeba přivést kladné napětí na povolovací pin (EN), z~dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený čas nutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C2) s~časovou konstantou \(\tau\):
+        Dále je potřeba přivést kladné napětí na povolovací pin (EN). Z~dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený čas nutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C2) s~časovou konstantou \(\tau\):
         \begin{equation}
             \tau=R_{1}C_{2}=\qty{10}{\kilo\ohm}\cdot \qty{1}{\micro\farad}=\qty{10}{\milli\second}
         \end{equation} 
@@ -64,52 +66,156 @@
         \end{figure}
         % TODO: nove schema dodat
 
-        Aby bylo vyhověno zmíněným požadavkům a zachována návrhová rezerva, byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}. Jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Tento čip funguje pouze jako buck kontroler a je potřeba doplnit zapojení dvěma externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a generované teplo se lépe rozloží. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných porametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru podle zvolených hodnot. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V~obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k~volbě hodnot vybraných součástek. 
+        Aby bylo vyhověno zmíněným požadavkům a zachována návrhová rezerva, byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}. Jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Tento čip funguje pouze jako buck kontroler a zapojení je potřeba doplnit zapojení dvěma externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a generované teplo se lépe rozloží. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných porametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru zadaným hodnotám. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V~obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k~volbě hodnot vybraných součástek. 
 
         TODO: výpočty 
 
     \subsection{Deska plošných spojů}
-        Ačkoliv se jedná o relativně jednoduchou DPS, je potřeba při návrhu dbát jistých pravidel a doporučení 
-        % sem patří zmínit ESP umístění modulu, konektory, stacup desky, buck měnič
+        Ačkoliv se jedná o relativně jednoduchou DPS, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na DPS je rozhodujícím faktorem pro následný výkon antény. Další částí vyžadující správný návrh rozložení je pak BUCK měnič. 
+        
+        \begin{figure}[!ht]
+            \centering
+            \begin{tikzpicture}
+                % Include the image
+                \node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=0.8\textwidth]{obrazky/dps/mainBoard-3d-top-popis.png}};
+                
+                % \draw[->,thick] (0,0) -- (1,9.4);
+                \node[anchor=south west,inner sep=0,color=red] at (0.5,9.7)  {1.};
+                \node[anchor=south west,inner sep=0,color=red] at (0.6,1.3)  {2.};
+                \node[anchor=south west,inner sep=0,color=red] at (4.2,-0.4)  {3.};
+                \node[anchor=south west,inner sep=0,color=red] at (6.8,1.3)  {4.};
+                \node[anchor=south west,inner sep=0,color=red] at (6.8,5)  {5.};
+                % legend
+                \node[anchor=south west,inner sep=0] (leg-blu) at (8.5,10)  {MCU};
+                \node[anchor=south west,inner sep=0] (leg-ora) at (8.5,9.32) {BUCK měnič napětí};
+                \node[anchor=south west,inner sep=0] (leg-red) at (8.5,8.64) {Konektory:};
+
+                \node[below left=0.8 and 0.6 of leg-red, anchor=south west] (kon1) {1. Ovládané periferie};
+                \node[below left=0.6 and 0.0 of kon1, anchor=south west] (kon2) {2. Externí moduly};
+                \node[below left=0.6 and 0.0 of kon2, anchor=south west] (kon3) {3. Programování};
+                \node[below left=0.6 and 0.0 of kon3, anchor=south west] (kon4) {4. Vstup napájení};
+                \node[below left=0.6 and 0.0 of kon4, anchor=south west] (kon5) {5. Lazení a testování};
+                % \node[anchor=south west,inner sep=0,color=red] {2.};
+                % \node[anchor=south west,inner sep=0,color=red] {3.};
+                % \node[anchor=south west,inner sep=0,color=red] {4.};
+                % \node[anchor=south west,inner sep=0,color=red]          {5.};
+            \end{tikzpicture}
+            \caption{Vizualizace DPS řídící jed. s vyznačením jednotlivých částí.}
+            \label{fig:ridici-jendotka-dps-popis}
+        \end{figure}
+
+        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev umožňuje nabízí více prostoru pro vedení cest a také umožňuje lepší zemnění, čímž se zároveň zlepší vlastnosti zařízení z hlediska EME (emise elektromagnetického záření). Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v nejnižší cenové skupině výrobce. Rozložení vrstev je vyobrazeno na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
+
+        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu DPS tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jendotka-dps-popis} je zobrazen výsledný návrh DPS, v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v sekci~\ref{sec:ridici-jendotka-esp32-modul}.
+
+        \begin{figure}[h!]
+            \centering
+            % trim=left bottom right top
+            \begin{tikzpicture}[scale=1.5]
+
+                % Layers
+                \fill[red!30]    (0,3.75)   rectangle (4,4.75);
+                \fill[green!30]  (0,2.5)    rectangle (4,3.5);
+                \fill[orange!30] (0,1.25)   rectangle (4,2.25);
+                \fill[blue!30]   (0,0)      rectangle (4,1);
+                
+
+                % Layer labels
+                \node at (2,4.25) {Signálové cesty};
+                \node at (2,3) {Zemní plocha (GND)};
+                \node at (2,1.75) {Výkonové cesty};
+                \node at (2,0.5) {Signálové cesty};
+
+                \node[anchor=east] at (0,4.25) {Top};
+                \node[anchor=east] at (0,3)    {1. vnitřní vrstva};
+                \node[anchor=east] at (0,1.75) {2. vnitřní vrstva};
+                \node[anchor=east] at (0,0.5)  {Bottom};
+
+                \node[anchor=north] at (4,5.25) {Tl. mědi:};
+                \node[anchor=west] at (4,4.25) {\qty{1}{oz}};
+                \node[anchor=west] at (4,3)    {\qty{0.5}{oz}};
+                \node[anchor=west] at (4,1.75) {\qty{0.5}{oz}};
+                \node[anchor=west] at (4,0.5)  {\qty{1}{oz}};
+                
+                % Comments
+                % \draw[<-,thick] (0,3.75)    -- +(0.5,-0.5) node[below] {Bottom Layer};
+                % \draw[<-,thick] (0,2.5)     -- +(0.5,-0.5) node[below] {Inner Layer 2};
+                % \draw[<-,thick] (0,1.25)    -- +(0.5,-0.5) node[below] {Inner Layer 1};
+                % \draw[<-,thick] (0,0)       -- +(0.5,-0.5) node[below] {Top Layer};
+                
+                \end{tikzpicture}
+            \caption{Rozložení vrstev DPS řídící jednotky.}
+            \label{fig:ridici-jednotka-stackup-dps}
+        \end{figure}
+
+
+        \subsubsection{Měnič napětí}
+            TODO: Zde popis návrhu, zdroje, obrázky
 
    
 
     \section{Konektivita}
-    \label{subsec:pocet-a-fce-vodicu-sbernice}
-    Z~hlediska datové komunikace jsou zapotřebí dva vodiče (TX a RX), kromě toho je ale nutné periferiím dodat napájení. Většina periferií by měla být v~principu dosti jednoduchá a energeticky nenáročná zařízení, typicky obsahující mikrokontroler pracující s~napětím 3,3 nebo \qty{5}{V} s~jedním nebo několika málo připojenými senzory. Pro jejich napájení postačí další dva vodiče, jeden zemní, společný i pro datové vodiče, a druhý s~napětím \qty{5.2}{V}. Periferie musí být navrženy tak, aby je drobné změny této hodnoty neovlivnily. V~případě několika periferí zapojených za sebe bude na delším vedení zákonitě docházet k~poklesu napětí, proto byla zvolena návrhová rezerva \qty{0.2}{V}, která na základě praktického testu bude možná v~budoucnu ještě navýšena. Každá periferie musí obsahovat vlastní regulátor, kterým si pro svůj provoz vytvoří potřebné stabilní napětí 5 nebo \qty{3,3}{V}. 
-    \begin{table}[h!]
-        \centering
-        \caption{Přiřazení vodičů pro konektor D-sub.}
-        \label{tab:sbernice-popis-vodicu}
-        \begin{tabular}{|l|l|l|l|}
-            \hline
-            \textbf{Č.} & \textbf{Zkratka} & \textbf{Popis} & \textbf{Napětí} \\
-            \hline\hline
-            2, 7 & 24V & Napájení z~externího zdroje, pro náročné periferie & \qty{24}{V} \\
-            \hline
-            1, 5, 6, 9 & GND & Společná zem & \qty{0}{V}\\
-            \hline
-            8 & 5V & Napájení pro MCU periferií & \qty{5.2}{V}\\
-            \hline
-            3 & CANH & Kladný vodič diferenční datové linky & 0 až \qty{3.3}{V}\\
-            \hline
-            4 & CANL & Záporný vodič diferenční datové linky & 0 až \qty{3.3}{V}\\
-            \hline
-        \end{tabular}
-    \end{table}
+        Řídící jednotka je vybavena několika konektory, jak je opět možno vidět na obr.~\ref{fig:ridici-jendotka-dps-popis}. Na levé straně DPS (značeno 1.) se nachází konektory pro připojení periferií připravené pro montáž do panelu, kde pak budou přístupné uživateli. Ostatní vyznačené konektory slouží pro připojení externích modulů v rámci hlavního šasi (viz blokové schéma na obr.~\ref{fig:blokove-schema}) popř. pro programování a testování, nebudou tedy volně přístupné uživateli.
 
-    Některé periferie mohou mít vyšší výkonové nároky a navržené nízkonapěťové napájení by jim nemuselo stačit, zároveň by vysokým odběrem proudu klesala stabilita celé sběrnice. Pro tyto periferie je proto potřeba přivést další napájecí větev, opět o~dvou vodičích. Krom zemního vodiče přivedeme napájení \qty{24}{V}, které pochází přímo z~externího zdroje v~hlavním šasi zařízení. Daná periferie pak musí obsahovat vlastní měnič, kterým si vytvoří napětí o~potřebné velikosti. 
+        \begin{figure}[h!]
+            \centering
+            % trim=left bottom right top
+            \begin{tikzpicture}
 
-    Všechny zmíněné vodiče jsou pro lepší přehlednost shrnuty v~tab.~\ref{tab:sbernice-popis-vodicu}.
+                % Draw the connector outline
+                \draw[rounded corners=5pt] (0,0) -- (2,0) -- (2.6,1.5) -- (-0.6,1.5) -- cycle;
+                
+                % Draw the pins
+                \newcounter{pinnum}
+                \setcounter{pinnum}{9}
+                \def\xoff{-0.25}
+                \foreach \x in {0.5,1,...,2}
+                    \foreach \y in {0.6}
+                    {
+                        \draw (\xoff+\x,\y) circle (0.1);
+                        \node[anchor=north,font=\fontsize{9}{0}\selectfont] at (\xoff+\x,\y-0.03) {\thepinnum};
+                        \setcounter{pinnum}{\value{pinnum}-1}
+                    }
 
+                \def\xoff{-0.5}
+                \foreach \x in {0.5,1,...,2.5}
+                    \foreach \y in {1.0}
+                    {
+                        \draw (\xoff+\x,\y) circle (0.1);
+                        \node[anchor=south,font=\fontsize{9}{0}\selectfont] at (\xoff+\x,\y+0.03) {\thepinnum};
+                        \setcounter{pinnum}{\value{pinnum}-1}
+                    }
+                
+                % Pin numbers
+                \node[anchor=west] (pin1) at (-4,1.4)                            {1,~5,~6,~9: GND};
+                \node[below=0.6 of pin1.west,anchor=west] (pin2) {~~~~~~2,~7: \qty{24}{V}};
+                \node[below=0.6 of pin2.west,anchor=west] (pin3) {~~~~~~~~~8: \qty{5.2}{V}};
+                \node[anchor=west] at (2,1.1) (pin4) {~~~~~~~~~3: CAN High};
+                \node[below=0.6 of pin4.west,anchor=west] (pin5) {~~~~~~~~~4: CAN Low};
+                
+            \end{tikzpicture}
+            \caption{Přiřazení pinů konektorů D'sub 9 pro připojení periferií.}
+            \label{fig:ridici-jednotka-dsub-pinout}
+        \end{figure}
 
-% TODO: toto jsem tu jen hodil, at vidim, že to existuje
-    Dále bylo nutné vybrat vratnou pojistku s~vhodnými parametry. Maximální provozní proud, který může po sběrnici téct je limitovaný sériovým odporem a pro zvolenou hodnotu \qty{100}{\ohm} odpovídá \(I_{max} =\qty{33}{mA}\), této hodnoty ale nikdy nedosáhne stabilně nýbrž pouze na krátký čas při změně mezi logickou nulou a jedničkou. Byla proto zvolena pojistka s~hodnotou limitního proudu \(I_{trip} =\qty{60}{mA}\) a běžného provozního proudu \(I_{hold} =\qty{20}{mA}\). 
+        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu. Jak je vidět na obr.~\ref{fig:ridici-jendotka-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný CAN řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky vůči napájení, tak proti ESD~\cite{ata-datasheet}. 
 
-\section{Konektor - TODO: pryč}
-    Hlavní šasi bude disponovat dvěma konektory typu samice. Každá periferie bude mít napevno připevněn kabel zakončený konektorem typu samce a na své krabičce pak opět jeden konektor typu samice. Periferie tedy bude možné připojit buďto přímo do jednoho ze slotů hlavního šasi anebo do série s~některou jinou již připojenou periferií. 
+        \begin{figure}[h!]
+            \centering
+            % trim=left bottom right top
+            \includegraphics
+            [
+                width=0.9\textwidth, 
+                page=3, 
+                trim=5.5cm 4.5cm 4cm 2.5cm, 
+                clip
+            ]{obrazky/exportovane/main-board-schematic.pdf}
+            \caption{Zapojení a ochrana konektorů. Vytvořeno v~KiCad 7.0.}
+            \label{fig:ridici-jednotka-konektory}
+        \end{figure}
+        % TODO: nove schema dodat
 
-    V~principu lze zvolit jakýkoliv typ konektoru disponující alespoň šesti piny, musí však být možné konektor pohodlně použít jak na zakončení kabelu, tak i jako montovaný do panelu, např. na hlavním šasi. Volba konkrétního typu dosud nebyla provedena.
+        Co se týče napájecích vodičů, každý z nich je ošetřen vratnou pojistkou (ang. polyfuse) dimenzovanou podle předpokládaného maximálního odběru zařízení. Při překročení tohoto proudu např. z důvodu zkratu v některé z periferií pojistka sepne a proud v obvodu omezí na minimum. Schéma zapojení konektorů spolu s hodnotami vratných pojistek se nachází na obr.~\ref{fig:ridici-jednotka-konektory}.
 
 
             

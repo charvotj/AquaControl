@@ -1133,6 +1133,16 @@
       (net 51 "Net-(U6B-SW)") (pinfunction "D") (pintype "unspecified") (tstamp 183825ae-d82c-4242-862c-e00813f9ef83))
     (pad "9" smd rect (at 1.005002 0) (size 4.490001 4.570001) (layers "F.Cu")
       (net 51 "Net-(U6B-SW)") (pintype "unspecified") (tstamp 972be583-6cd8-4ed5-a2a6-3fece0ff5c2c))
+    (model ":KICAD7_3DMODEL_DIR:Package_SON.3dshapes/Texas_DQK.step" hide
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model ":KICAD7_3DMODEL_DIR:Package_SON.3dshapes/Texas_DQK.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 3 2.2 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "NetTie:NetTie-2_SMD_Pad0.5mm" (layer "F.Cu")
@@ -1541,6 +1551,11 @@
     (pad "3" thru_hole oval (at 5 0 90) (size 1.7 1.95) (drill 0.95) (layers "*.Cu" "*.Mask")
       (net 1 "GND") (pinfunction "Pin_3") (pintype "passive") (tstamp 6ab49467-c7e8-49ff-b86a-629e90553d36))
     (model "${KICAD6_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.wrl"
+      (offset (xyz 5 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 180))
+    )
+    (model "${KICAD6_3DMODEL_DIR}/Connector_JST.3dshapes/JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -1558,7 +1573,7 @@
     (property "ki_keywords" "Jumper SPST")
     (path "/e09778c5-d723-4378-b78b-5054d4eb0fd5/15961e50-7c84-43da-9f7f-c66aa05b01a4")
     (attr exclude_from_pos_files)
-    (fp_text reference "JP1" (at -2.032 -0.087 -180) (layer "F.SilkS") hide
+    (fp_text reference "JP1" (at -2.032 -0.087) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp de69bfc4-fbc2-4644-97a5-ab70b6f76875)
     )
@@ -1602,6 +1617,11 @@
       (net 36 "/ESP32 Module/3V3") (pinfunction "A") (pintype "passive") (tstamp 1f636a94-6ad3-4a9e-b11b-dd35aa718dfa))
     (pad "2" thru_hole circle (at 2.54 0 270) (size 1.4 1.4) (drill 0.8) (layers "*.Cu" "*.Mask")
       (net 59 "Net-(J3-Pin_1)") (pinfunction "B") (pintype "passive") (tstamp b3ebf80b-1cc5-4541-9038-691bdf4625e7))
+    (model ":KICAD7_3DMODEL_DIR:Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
+    )
   )
 
   (footprint "Button_Switch_SMD:SW_SPST_B3U-1000P" (layer "F.Cu")
@@ -1623,7 +1643,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 9302bd09-70b9-46ec-9749-ed1745fb46b0)
     )
-    (fp_text user "${REFERENCE}" (at 0 -2.5) (layer "F.Fab")
+    (fp_text user "${REFERENCE}" (at 0 -2.5) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 0f2b6de1-25ff-4963-b34d-7bebe587b29a)
     )
@@ -2320,7 +2340,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp b52ac4ed-da84-4cf1-b5b8-5411e7ed665f)
     )
-    (fp_text user "${REFERENCE}" (at 0 -2.5) (layer "F.Fab")
+    (fp_text user "${REFERENCE}" (at 0 -2.5) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp d360a7b7-d081-43f8-ba2a-51adbfd41368)
     )
@@ -2466,6 +2486,11 @@
     (pad "4" thru_hole oval (at 7.5 0 90) (size 1.7 1.95) (drill 0.95) (layers "*.Cu" "*.Mask")
       (net 1 "GND") (pinfunction "Pin_4") (pintype "passive") (tstamp 13ba6acb-5a2e-4837-a529-48ef54cdad35))
     (model "${KICAD6_3DMODEL_DIR}/Connector_JST.3dshapes/JST_XH_B4B-XH-AM_1x04_P2.50mm_Vertical.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model ":KICAD7_3DMODEL_DIR:Connector_JST.3dshapes/JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -7148,6 +7173,11 @@
     (pad "2" thru_hole circle (at 5.08 1.2 90) (size 1.515 1.515) (drill 1.01) (layers "*.Cu" "*.Mask")
       (net 62 "Net-(F5-Pad2)") (pintype "passive") (tstamp 012fb97c-d8ef-4bf2-a87e-b0eecafdc9d5))
     (model "30R400UMR.stp"
+      (offset (xyz 0 0 -17))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model ":KICAD7_3DMODEL_DIR:Fuse.3dshapes/Fuse_BelFuse_0ZRE_0ZRE0055FF_L14.0mm_W4.1mm.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -7593,6 +7623,11 @@
       (net 26 "/Connectors/24V") (pinfunction "D") (pintype "unspecified") (tstamp ea9dc712-e40a-41f0-94e3-b282aa966963))
     (pad "9" smd rect (at 1.005002 0) (size 4.490001 4.570001) (layers "F.Cu")
       (net 26 "/Connectors/24V") (pintype "unspecified") (tstamp a9104730-6cb6-4fb8-ae93-039f6c5076be))
+    (model ":KICAD7_3DMODEL_DIR:Package_SON.3dshapes/Texas_DQK.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 3 2.2 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "TXU0101:SOT-23-6-DBV_TEX" (layer "F.Cu")
@@ -7714,6 +7749,11 @@
       (net 36 "/ESP32 Module/3V3") (pinfunction "OE") (pintype "input") (tstamp 051f6f84-bcdd-4caa-b188-cf16789598e8))
     (pad "6" smd rect (at 1.36525 -0.950001) (size 0.9779 0.5588) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 28 "/Connectors/5.2V") (pinfunction "VCCB") (pintype "power_in") (tstamp a0e66f24-c66d-423a-8de4-03c566efcfef))
+    (model ":KICAD7_3DMODEL_DIR:Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "MountingHole:MountingHole_2.2mm_M2_Pad" (layer "F.Cu")
@@ -7842,6 +7882,11 @@
     (pad "4" thru_hole oval (at 7.5 0 90) (size 1.7 1.95) (drill 0.95) (layers "*.Cu" "*.Mask")
       (net 1 "GND") (pinfunction "Pin_4") (pintype "passive") (tstamp a58aada7-fbfd-44de-9d88-eec031c64b49))
     (model "${KICAD6_3DMODEL_DIR}/Connector_JST.3dshapes/JST_XH_B4B-XH-AM_1x04_P2.50mm_Vertical.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model ":KICAD7_3DMODEL_DIR:Connector_JST.3dshapes/JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -9247,6 +9292,11 @@
       (net 28 "/Connectors/5.2V") (pinfunction "INPUT") (pintype "power_in") (tstamp ce182fb7-436c-4a6d-b005-90b97ea5d2ef))
     (pad "4" smd rect (at 0 -3.2639 90) (size 3.1496 1.4732) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 36 "/ESP32 Module/3V3") (pinfunction "OUTPUT") (pintype "power_out") (tstamp dd41b2b1-7832-40f1-9349-3c86b581d867))
+    (model ":KICAD7_3DMODEL_DIR:Package_TO_SOT_SMD.3dshapes/SOT-223.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
+    )
   )
 
   (footprint "PCM_Espressif:ESP32-WROOM-32E" (layer "F.Cu")
@@ -10127,6 +10177,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
+    (model ":KICAD7_3DMODEL_DIR:Package_SO.3dshapes/SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.35x2.35mm.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Resistor_SMD:R_0815_2038Metric_Pad1.20x4.05mm_HandSolder" (layer "F.Cu")
@@ -10397,6 +10452,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
+    (model ":KICAD7_3DMODEL_DIR:Fuse.3dshapes/Fuse_0402_1005Metric.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 5 5.7 2.2))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (gr_line (start 161.036 90.6272) (end 168.1988 90.6272)
@@ -10419,7 +10479,7 @@
     (stroke (width 0.15) (type default)) (layer "F.SilkS") (tstamp a7220dfb-d2b2-46f7-9563-3772881a3604))
   (gr_line (start 161.1376 100.838) (end 168.3004 100.838)
     (stroke (width 0.15) (type default)) (layer "F.SilkS") (tstamp abf99fbd-3ea4-442e-9313-2dc873fc044e))
-  (gr_line (start 148.9972 53.325347) (end 169.672 53.325347)
+  (gr_line (start 148.9972 53.325347) (end 169.7872 53.325347)
     (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 6aef071f-e5c1-4615-a788-2311ccec9004))
   (gr_line (start 148.9972 46.99) (end 148.9972 53.325347)
     (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 71bc83fe-8a5d-4c17-ac79-3ff7e7cce67d))
@@ -10442,6 +10502,9 @@
   )
   (gr_text "15" (at 168.3512 102.569104) (layer "F.SilkS") (tstamp 240d885a-b966-43d0-aec2-98013d097aaf)
     (effects (font (size 0.6 0.6) (thickness 0.15)) (justify left bottom))
+  )
+  (gr_text "GND" (at 157.6324 136.906) (layer "F.SilkS") (tstamp 2825df06-cacd-4133-8626-2f30e2283f12)
+    (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
   )
   (gr_text "3V3" (at 159.9184 120.5992) (layer "F.SilkS") (tstamp 2f2cecd1-ae10-41ff-9273-d96130a5ca74)
     (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
@@ -10524,6 +10587,9 @@
   (gr_text "Relays" (at 129.794 138.7348) (layer "F.SilkS") (tstamp c541144b-89a2-46a2-b222-694bc6fbdbb3)
     (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
   )
+  (gr_text "+24V" (at 156.8196 123.5456) (layer "F.SilkS") (tstamp c88c6e6d-dca2-4c04-9a56-5a1d92334f40)
+    (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
+  )
   (gr_text "21" (at 168.3512 94.89049) (layer "F.SilkS") (tstamp caf28e45-2fc2-4f71-b76e-df6b20c3bc0a)
     (effects (font (size 0.6 0.6) (thickness 0.15)) (justify left bottom))
   )
@@ -10550,12 +10616,6 @@
   )
   (gr_text "16" (at 161.5948 102.533938) (layer "F.SilkS") (tstamp fcfbc83e-1433-44b0-bb3b-2cfd5a2dab5a)
     (effects (font (size 0.6 0.6) (thickness 0.15)) (justify left bottom))
-  )
-  (gr_text "GND" (at 157.6324 136.906) (layer "F.Fab") (tstamp 2825df06-cacd-4133-8626-2f30e2283f12)
-    (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
-  )
-  (gr_text "+24V" (at 156.8196 123.5456) (layer "F.Fab") (tstamp c88c6e6d-dca2-4c04-9a56-5a1d92334f40)
-    (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
   )
 
   (segment (start 143.95125 125.06093) (end 144.969649 124.042531) (width 0.25) (layer "F.Cu") (net 1) (tstamp 030b63e7-66a7-4fcc-8537-d49f73846ff0))
