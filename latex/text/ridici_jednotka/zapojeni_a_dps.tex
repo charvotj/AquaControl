@@ -9,7 +9,7 @@
         [
             width=\textwidth, 
             page=1, 
-            trim=4.5cm 7.5cm 3cm 4cm, 
+            trim=4.5cm 9cm 3cm 4cm, 
             clip
         ]{obrazky/exportovane/main-board-schematic.pdf}
         \caption{Blokové schéma řídící jednotky. Vytvořeno v~KiCad 7.0.}
@@ -28,7 +28,7 @@
             [
                 width=0.9\textwidth, 
                 page=2, 
-                trim=2.5cm 6cm 15.5cm 1.5cm, 
+                trim=2.5cm 8.5cm 15.5cm 2cm, 
                 clip
             ]{obrazky/exportovane/main-board-schematic.pdf}
             \caption{Podpůrné obvody pro modul ESP32-WROOM-E. Vytvořeno v~KiCad 7.0.}
@@ -59,13 +59,13 @@
             [
                 width=0.9\textwidth, 
                 page=3, 
-                trim=5.5cm 4.5cm 4cm 2.5cm, 
+                trim=2.5cm 4.5cm 4cm 2.5cm, 
                 clip
             ]{obrazky/exportovane/main-board-schematic.pdf}
             \caption{Napájecí obvod řídící jednotky. Vytvořeno v~KiCad 7.0.}
             \label{fig:ridici-jednotka-napajeni}
         \end{figure}
-        % TODO: nove schema dodat
+        % TODO: zjednodusene schema
 
         Aby bylo vyhověno zmíněným požadavkům a zachována návrhová rezerva, byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}. Jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Tento čip funguje pouze jako buck kontroler a zapojení je potřeba doplnit zapojení dvěma externími MOSFET tranzistory, většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a generované teplo se lépe rozloží. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných porametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru zadaným hodnotám. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Výsledné zvolené zapojení se nachází na obr.~\ref{fig:ridici-jednotka-napajeni}. V~obrázku se nachází také odkazy ke konkrétním kapitolám katalogového listu relevantních k~volbě hodnot vybraných součástek. 
 
@@ -207,8 +207,8 @@
             \includegraphics
             [
                 width=0.9\textwidth, 
-                page=3, 
-                trim=5.5cm 4.5cm 4cm 2.5cm, 
+                page=5, 
+                trim=8.5cm 7.6cm 7.5cm 3cm, 
                 clip
             ]{obrazky/exportovane/main-board-schematic.pdf}
             \caption{Zapojení a ochrana konektorů. Vytvořeno v~KiCad 7.0.}

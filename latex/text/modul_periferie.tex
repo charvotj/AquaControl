@@ -30,7 +30,7 @@
         Ve druhém kroku je přidána dvojice D'sub konektorů a CAN řadič ATA6561 obdobně jako u řídící jednotky popsané v sekci \ref{sec:ridici-jednotka-schema-a-dps}. Na závěr jsou všechny dosud nevyužité piny vyvedeny na konektor (dutinkovou lištu), aby byly jednoduše dostupné pro připojenou dceřinnou desku. Pro napájení výkonově náročnejších periferií (např. ovladač LED osvětlení) jsou zvlášť vyvedeny ještě dvě trojice pinů připojené na \qty{24}{V} a zem (GND).
 
         \subsubsection{Tvorba DPS}
-        Hlavním cílem bylo vytvořit DPS co nejmenší, jelikož se jedná o samostatné moduly, kterých bude v systému zapojeno několik a pro manipulaci a rozmístění modulů okolo akvária je menší rozměr výhodou. Hlavní limitací v této snaze není počet součástek, ale spíše rozměry mechanických prvků, zejména konektorů D'sub. Na obr.~\ref{fig:modul-periferie} je vidět výsledný návrh DPS s osazenými součástkami a dosaženými rozměry. Je zřejmé že jiným rozložením dutinkových lišt by se návrh dal ještě drobně zmenšit, ale je potřeba ponechat ještě jistou flexilitu pro tvorbu dceřinných desek.
+        Hlavním cílem bylo vytvořit DPS co nejmenší, jelikož se jedná o samostatné moduly, kterých bude v systému zapojeno několik a pro manipulaci a rozmístění modulů okolo akvária je menší rozměr výhodou. Hlavní limitací v této snaze není počet součástek, ale spíše rozměry mechanických prvků, zejména konektorů D'sub. Na obr.~\ref{fig:modul-periferie-dps} je vidět výsledný návrh DPS s osazenými součástkami a dosaženými rozměry. Je zřejmé že jiným rozložením dutinkových lišt by se návrh dal ještě drobně zmenšit, ale je potřeba ponechat jistou flexilitu pro tvorbu dceřinných desek.
 
         \begin{figure}[!ht]
             \centering
@@ -51,6 +51,8 @@
             \caption{Vizualizace DPS obecného modulu periferie.}
             \label{fig:modul-periferie-dps}
         \end{figure}
+
+        Co se týče rozložení vrstev, byla opět použita čtyřvrstvá deska se strejnou strukturou jako je na obr.~\ref{fig:ridici-jednotka-stackup-dps} pro DPS řídící jednotky. Celý návrh DPS se nachází v příloze TODO.
 
 
 
