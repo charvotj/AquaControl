@@ -56,6 +56,8 @@ void SYSTEM_Initialize(void)
 #endif
 #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
     DAC1_Initialize();
+#elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
+    WaterLevelADC_Initialize();
 #endif
     
 }

@@ -1,5 +1,5 @@
-#ifndef TEMP_SENSOR_DRIVER_H
-#define TEMP_SENSOR_DRIVER_H
+#ifndef WATER_LEVEL_SENSOR_DRIVER_H
+#define WATER_LEVEL_SENSOR_DRIVER_H
 
 
 #include "driver/gpio.h"
@@ -20,10 +20,11 @@
 #include"../../shared/common_types.h"
 #include"../../shared/CAN_definitions.h"
 
-esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperature);
+esp_err_t water_level_sensor_get_data(can_node_t* node_handle, uint8_t* percent_of_wl, bool* boye_state);
 
 
 
 
 
-#endif // TEMP_SENSOR_DRIVER_H
+
+#endif // WATER_LEVEL_SENSOR_DRIVER_H

@@ -45,8 +45,12 @@ void CAN_SendDebugPrint(const char* txData)
     }
 }
 
-void CAN_SendTMCmd(uint8_t cmd_num, uint8_t data_len, uint8_t data[7])
+void CAN_SendTMCmd(uint8_t cmd_num, can_cmd_status status, uint8_t data_len, uint8_t data[6])
 {
+    //    check params
+    if(data_len > 6)
+        return CAN_SendDebugPrint("Too long cmd data");
+    
     struct CAN_MSG_OBJ Transmission;  //create the CAN message object
     Transmission.field.brs=CAN_NON_BRS_MODE; // No bit rate switching
     Transmission.field.formatType=CAN_2_0_FORMAT; //CAN 2.0 frames 
@@ -57,10 +61,11 @@ void CAN_SendTMCmd(uint8_t cmd_num, uint8_t data_len, uint8_t data[7])
     
     uint8_t Transmit_Data[8] = {0x00}; // data bytes
     Transmit_Data[0] = cmd_num;
-    memcpy(&Transmit_Data[1], &data[0], data_len);
+    Transmit_Data[1] = status;
+    memcpy(&Transmit_Data[2], &data[0], data_len);
     Transmission.data=Transmit_Data;
     
-    Transmission.field.dlc= (data_len+1);
+    Transmission.field.dlc= (data_len+2); // two bytes are fixed payload
     // wait for FIFO
     while(CAN_TX_FIFO_AVAILABLE != CAN1_TransmitFIFOStatusGet(CAN1_TXQ));//ensure that the TXQ has space for a message
     CAN1_Transmit(CAN1_TXQ, &Transmission); //transmit frame
@@ -134,10 +139,14 @@ void CAN1_RX_TS_FIFOHandler(void)
                     case CAN_TS_TEMP_SENS_GET_TEMP:
                         temp_sensor_can_send_temp();
                         break;
+                    #elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
+                    case CAN_TS_WATER_LVL_SENS_GET_LVL:
+                        water_level_can_send_data();
+                        break;
                     #endif
 
                     default:
-                        CAN_SendDebugPrint("Unknown CMD");
+                        can_cmd_unsupported(cmd_number);
                         break;
                 }
                 break;

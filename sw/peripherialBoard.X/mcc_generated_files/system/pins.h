@@ -254,6 +254,67 @@
     #define DS18B20_SetOpenDrain()       do { ODCONCbits.ODCC7 = 1; } while(0)
     #define DS18B20_SetAnalogMode()      do { ANSELCbits.ANSELC7 = 1; } while(0)
     #define DS18B20_SetDigitalMode()     do { ANSELCbits.ANSELC7 = 0; } while(0)
+
+#elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
+    // get/set RA0 aliases
+    #define WATER_LEVEL_ADC_PIN_TRIS                 TRISAbits.TRISA0
+    #define WATER_LEVEL_ADC_PIN_LAT                  LATAbits.LATA0
+    #define WATER_LEVEL_ADC_PIN_PORT                 PORTAbits.RA0
+    #define WATER_LEVEL_ADC_PIN_WPU                  WPUAbits.WPUA0
+    #define WATER_LEVEL_ADC_PIN_OD                   ODCONAbits.ODCA0
+    #define WATER_LEVEL_ADC_PIN_ANS                  ANSELAbits.ANSELA0
+    #define WATER_LEVEL_ADC_PIN_SetHigh()            do { LATAbits.LATA0 = 1; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetLow()             do { LATAbits.LATA0 = 0; } while(0)
+    #define WATER_LEVEL_ADC_PIN_Toggle()             do { LATAbits.LATA0 = ~LATAbits.LATA0; } while(0)
+    #define WATER_LEVEL_ADC_PIN_GetValue()           PORTAbits.RA0
+    #define WATER_LEVEL_ADC_PIN_SetDigitalInput()    do { TRISAbits.TRISA0 = 1; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetDigitalOutput()   do { TRISAbits.TRISA0 = 0; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetPullup()          do { WPUAbits.WPUA0 = 1; } while(0)
+    #define WATER_LEVEL_ADC_PIN_ResetPullup()        do { WPUAbits.WPUA0 = 0; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetPushPull()        do { ODCONAbits.ODCA0 = 0; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetOpenDrain()       do { ODCONAbits.ODCA0 = 1; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetAnalogMode()      do { ANSELAbits.ANSELA0 = 1; } while(0)
+    #define WATER_LEVEL_ADC_PIN_SetDigitalMode()     do { ANSELAbits.ANSELA0 = 0; } while(0)
+
+    // get/set RA1 aliases
+    #define WATER_LEVEL_BOYE_TRIS                 TRISAbits.TRISA1
+    #define WATER_LEVEL_BOYE_LAT                  LATAbits.LATA1
+    #define WATER_LEVEL_BOYE_PORT                 PORTAbits.RA1
+    #define WATER_LEVEL_BOYE_WPU                  WPUAbits.WPUA1
+    #define WATER_LEVEL_BOYE_OD                   ODCONAbits.ODCA1
+    #define WATER_LEVEL_BOYE_ANS                  ANSELAbits.ANSELA1
+    #define WATER_LEVEL_BOYE_SetHigh()            do { LATAbits.LATA1 = 1; } while(0)
+    #define WATER_LEVEL_BOYE_SetLow()             do { LATAbits.LATA1 = 0; } while(0)
+    #define WATER_LEVEL_BOYE_Toggle()             do { LATAbits.LATA1 = ~LATAbits.LATA1; } while(0)
+    #define WATER_LEVEL_BOYE_GetValue()           PORTAbits.RA1
+    #define WATER_LEVEL_BOYE_SetDigitalInput()    do { TRISAbits.TRISA1 = 1; } while(0)
+    #define WATER_LEVEL_BOYE_SetDigitalOutput()   do { TRISAbits.TRISA1 = 0; } while(0)
+    #define WATER_LEVEL_BOYE_SetPullup()          do { WPUAbits.WPUA1 = 1; } while(0)
+    #define WATER_LEVEL_BOYE_ResetPullup()        do { WPUAbits.WPUA1 = 0; } while(0)
+    #define WATER_LEVEL_BOYE_SetPushPull()        do { ODCONAbits.ODCA1 = 0; } while(0)
+    #define WATER_LEVEL_BOYE_SetOpenDrain()       do { ODCONAbits.ODCA1 = 1; } while(0)
+    #define WATER_LEVEL_BOYE_SetAnalogMode()      do { ANSELAbits.ANSELA1 = 1; } while(0)
+    #define WATER_LEVEL_BOYE_SetDigitalMode()     do { ANSELAbits.ANSELA1 = 0; } while(0)
+
+    // get/set RC5 aliases
+    #define SHIELD_ON_PIN_TRIS                 TRISAbits.TRISC5
+    #define SHIELD_ON_PIN_LAT                  LATAbits.LATC5
+    #define SHIELD_ON_PIN_PORT                 PORTAbits.RC5
+    #define SHIELD_ON_PIN_WPU                  WPUAbits.WPUC5
+    #define SHIELD_ON_PIN_OD                   ODCONAbits.ODCC5
+    #define SHIELD_ON_PIN_ANS                  ANSELAbits.ANSELC5
+    #define SHIELD_ON_PIN_SetHigh()            do { LATAbits.LATC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetLow()             do { LATAbits.LATC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_Toggle()             do { LATAbits.LATC5 = ~LATAbits.LATC5; } while(0)
+    #define SHIELD_ON_PIN_GetValue()           PORTAbits.RC5
+    #define SHIELD_ON_PIN_SetDigitalInput()    do { TRISAbits.TRISC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetDigitalOutput()   do { TRISAbits.TRISC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_SetPullup()          do { WPUAbits.WPUC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_ResetPullup()        do { WPUAbits.WPUC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_SetPushPull()        do { ODCONAbits.ODCC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_SetOpenDrain()       do { ODCONAbits.ODCC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetAnalogMode()      do { ANSELAbits.ANSELC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetDigitalMode()     do { ANSELAbits.ANSELC5 = 0; } while(0)
 #endif
 
 // get/set RB2 aliases

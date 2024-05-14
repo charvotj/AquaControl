@@ -51,7 +51,7 @@ esp_err_t can_process_cmd_debug_print(twai_message_t *message);
 esp_err_t can_process_cmd_broadcast(twai_message_t *message);
 
 esp_err_t can_tx_cmd_broadcast(uint8_t cmd_number, uint8_t dlc, uint8_t data[TWAI_FRAME_MAX_DLC]);
-esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t tx_data_len, uint8_t tx_data[TWAI_FRAME_MAX_DLC-1], uint8_t* rx_data_len, uint8_t* rx_data);
+esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t tx_data_len, uint8_t tx_data[TWAI_FRAME_MAX_DLC-1], can_cmd_status* rx_status, uint8_t* rx_data_len, uint8_t* rx_data);
 
 esp_err_t can_slave_reset(uint8_t slave_address);
 esp_err_t can_slave_restore_defaults(uint8_t slave_address);

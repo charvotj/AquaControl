@@ -13,6 +13,7 @@
 #include "can_driver/can_driver.h"
 #include "../shared/CAN_definitions.h"
 #include "temp_sensor_driver/temp_sensor_driver.h"
+#include "water_level_driver/water_level_driver.h"
 
 
 
@@ -86,10 +87,14 @@ void main(void)
             #
         #elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
             GLOBAL_device_status = temp_sensor_routine();
+            __delay_ms(1000);
+        #elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
+            GLOBAL_device_status = water_level_routine();
+            __delay_ms(200);
         #else
             #error "Not supported DEVICE_TYPE"
         #endif
-        __delay_ms(1000);
+        
     }    
     return;
 }

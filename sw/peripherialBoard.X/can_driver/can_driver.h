@@ -40,7 +40,7 @@
 #define MY_CAN_ADDRESS DEVICE_TYPE
 
 void CAN_SendDebugPrint(const char* txData);
-void CAN_SendTMCmd(uint8_t cmd_num, uint8_t data_len, uint8_t data[7]);
+void CAN_SendTMCmd(uint8_t cmd_num, can_cmd_status status, uint8_t data_len, uint8_t data[6]);
 void CAN1_RX_BR_FIFOHandler(void);
 void CAN1_RX_TS_FIFOHandler(void);
 

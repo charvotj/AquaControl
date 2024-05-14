@@ -23,6 +23,7 @@
 #include "status_control.h"
 #include "CAN_driver.h"
 #include "temp_sensor_driver.h"
+#include "water_level_sensor_driver.h"
 
 
 #define STATS_TASK_PRIO     3
@@ -217,15 +218,21 @@ void app_main(void)
     // xSemaphoreGive(sync_stats_task);
 
     // debug 
-    uint8_t cmd_num = 0;
-    uint8_t data[7] = {0, 0 , 0 ,0 ,0 ,0 ,0};
-    uint8_t dlc = 0;
-    uint8_t slave_adr = 4;
+
     float temp_from_sensor = 0;
     can_node_t temp_node = {
         .can_address = NODE_TYPE_TEMP_SENSOR,
         .node_type = NODE_TYPE_TEMP_SENSOR,
         .SN = 512,
+        .status = NODEST_NORMAL
+    };
+
+    uint8_t wl = 0;
+    bool boye =  0;
+    can_node_t wl_node = {
+        .can_address = NODE_TYPE_WATER_LEVEL_SENSOR,
+        .node_type = NODE_TYPE_WATER_LEVEL_SENSOR,
+        .SN = 1024,
         .status = NODEST_NORMAL
     };
 
@@ -236,6 +243,10 @@ void app_main(void)
         st = temp_sensor_get_temperature(&temp_node, &temp_from_sensor);
         if(st == ESP_OK)
             printf("Temperature from sensor: %f ˚C\n",temp_from_sensor);
+
+        st = water_level_sensor_get_data(&wl_node, &wl, &boye);
+        if(st == ESP_OK)
+            printf("WL: %u, B: %u\n",wl,boye);
     }
     
 }

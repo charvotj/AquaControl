@@ -46,6 +46,16 @@
 // TO MASTER COMMANDS - cmd number for response is the same, only command type is changing
 #define CAN_TM_TEMP_SENS_GET_TEMP_RES        CAN_TS_TEMP_SENS_GET_TEMP
 
+/********************************************
+ *  PERIPHERIAL SPECIFIC COMMANDS - water level sensor
+*********************************************/
+// TO SLAVE COMMANDS
+#define CAN_TS_WATER_LVL_SENS_GET_LVL            (uint8_t)0x80
+
+
+// TO MASTER COMMANDS - cmd number for response is the same, only command type is changing
+#define CAN_TM_WATER_LVL_SENS_GET_LVL_RES        CAN_TS_WATER_LVL_SENS_GET_LVL
+
 
 
 

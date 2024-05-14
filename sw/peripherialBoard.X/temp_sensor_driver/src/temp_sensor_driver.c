@@ -153,14 +153,17 @@ node_status_t temp_sensor_routine()
 void temp_sensor_can_send_temp()
 {
     uint8_t data_len = 0u;
-    uint8_t data[7] = {0,0,0,0,0,0,0};
+    uint8_t data[6] = {0u};
+    can_cmd_status st = CANST_TEMP_SENSOR_SPECIFIC_ER;
+    
     if(NODEST_NORMAL == GLOBAL_device_status)
     {
         data_len = 2u;
         data[0] = (uint8_t)(0xFF & temp_proccesed);
         data[1] = (uint8_t)(temp_proccesed >> 8);
+        st = CANST_OK;
     }
-    CAN_SendTMCmd(CAN_TM_TEMP_SENS_GET_TEMP_RES,data_len,data);
+    CAN_SendTMCmd(CAN_TM_TEMP_SENS_GET_TEMP_RES,st,data_len,data);
 }
 
 

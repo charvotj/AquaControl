@@ -8,14 +8,19 @@
 
 #include "../can_commands.h"
 
-static uint8_t data[7] = {0,0,0,0,0,0,0};
-void can_cmd_reset()
+static uint8_t data[6] = {0u};
+void can_cmd_reset(void)
 {
-    CAN_SendTMCmd(CAN_TM_RST_RES,0,data);
+    CAN_SendTMCmd(CAN_TM_RST_RES, CANST_OK, 0, data);
     // wait for response to send
     while(CAN_TX_FIFO_AVAILABLE != CAN1_TransmitFIFOStatusGet(CAN1_TXQ));
     __delay_ms(2000);
     Reset();
+}
+
+void can_cmd_unsupported(uint8_t cmd_num)
+{
+    CAN_SendTMCmd(cmd_num,CANST_UNSUPPORTED_CMD,0,data);
 }
 
 

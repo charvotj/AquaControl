@@ -16,9 +16,10 @@ esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperatur
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
 
-    if(ESP_OK != can_tx_cmd_to_slave(node_handle->can_address, CAN_TS_TEMP_SENS_GET_TEMP,tx_data_len, tx_data, &rx_data_len, &rx_data[0]))
+    if(ESP_OK != can_tx_cmd_to_slave(node_handle->can_address, CAN_TS_TEMP_SENS_GET_TEMP,tx_data_len, tx_data,&rx_status, &rx_data_len, &rx_data[0]))
     {
         ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_TEMP_SENS_GET_TEMP");
         return ESP_FAIL;
@@ -30,7 +31,7 @@ esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperatur
         ESP_LOGE(TAG,"Wrong payload of CAN_TM_TEMP_SENS_GET_TEMP_RES");
         return ESP_FAIL;
     }
-    printf("0:%d, 1:%d \n",rx_data[0],rx_data[1]);
+    // printf("0:%d, 1:%d \n",rx_data[0],rx_data[1]);
     *temperature = ((int16_t)(rx_data[1] << 8) | (rx_data[0])) / 16.0;
     return ESP_OK;
 }

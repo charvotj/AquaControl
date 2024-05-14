@@ -72,6 +72,9 @@ void PIN_MANAGER_Initialize(void)
     ANSELB &= 0xDF;
 #elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
     ANSELC &= 0x7F;
+#elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
+    ANSELA &= 0xFD;
+    ANSELC &= 0xDF;
 #endif  
 
     /**
@@ -83,6 +86,8 @@ void PIN_MANAGER_Initialize(void)
     WPUE = 0x0;
 #if DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
     WPUC &= 0x80;
+#elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
+    WPUC &= 0x20;
 #endif
 
     /**

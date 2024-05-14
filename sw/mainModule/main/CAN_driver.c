@@ -97,7 +97,7 @@ esp_err_t can_tx_cmd_broadcast(uint8_t cmd_number, uint8_t dlc, uint8_t data[TWA
     return status;
 }
 
-esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t tx_data_len, uint8_t tx_data[TWAI_FRAME_MAX_DLC-1], uint8_t* rx_data_len, uint8_t* rx_data)
+esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t tx_data_len, uint8_t tx_data[TWAI_FRAME_MAX_DLC-1], can_cmd_status* rx_status, uint8_t* rx_data_len, uint8_t* rx_data)
 {
     // check params
     if(tx_data_len > TWAI_FRAME_MAX_DLC-1 || tx_data == NULL)
@@ -139,13 +139,19 @@ esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t
             // check correct slave
             if(rx_slave_address == slave_address)
             {
+                // check payload length before reading memory
+                if(rx_msg->data_length_code < 2)
+                    return ESP_FAIL;
+
                 // check correct payload
                 if(rx_msg->data[0] == cmd_number)
                 {
+                    // save status code 
+                    *rx_status = rx_data[0];
                     // save the response 
-                    *rx_data_len = rx_msg->data_length_code - 1;
+                    *rx_data_len = rx_msg->data_length_code - 2;
                     if(*rx_data_len > 0)
-                        memcpy(rx_data, &(rx_msg->data[1]), *rx_data_len);
+                        memcpy(rx_data, &(rx_msg->data[2]), *rx_data_len);
                     // enable for tx other cmds
                     xSemaphoreGive(can_tx_mutex);
                     // always free the memory after reading from queue
@@ -170,9 +176,10 @@ esp_err_t can_slave_reset(uint8_t slave_address)
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_RST,tx_data_len , tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_RST,tx_data_len , tx_data,  &rx_status,&rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_restore_defaults(uint8_t slave_address)
@@ -180,9 +187,10 @@ esp_err_t can_slave_restore_defaults(uint8_t slave_address)
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_RES_DEF, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_RES_DEF, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_mute(uint8_t slave_address, u_int8_t time_s)
@@ -190,11 +198,12 @@ esp_err_t can_slave_mute(uint8_t slave_address, u_int8_t time_s)
     uint8_t tx_data_len = 1u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     
     tx_data[0] = time_s;
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_MUTE, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_MUTE, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_ping(uint8_t slave_address)
@@ -202,9 +211,10 @@ esp_err_t can_slave_ping(uint8_t slave_address)
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_PING, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_PING, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_SN(uint8_t slave_address, node_sn_t* sn)
@@ -212,9 +222,10 @@ esp_err_t can_slave_get_SN(uint8_t slave_address, node_sn_t* sn)
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_SN, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_SN, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_node_type(uint8_t slave_address, node_type_t* node_type)
@@ -222,9 +233,10 @@ esp_err_t can_slave_get_node_type(uint8_t slave_address, node_type_t* node_type)
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_NODE_TYPE, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_NODE_TYPE, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_node_status(uint8_t slave_address, node_status_t* status)
@@ -232,9 +244,10 @@ esp_err_t can_slave_get_node_status(uint8_t slave_address, node_status_t* status
 uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_STATUS, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_STATUS, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_temperature(uint8_t slave_address, node_temp_t* temp)
@@ -242,9 +255,10 @@ esp_err_t can_slave_get_temperature(uint8_t slave_address, node_temp_t* temp)
 uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_TEMP, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_TEMP, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_uptime(uint8_t slave_address, node_uptime_t* uptime)
@@ -252,9 +266,10 @@ esp_err_t can_slave_get_uptime(uint8_t slave_address, node_uptime_t* uptime)
     uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
-    uint8_t rx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
-
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_UPTIME, tx_data_len, tx_data, &rx_data_len, &rx_data);
+    uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
+    can_cmd_status rx_status = CANST_GENERAL_ERROR;
+    
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_UPTIME, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
 
