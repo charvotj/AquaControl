@@ -444,10 +444,15 @@
       (net 13 "/RA3") (pinfunction "Pin_14") (pintype "passive") (tstamp 2c6fe4d8-5696-4665-8b63-615abf61aa46))
     (pad "16" thru_hole oval (at -2.54 17.78) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask")
       (net 32 "/RA4") (pinfunction "Pin_16") (pintype "passive") (tstamp 8d44305c-d45e-4b6e-9a59-76583de1a82b))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_2x11_P2.54mm_Vertical.wrl" hide
-      (offset (xyz 0 0 0))
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+      (offset (xyz 0 0 -1.5))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz 0 180 0))
+    )
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x08_P2.54mm_Vertical.step"
+      (offset (xyz -2.54 0 -1.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 180 0))
     )
   )
 
@@ -793,6 +798,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
+    (model ":KICAD7_3DMODEL_DIR:Inductor_SMD.3dshapes/L_Bourns_SRN6045TA.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Library:V-DFN3020-13" (layer "F.Cu")
@@ -838,6 +848,11 @@
       (net 16 "GND") (pinfunction "GND") (pintype "power_in") (clearance 0.1) (thermal_bridge_angle 45) (tstamp 817f7e73-a501-4f06-8605-e1e45abd459b))
     (pad "9" smd rect (at 1.15 0.5875) (size 0.3 1.725) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 24 "Net-(U3-SW)") (pinfunction "SW") (pintype "output") (clearance 0.1) (thermal_bridge_angle 45) (tstamp 63f14e0e-3873-4341-aba4-ec90b09e760a))
+    (model ":KICAD7_3DMODEL_DIR:Package_DFN_QFN.3dshapes/DFN-10-1EP_2x3mm_P0.5mm_EP0.64x2.4mm.step"
+      (offset (xyz 1.15 -1.429 0))
+      (scale (xyz 1.1 0.955 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" (layer "F.Cu")
@@ -1465,6 +1480,11 @@
       (net 16 "GND") (pinfunction "GND") (pintype "power_in") (clearance 0.1) (thermal_bridge_angle 45) (tstamp 9d218a9a-78a7-4397-91ed-e49f1d8ae2b1))
     (pad "9" smd rect (at 1.15 0.5875) (size 0.3 1.725) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 21 "Net-(U4-SW)") (pinfunction "SW") (pintype "output") (clearance 0.1) (thermal_bridge_angle 45) (tstamp 11acbe41-c4fb-49ae-9a1f-de374bd900d3))
+    (model ":KICAD7_3DMODEL_DIR:Package_DFN_QFN.3dshapes/DFN-10-1EP_2x3mm_P0.5mm_EP0.64x2.4mm.step"
+      (offset (xyz 1.15 -1.42 0))
+      (scale (xyz 1.1 0.95 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder" (layer "F.Cu")
@@ -1631,6 +1651,11 @@
     (pad "2" smd rect (at 2.25 0 180) (size 1.7 5.7) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 21 "Net-(U4-SW)") (pinfunction "2") (pintype "passive") (tstamp 789ae9f2-a638-42a3-9b8e-7621900f911b))
     (model "${KICAD7_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Changjiang_FNR6045S.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+    (model ":KICAD7_3DMODEL_DIR:Inductor_SMD.3dshapes/L_Bourns_SRN6045TA.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -6162,7 +6187,7 @@
       (net 20 "/ICSP_DAT") (pinfunction "Pin_4") (pintype "passive") (tstamp 667cc31d-e37c-4d1e-bae7-13bb8d6790a7))
     (pad "5" thru_hole oval (at 0 -10.16 180) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask")
       (net 19 "/ICSP_CLK") (pinfunction "Pin_5") (pintype "passive") (tstamp 5ffd25df-0b42-491f-8e3e-f404a54d71a4))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x05_P2.54mm_Vertical.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -6228,7 +6253,7 @@
       (net 22 "/24V") (pinfunction "Pin_2") (pintype "passive") (tstamp f9f1fa97-d946-4814-8191-fd09bcb934df))
     (pad "3" thru_hole oval (at 0 -5.08 180) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask")
       (net 22 "/24V") (pinfunction "Pin_3") (pintype "passive") (tstamp af59af23-c693-41a9-bdea-1c4671f7261a))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x03_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -6348,7 +6373,7 @@
       (net 16 "GND") (pinfunction "Pin_2") (pintype "passive") (tstamp c17c8483-1500-4dcb-8ac2-5ecf7b4f3fde))
     (pad "3" thru_hole oval (at 0 -5.08 180) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask")
       (net 16 "GND") (pinfunction "Pin_3") (pintype "passive") (tstamp 56b4a03b-bbe6-419d-85af-99a0ac50bb88))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x03_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -6522,7 +6547,7 @@
       (net 15 "/RB1") (pinfunction "Pin_2") (pintype "passive") (tstamp a07a8a38-878b-47d5-8aba-11fe96b3c38b))
     (pad "3" thru_hole oval (at 0 -5.08 180) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask")
       (net 18 "/RB5") (pinfunction "Pin_3") (pintype "passive") (tstamp 9e741d13-502d-4276-936e-81484e7139ff))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x03_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
