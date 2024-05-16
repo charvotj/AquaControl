@@ -1317,6 +1317,23 @@
     )
   )
 
+  (sheet (at 210.82 64.77) (size 38.1 27.94) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid b3ba5654-1b9f-48bd-bc5b-da3dd34d132e)
+    (property "Sheetname" "Untitled Sheet" (at 210.82 64.0584 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "main-b-simply.kicad_sch" (at 210.82 93.2946 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "ukazky-do-textu"
+        (path "/5ea9602d-a3cc-4e11-96b1-d08bdd6d2ed5" (page "2"))
+      )
+    )
+  )
+
   (sheet_instances
     (path "/" (page "1"))
   )

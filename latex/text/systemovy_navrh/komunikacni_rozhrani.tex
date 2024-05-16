@@ -3,6 +3,50 @@
     Před návrhem jednotlivých částí zařízení je zapotřebí definovat komunikační rozhraní mezi řídícím modulem a periferiemi, protože právě od jeho specifikace se následně odvíjí tvorba zbytku zařízení. 
 
     Úkolem rozhraní je obousměrně komunikovat s~periferiemi, tedy např. stahovat data z~připojených sensorů a zároveň za pomoci přikazů periferie řídit. Kromě datové komunikace musí rozhraní periferie také napájet a to i v~případě energeticky náročnějších obvodů jako např. osvětlení. 
+
+    Pro připojení periferií byl zvolen konektor typu D'sub 9, který je cenově dostupný, disponuje dostatečným množstvím pinů a umožňuje montáž jak do panelu, tak i jako zakončení kabelu. Přiřazení a funkce jednotlivých vodičů jsou vyobrazeny na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}. Konektor disponuje dvěma úrovněmi napájení, \qty{5}{V} slouží k napájení MCU periferií a k nim připojených senzorů nebo jiné nenáročné elektroniky. Je pravděpodobné, že s připojením více periferií za sebe dojde k úbytku napětí v důsledku ztrát na vedení, aby bylo toto částečně kompenzováno, napětí vystupující z měniče řídící jednotky je přibložně o \qty{0.2}{V} vyšší. Druhou napájecí linkou je výstup přímo z externího spínaného zdroje, tedy s napětím \qty{24}{V}, ten slouží pro výkonově náročnější periferie, které si již napětí dále upraví podle potřeby a nebudou neúměrně zatěžovat první zmíněnou napájecí linku.
+
+    \begin{figure}[h!]
+        \centering
+        % trim=left bottom right top
+        \begin{tikzpicture}
+
+            % Draw the connector outline
+            \draw[rounded corners=5pt] (0,0) -- (2,0) -- (2.6,1.5) -- (-0.6,1.5) -- cycle;
+            
+            % Draw the pins
+            \newcounter{pinnum}
+            \setcounter{pinnum}{9}
+            \def\xoff{-0.25}
+            \foreach \x in {0.5,1,...,2}
+                \foreach \y in {0.6}
+                {
+                    \draw (\xoff+\x,\y) circle (0.1);
+                    \node[anchor=north,font=\fontsize{9}{0}\selectfont] at (\xoff+\x,\y-0.03) {\thepinnum};
+                    \setcounter{pinnum}{\value{pinnum}-1}
+                }
+
+            \def\xoff{-0.5}
+            \foreach \x in {0.5,1,...,2.5}
+                \foreach \y in {1.0}
+                {
+                    \draw (\xoff+\x,\y) circle (0.1);
+                    \node[anchor=south,font=\fontsize{9}{0}\selectfont] at (\xoff+\x,\y+0.03) {\thepinnum};
+                    \setcounter{pinnum}{\value{pinnum}-1}
+                }
+            
+            % Pin numbers
+            \node[anchor=west] (pin1) at (-4,1.4)                            {1,~5,~6,~9: GND};
+            \node[below=0.6 of pin1.west,anchor=west] (pin2) {~~~~~~2,~7: \qty{24}{V}};
+            \node[below=0.6 of pin2.west,anchor=west] (pin3) {~~~~~~~~~8: \qty{5.2}{V}};
+            \node[anchor=west] at (2,1.1) (pin4) {~~~~~~~~~3: CAN High};
+            \node[below=0.6 of pin4.west,anchor=west] (pin5) {~~~~~~~~~4: CAN Low};
+            
+        \end{tikzpicture}
+        \caption{Přiřazení pinů konektorů D'sub 9 pro připojení periferií.}
+        \label{fig:komunikacni-rozhr-dsub-pinout}
+    \end{figure}
+
     
     \subsection{Výběr datové sběrnice}
         Existuje celá řada datových sběrnic, které jsou v~elektrotechnice hojně využívány. Každá z~nich má své výhody a nevýhody stejně jako jisté limitace použití. V~tab.~\ref{tab:porovnani-sbernic} se nachází výčet různých sběrnic, které byly při výběru uvažovány. 
@@ -84,7 +128,7 @@
 
         UART je výhodný svou jednoduchou implementací a umožňuje obousměrnou asynchronní komunikaci. Nevýhodou je že funguje pouze pro dvě zařízení. Jednou z možností jak tuto limitaci obejít by bylo zavedení řetězového způsobu komunikace, kdy by každé zařízení komunikovalo se dvěmi sousedními a informace by se postupně předávala dále až k cílovému zařízení. Tento systém je relativně jednoduchý, ale například v případě poruchy jednoho zařízení se odpojí všechna následující zařízení, což může mít neočekávané následky.
 
-        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitěkší a dražší implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontroler nebo připojit externí ovladač řízený např. přes SPI, dále je nutné přidat i řadič, který převede signál na diferenční a zároveň umožní zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde ještě k lepšímu potlačení šumu.
+        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitější a dražší implementace. Většina běžných mikrokontrolerů nemá pro CAN vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontroler nebo připojit externí ovladač řízený např. přes SPI, dále je nutné přidat i řadič, který převede signál na diferenční a zároveň umožní zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde k ještě lepšímu potlačení šumu.
 
     \subsection{Sběrnice CAN}
         Po důkladné rešerši a zvážení zmíněných kladů a záporů byla  zvolena sběrnice CAN. ESP32 jakožto již zvolený mikrokontroler řídící jednotky obsahuje vestavený CAN kontroler a pro moduly periferií byl na základě tohoto rozhodnutí zvolen také vhodný mikrokontroler. Co se týče nutnosti přidání řadiče, jedná se sice o další součástku, která na první pohled navyšuje cenu zařízení, kromě převodu signálu na diferenční ale zajišťuje také ochranu konektorů proti mnoha nežádoucím jevům jako je zkrat, ESD výboj nebo přepětí. Tímto se ve výsledku celé zapojení zlevní a zjednoduší.

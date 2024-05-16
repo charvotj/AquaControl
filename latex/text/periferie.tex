@@ -1,5 +1,5 @@
 \chapter{Volba a návrh periferií}
-    Tato kapitola se již věnuje návrhu konkrétních periferií, tedy jednotlivých senzorů a akčních členů. Po technické stránce jsou všechny zmíněné moduly nadstavbou pro \uv{obecný modul periferie} popsaný detailně v předešlé kapitole. Jelikož je celý systém modulární, je pravděpodobné, že postupem času bude dále rozšiřován o nové typy periferií a i v současné chvíli je jich v plánu více, než je v možnostech této práce. Pro lepší přehlednost se v tab.\ref{tab:prehled-periferii} nachází přehled všech realizovaných i v tuto chvíli pouze plánovaných periferií.
+    Tato kapitola se již věnuje návrhu konkrétních periferií, tedy jednotlivých senzorů a akčních členů. Po technické stránce jsou všechny zmíněné moduly nadstavbou pro \uv{obecný modul periferie} popsaný detailně v předešlé kapitole. Jelikož je celý systém modulární, je pravděpodobné, že postupem času bude dále rozšiřován o nové typy periferií a i v současné chvíli je jich v plánu více, než je v možnostech této práce. Pro lepší přehlednost se v tab.~\ref{tab:prehled-periferii} nachází přehled všech realizovaných i v tuto chvíli pouze plánovaných periferií.
 
     \begin{table}[h]
         \centering
@@ -16,15 +16,15 @@
             Filtr vody      & S & \qty{230}{V}  & Filtrace vody                      & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
             Krmítko         & A & \qty{24}{V}   & Dávkování krmiva                   & N  \\ \hline
             Sensor průtoku  & S & -             & Voda tekoucí filtrem               & N  \\ \hline
-                            & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
-                                & S &  &  & A  \\ \hline
+                            % & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
             \end{tabular}
         
     \end{table}
@@ -32,8 +32,7 @@
 
 \input{text/periferie/led_modul.tex}
 
-\section{Senzor teploty}
-\label{sec:perif-sensor-teploty}
+\input{text/periferie/sensor_teploty.tex}
 
 \section{Senzor výšky hladiny}
 \label{sec:perif-sensor-hladina}
