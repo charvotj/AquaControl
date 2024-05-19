@@ -7,15 +7,15 @@
         \label{tab:prehled-periferii}
         \begin{tabular}{|l|l|l|l|l|}
             \hline
-            Název & Typ & Napájení & Měřené / ovládané veličiny & Realizováno \\ \hline\hline
+            Název & Typ & Napájení & Funkce & Realizováno \\ \hline\hline
             Sensor teploty  & S & \qty{5}{V}    & Teplota vody                       & Ano, kap.~\ref{sec:perif-sensor-teploty}  \\ \hline
             Sensor hladiny  & S & \qty{5}{V}    & Výška hladiny (spojitě + skokově)  & Ano, kap.~\ref{sec:perif-sensor-hladina}  \\ \hline
             LED osvětlení   & A & \qty{24}{V}   & Intenzita osvětlení                & Ano, kap.~\ref{sec:perif-led-osvetleni}  \\ \hline
             Sensor pH       & S & \qty{5}{V}    & pH vody                            & Ano, kap.~\ref{sec:perif-sensor-ph}  \\ \hline
             Topné těleso    & A & \qty{230}{V}  & Ohřev vody                         & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
             Filtr vody      & S & \qty{230}{V}  & Filtrace vody                      & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
-            Krmítko         & A & \qty{24}{V}   & Dávkování krmiva                   & N  \\ \hline
-            Sensor průtoku  & S & -             & Voda tekoucí filtrem               & N  \\ \hline
+            Krmítko         & A & \qty{24}{V}   & Dávkování krmiva                   & Ne  \\ \hline
+            Sensor průtoku  & S & -             & Voda tekoucí filtrem               & Ne  \\ \hline
                             % & S &  &  & A  \\ \hline
                             %     & S &  &  & A  \\ \hline
                             %     & S &  &  & A  \\ \hline
@@ -26,7 +26,10 @@
                             %     & S &  &  & A  \\ \hline
                             %     & S &  &  & A  \\ \hline
             \end{tabular}
-        
+            \begin{tabular}{c}
+                S = sensor, A = akční člen \\
+            \end{tabular}
+   
     \end{table}
     % TODO zkontrolovat styl vuci sablone prace
 

@@ -40,7 +40,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md",
+                "file": "Bakalárka Check list.md",
                 "mode": "source",
                 "source": false
               }
@@ -131,7 +131,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md",
+                "file": "Bakalárka Check list.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -148,7 +148,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md",
+                "file": "Bakalárka Check list.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -171,7 +171,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Text prace/Bakalarka Obsah.md"
+                "file": "Bakalárka Check list.md"
               }
             }
           }
@@ -194,6 +194,7 @@
   },
   "active": "d1de93b125fb7060",
   "lastOpenFiles": [
+    "Text prace/Bakalarka Obsah.md",
     "Notes/CAN.md",
     "Notes/Nákupní seznam.md",
     "Notes/Random notes.md",
@@ -205,7 +206,6 @@
     "Canvases/Peripherials.canvas",
     "Pasted image 20240426132536.png",
     "Notes/Web server.md",
-    "Text prace/Bakalarka Obsah.md",
     "Text prace/Semestralka Obsah.md",
     "Bakalárka Check list.md",
     "Main board/Main board schematic.md",

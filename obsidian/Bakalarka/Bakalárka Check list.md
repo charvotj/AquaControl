@@ -1,2 +1,15 @@
 - Study:
 	- RTOS: [[freeRTOS notes]]
+
+- Úprava textu před finálním odevzdáním
+- TODO:
+	- Kontrola citací - jednotný styl pro stejný typ citací
+	- Obrázky nesmí být na konci kapitoly ani strany
+	- Nesmí býti prázdná kapitola
+	- vlna - neboli jednopísmenková slova na konci řádků
+	- kontroler vs kontrolér
+	- D-sub, D'sub
+	- display, displej
+	-  BUCK malým
+	- Zkratky
+	-  Sjednotit značení součástek buď U_1 nebo U1

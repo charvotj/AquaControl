@@ -31,6 +31,7 @@
 
     
 \subsubsection{Popis schématu a výpočty hodnot součástek}
+% TODO: projet ještě jednou poznámky od Pavla
     Zjednodušené schéma pro jeden ovládaný kanál se nachází na obr.~\ref{fig:led-board-simp-schema}, při výpočtech bude použito označení součástek z tohoto schématu. Úplné schéma modulu pak lze nalézt v příloze~\ref{priloha:schema-led-board}.
 
     Jako BUCK kontroler je zvolen čip AP63356Q vyvinutý společností Diodes incorporated, jedná se o úspornou a velmi malou součástku, která v sobě integruje oba potřebné MOSFET tranzistory a spíná s pevně danou frekvencí \(f_{SW}=\qty{450}{kHz} \) ~\cite{Diodes_AP63356Q}. Pro snímání proudu poslouží čip INA180A4 firmy Texas Instruments~\cite{TI_INA180A4}.
@@ -41,7 +42,7 @@
     \begin{equation}
         R_{3} = R_{4}\cdot \left(\frac{U_{outMAX} }{\num{0.8}}-1\right) = \qty{10}{k}\cdot \left(\frac{12}{\num{0.8}}-1\right) = \qty{140}{k\ohm}
     \end{equation} 
-    Na pin RA3 mikrokontroleru je přivedeno analogové napětí z periferie DAC popř. PWM signál a skrze ochrannou diodu (a rezistor \(R_{5} \) ) pak teče proud do rezistoru \(R_{4} \), úbytek napětí na tomto rezistoru je ale konstantní (\qty{0.8}{V}) a tedy je konstantní i proud rezistorem. Z prvního Kirchhoffova zákona pak víme, že proud rezistorem \(R_{3} \) klesne o hodnotu proudu dodanou z pinu RA3, tím klesne také napětí na výstupu měniče a dojde ke ztlumení jasu LED pásku. Citlivost (nebo také rozsah) změny je definován hodnotou \(R_{5} \), snížením jeho hodnoty lze dosáhnout na výstupu ještě nižšího napětí. Pro hodnotu \(R_{5} = \qty{100}{k\ohm}\) zobrazenou ve schématu lze nejnižší možné napětí vypočítat následovně:
+    Na pin RA3 mikrokontroleru je přivedeno analogové napětí z periferie DAC popř. PWM signál a skrze rezistor \(R_{5} \) (a ochrannou diodu) pak teče proud do rezistoru \(R_{4} \), úbytek napětí na tomto rezistoru je ale konstantní (\qty{0.8}{V}) a tedy je konstantní i proud rezistorem. Z prvního Kirchhoffova zákona pak víme, že proud rezistorem \(R_{3} \) klesne o hodnotu proudu dodanou z pinu RA3, tím klesne také napětí na výstupu měniče a dojde ke ztlumení jasu LED pásku. Citlivost (nebo také rozsah) změny je definován hodnotou \(R_{5} \), snížením jeho hodnoty lze dosáhnout na výstupu ještě nižšího napětí. Pro hodnotu \(R_{5} = \qty{100}{k\ohm}\) zobrazenou ve schématu lze nejnižší možné napětí vypočítat následovně:
     \begin{equation}
         U_{outMIN} = \num{0.8}+R_{3} \cdot I_{3} = \num{0.8}+R_{3} \cdot \left(\frac{\num{0.8}}{R_{4}} - \frac{U_{VDD} - U_{D1}}{R_{4}+R_{5}} \right) 
     \end{equation}  

@@ -69,9 +69,9 @@
         \label{fig:blokove-schema}
     \end{figure}
     
-    Pro napájení vlastní elektroniky zařízení bude v~šasi umístěn hotový modul spínaného zdroje převádějící síťové napětí \qty{230}{V} na stejnosměrných \qty{24}{V} se kterými pak zařízení dále pracuje (viz sekce~\ref{sec:ridici-jendotka-napajeci-obvod}).   
+    Pro napájení vlastní elektroniky zařízení je v~šasi umístěn hotový modul spínaného zdroje převádějící síťové napětí \qty{230}{V} na stejnosměrných \qty{24}{V} se kterými pak zařízení dále pracuje (viz kapitola~\ref{sec:ridici-jendotka-napajeci-obvod}).   
     
-    Z~hlediska bezpečnosti je potřeba zajistit, aby se uživatel ani samotná nízkonapěťová část obvodu nemohli dostat do kontaktu s~nebezpečným napětím. Toho bude dosaženo galvanickým oddělením částí zařízení pracujících se síťovým napětím. V~blokovém schématu (obr.~\ref{fig:blokove-schema}) jsou všechny tyto části podbarveny šedou barvou. Galvanického oddělení bude dosaženo použitím vhodných komerčně dostupných modulů, které již mají tento problém vyřešen. U~relé modulu je potřeba zvolit variantu s~optočlenem a pro napájecí zdroj s~výstupem \qty{24}{V} pak zkontrolovat v~dokumentaci přítomnost galvanického oddělení. 
+    Z~hlediska bezpečnosti je potřeba zajistit, aby se uživatel ani samotná nízkonapěťová část obvodu nemohli dostat do kontaktu s~nebezpečným napětím. Toho je dosaženo galvanickým oddělením částí zařízení pracujících se síťovým napětím. V~blokovém schématu (obr.~\ref{fig:blokove-schema}) jsou všechny tyto části podbarveny šedou barvou. Pro spínaní síťových zásuvek jsou použita relé, které samy o sobě tvoří galvanickou izolaci, pro ještě lepší ochranu mikrokontroleru je pak zvolena variantu s~optočleny. Pro napájecí zdroj s~výstupem \qty{24}{V} je přítomnost galvanického oddělení kontrolována v~dokumentaci výrobce. 
     
 
 

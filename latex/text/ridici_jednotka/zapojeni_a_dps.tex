@@ -1,6 +1,6 @@
 \section{Návrh zapojení a tvorba DPS}
 \label{sec:ridici-jednotka-schema-a-dps}
-    Řídící jednotka je tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru obsahuje také měnič napětí typu BUCK ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V} (odůvodnění v~sekci~\ref{sec:komunikacni-rozhrani}). Toto napětí je pak dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další sekce. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-ridici-jednotka}.
+    Řídící jednotka je tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroleru obsahuje také měnič napětí typu BUCK ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V}. Toto napětí je pak dále používáno pro napájení samotného mikrokontroleru řídící jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další kapitoly. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-ridici-jednotka}.
 
     \begin{figure}[h!]
         \centering
@@ -19,6 +19,7 @@
 
     \subsection{Zapojení ESP32 modulu}
     \label{sec:ridici-jendotka-esp32-modul}
+    % TODO: Označení součástek ve schématu se změnilo
         Při tvorbě schématu bylo vycházeno z~dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých existujících vývojových desek. K~zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvody pro ESP32 modul je na obr.~\ref{fig:ridici-jednotka-esp-obvody}.
 
         \begin{figure}[h!]
@@ -37,6 +38,7 @@
 
         Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C1, C3). Ke snížení napětí z~původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U4). %TODO jiný part number asi
         
+        % TODO: Čas ke stabilizaci bude mnohem větší než 50 us. Nejprve totiž musí naběhnout 3V3, což trvá dle datasheetu TLV76133 trvá cca 500 us. Taky bys správně měl zohlednit i náběh 5V2, což je 3 ms.
         Dále je potřeba přivést kladné napětí na povolovací pin (EN). Z~dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený čas nutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C2) s~časovou konstantou \(\tau\):
         \begin{equation}
             \tau=R_{1}C_{2}=\qty{10}{\kilo\ohm}\cdot \qty{1}{\micro\farad}=\qty{10}{\milli\second}
@@ -50,7 +52,7 @@
     \subsection{Napájecí obvod}
         \label{sec:ridici-jendotka-napajeci-obvod}
         % \textit{TODO: schéma, výpočet hodnot součástek}
-        Pro napájení celého zařízení je použit externí zdroj stejnosměrného napětí \qty{24}{V}, toto napětí je rozvedeno všem připojeným periferiím (viz sekce~\ref{subsec:pocet-a-fce-vodicu-sbernice}). Pro většinu komponent je ale nutné napětí snížit. K~tomuto účelu byl navržen DC/DC měnič typu buck s~požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v~tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídící jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s~jakými výkonovými požadavky uživatel k~systému připojí. Navržený měnič tak musí fungovat v~širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s~co nejlepší účinností. 
+        Pro napájení celého zařízení je použit externí zdroj stejnosměrného napětí \qty{24}{V} a toto napětí je tak0 rozvedeno všem připojeným periferiím. Pro většinu komponent je ale nutné napětí snížit. K~tomuto účelu byl navržen DC/DC měnič typu buck s~požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v~tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídící jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s~jakými výkonovými požadavky uživatel k~systému připojí. Navržený měnič tak musí fungovat v~širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s~co nejlepší účinností. 
         
         \begin{figure}[h!]
             \centering
@@ -72,7 +74,7 @@
         \textit{TODO: výpočty by asi bylo dobré uvést co?}
 
     \subsection{Deska plošných spojů}
-        Ačkoliv se jedná o relativně jednoduchou DPS, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na DPS je rozhodujícím faktorem pro následný výkon antény. Další částí vyžadující správný návrh rozložení je pak BUCK měnič. 
+        Ačkoliv se jedná o relativně jednoduchou DPS, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na DPS je rozhodujícím faktorem pro sp8vnou funkci antény. Další částí vyžadující správný návrh rozložení a propojení součástek je pak BUCK měnič. 
         
         \begin{figure}[!ht]
             \centering
@@ -95,19 +97,19 @@
                 \node[below left=0.6 and 0.0 of kon1, anchor=south west] (kon2) {2. Externí moduly};
                 \node[below left=0.6 and 0.0 of kon2, anchor=south west] (kon3) {3. Programování};
                 \node[below left=0.6 and 0.0 of kon3, anchor=south west] (kon4) {4. Vstup napájení};
-                \node[below left=0.6 and 0.0 of kon4, anchor=south west] (kon5) {5. Lazení a testování};
+                \node[below left=0.6 and 0.0 of kon4, anchor=south west] (kon5) {5. Testování, rozšíření};
                 % \node[anchor=south west,inner sep=0,color=red] {2.};
                 % \node[anchor=south west,inner sep=0,color=red] {3.};
                 % \node[anchor=south west,inner sep=0,color=red] {4.};
                 % \node[anchor=south west,inner sep=0,color=red]          {5.};
             \end{tikzpicture}
-            \caption{Vizualizace DPS řídící jed. s vyznačením jednotlivých částí.}
+            \caption{Vizualizace DPS řídící jednotky s vyznačením jednotlivých částí.}
             \label{fig:ridici-jendotka-dps-popis}
         \end{figure}
 
-        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje lepší zemnění, čímž se zároveň zlepší vlastnosti zařízení z hlediska EME (emise elektromagnetického záření). Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v nejnižší cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
+        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z hlediska EMC. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
 
-        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu DPS tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jendotka-dps-popis} je zobrazen výsledný návrh DPS, v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v sekci~\ref{sec:ridici-jendotka-esp32-modul}.
+        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu DPS tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jendotka-dps-popis} je zobrazen výsledný návrh DPS, v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
 
         \begin{figure}[h!]
             \centering
@@ -133,10 +135,10 @@
                 \node[anchor=east] at (0,0.5)  {Bottom};
 
                 \node[anchor=north] at (4,5.25) {Tl. mědi:};
-                \node[anchor=west] at (4,4.25) {\qty{1}{oz}};
-                \node[anchor=west] at (4,3)    {\qty{0.5}{oz}};
-                \node[anchor=west] at (4,1.75) {\qty{0.5}{oz}};
-                \node[anchor=west] at (4,0.5)  {\qty{1}{oz}};
+                \node[anchor=west] at (4,4.25) {\qty{35}{\micro m}};
+                \node[anchor=west] at (4,3)    {\qty{17.5}{\micro m}};
+                \node[anchor=west] at (4,1.75) {\qty{17.5}{\micro m}};
+                \node[anchor=west] at (4,0.5)  {\qty{35}{\micro m}};
                 
                 % Comments
                 % \draw[<-,thick] (0,3.75)    -- +(0.5,-0.5) node[below] {Bottom Layer};

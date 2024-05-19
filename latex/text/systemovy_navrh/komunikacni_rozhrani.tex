@@ -4,7 +4,7 @@
 
     Úkolem rozhraní je obousměrně komunikovat s~periferiemi, tedy např. stahovat data z~připojených sensorů a zároveň za pomoci přikazů periferie řídit. Kromě datové komunikace musí rozhraní periferie také napájet a to i v~případě energeticky náročnějších obvodů jako např. osvětlení. 
 
-    Pro připojení periferií byl zvolen konektor typu D'sub 9, který je cenově dostupný, disponuje dostatečným množstvím pinů a umožňuje montáž jak do panelu, tak i jako zakončení kabelu. Přiřazení a funkce jednotlivých vodičů jsou vyobrazeny na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}. Konektor disponuje dvěma úrovněmi napájení, \qty{5}{V} slouží k napájení MCU periferií a k nim připojených senzorů nebo jiné nenáročné elektroniky. Je pravděpodobné, že s připojením více periferií za sebe dojde k úbytku napětí v důsledku ztrát na vedení, aby bylo toto částečně kompenzováno, napětí vystupující z měniče řídící jednotky je přibložně o \qty{0.2}{V} vyšší. Druhou napájecí linkou je výstup přímo z externího spínaného zdroje, tedy s napětím \qty{24}{V}, ten slouží pro výkonově náročnější periferie, které si již napětí dále upraví podle potřeby a nebudou neúměrně zatěžovat první zmíněnou napájecí linku.
+    Pro připojení periferií byl zvolen konektor typu D'sub 9, který je cenově dostupný, disponuje dostatečným množstvím pinů a umožňuje montáž jak do panelu, tak i jako zakončení kabelu. Přiřazení a funkce jednotlivých vodičů jsou vyobrazeny na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}. Konektor disponuje dvěma úrovněmi napájení, \qty{5}{V} slouží k napájení mikrokontrolerů modulů periferií a k nim připojených senzorů nebo jiné nenáročné elektroniky. Je pravděpodobné, že s připojením více periferií za sebe dojde k úbytku napětí v důsledku ztrát na vedení, aby bylo toto částečně kompenzováno, napětí vystupující z měniče řídící jednotky je přibližně o \qty{0.2}{V} vyšší. Druhou napájecí linkou je výstup přímo z externího spínaného zdroje, tedy s napětím \qty{24}{V}, ten slouží pro výkonově náročnější periferie, které si již napětí dále upraví podle potřeby a nebudou neúměrně zatěžovat první zmíněnou napájecí linku.
 
     \begin{figure}[h!]
         \centering
@@ -61,55 +61,55 @@
             \hline\hline
             SPI & 
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Více zařízení na sběrnici \\
-            - Vysoká rychlost přenosu dat \\
-            - Jednoduchý protokol \\
+            Více zařízení na sběrnici \\
+            Vysoká rychlost přenosu dat \\
+            Jednoduchý protokol \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Nutný CS pin pro každé zařízení \\
+            Nutný CS pin pro každé zařízení \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Určeno na krátkou vzdálenost \\
+            Určeno na krátkou vzdálenost \\
             \end{tabular} \\
             \hline
             I\(^{2}\)C &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Pouze 2 piny \\
-            - Více zařízení -- 128 adres \\
+            Pouze 2 piny \\
+            Více zařízení -- 128 adres \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Riziko kolize adres \\
-            - Nižší rychlost přenosu dat proti SPI \\
+            Riziko kolize adres \\
+            Nižší rychlost přenosu dat proti SPI \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Určeno na krátkou vzdálenost \\
+            Určeno na krátkou vzdálenost \\
             \end{tabular} \\
             \hline
             CAN &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Vysoká spolehlivost \\
-            - Dlouhé propojení \\
+            Vysoká spolehlivost \\
+            Dlouhé propojení \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Vyšší náklady na implementaci \\
-            - Nižší rychlost přenosu dat \\
+            Vyšší náklady na implementaci \\
+            Nižší rychlost přenosu dat \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Nepodporovano běžnými MCU -- nutný externí řadič \\
+            Nepodporovano běžnými MCU -- nutný externí řadič \\
             \end{tabular} \\
             \hline
             UART &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Jednoduchá implementace \\
-            - Možnost asynchronní komunikace \\
+            Jednoduchá implementace \\
+            Možnost asynchronní komunikace \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Nižší rychlost přenosu dat proti SPI \\
-            - Pouze 2 zařízení \\
+            Nižší rychlost přenosu dat proti SPI \\
+            Pouze 2 zařízení \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            - Pouze 2 zařízení \\
-            - Určeno na krátkou vzdálenost \\
+            Pouze 2 zařízení \\
+            Určeno na krátkou vzdálenost \\
             \end{tabular} \\
             \hline
             \end{tabularx}
