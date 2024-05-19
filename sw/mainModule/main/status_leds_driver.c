@@ -42,14 +42,14 @@ esp_err_t status_leds_set_color(status_leds_t led, led_color_t color)
     color.green *= ledstrip_brightness;
     color.blue *= ledstrip_brightness;
 
-    printf("Set LED color\n");
+    // printf("Set LED color\n");
     esp_err_t status = led_strip_set_pixel(led_strip, led, color.red, color.green, color.blue);
     if(status != ESP_OK)
         return status;
     
     /* Refresh the strip to send data */
     status = led_strip_refresh(led_strip);
-    printf("Set LED color 2, status: %d\n",status);
+    // printf("Set LED color 2, status: %d\n",status);
     return status;
 }
 
@@ -67,10 +67,10 @@ esp_err_t status_leds_change_brightness(float brightness)
     return ESP_OK;
 }
 
-// TODO: add other states
-esp_err_t status_leds_update(device_status_t devst)
+
+esp_err_t status_leds_update()
 {
-    switch (devst)
+    switch (STATUS_device)
     {
     case DEVST_NORMAL:
         status_leds_set_color(POWER_LED,COLOR_GREEN);
@@ -85,6 +85,27 @@ esp_err_t status_leds_update(device_status_t devst)
         break;
     case DEVST_UNDEFINED:
         status_leds_set_color(POWER_LED, COLOR_BLUE);
+        break;
+    default:
+        return ESP_FAIL;
+    }
+
+    switch (STATUS_wifi)
+    {
+    case WIFIST_ONLINE:
+        status_leds_set_color(WIFI_LED,COLOR_GREEN);
+        break;
+    case WIFIST_CONNECTED:
+        status_leds_set_color(WIFI_LED,COLOR_YELLOW);
+        break;
+    case WIFIST_ERROR:
+        status_leds_set_color(WIFI_LED,COLOR_RED);
+        break;
+    case WIFIST_STARTUP:
+        status_leds_set_color(WIFI_LED, COLOR_ORANGE);
+        break;
+    case WIFIST_UNDEFINED:
+        status_leds_set_color(WIFI_LED, COLOR_BLUE);
         break;
     default:
         return ESP_FAIL;

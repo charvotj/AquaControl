@@ -5,4 +5,5 @@
 cmake_minimum_required(VERSION 3.16)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+set(EXTRA_COMPONENT_DIRS /run/media/jakub/DATA/Jakub/ESP_Projects/esp-idf-lib/components)
 project(main)

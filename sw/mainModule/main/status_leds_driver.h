@@ -47,7 +47,7 @@ esp_err_t status_leds_init(void);
 esp_err_t status_leds_set_color(status_leds_t led, led_color_t color);
 esp_err_t status_leds_clear(void);
 esp_err_t status_leds_change_brightness(float brightness);
-esp_err_t status_leds_update(device_status_t devst);
+esp_err_t status_leds_update();
 
 
 

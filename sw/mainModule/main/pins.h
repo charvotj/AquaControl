@@ -25,8 +25,8 @@
                      // GPIO_NUM_18   /*!< GPIO18, input and output */
                      // GPIO_NUM_19   /*!< GPIO19, input and output */
                      // GPIO_NUM_20   /*!< GPIO20, input and output */
-                     // GPIO_NUM_21   /*!< GPIO21, input and output */
-                     // GPIO_NUM_22   /*!< GPIO22, input and output */
+#define I2C_SDA_GPIO    GPIO_NUM_21   /*!< GPIO21, input and output */
+#define I2C_SCL_GPIO    GPIO_NUM_22   /*!< GPIO22, input and output */
                      // GPIO_NUM_23   /*!< GPIO23, input and output */
 #define CAN_STBY_GPIO   GPIO_NUM_25   /*!< GPIO25, input and output */
 #define CAN_RX_GPIO     GPIO_NUM_26   /*!< GPIO26, input and output */

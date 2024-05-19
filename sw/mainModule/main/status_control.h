@@ -17,7 +17,7 @@
 #include "pins.h"
 
 #define STATUS_DEVICE_STARTUP_TIMEOUT_MS 10000u
-#define NUMBER_OF_STATUS_MODULES 3u
+#define NUMBER_OF_STATUS_MODULES 4u
 
 
 typedef enum {
@@ -30,6 +30,14 @@ typedef enum {
 } device_status_t;
 
 typedef enum {
+    WIFIST_STARTUP,
+    WIFIST_ERROR,
+    WIFIST_CONNECTED,
+    WIFIST_ONLINE,
+    WIFIST_UNDEFINED
+} wifi_status_t;
+
+typedef enum {
     MODST_STARTUP,
     MODST_READY,
     MODST_ERROR,
@@ -39,11 +47,13 @@ typedef enum {
 
 
 extern device_status_t STATUS_device;
+extern wifi_status_t STATUS_wifi;
 
 // Update NUMBER_OF_STATUS_MODULES if add new module
 extern module_status_t STATUS_module_can;
 extern module_status_t STATUS_module_display;
 extern module_status_t STATUS_module_ota;
+extern module_status_t STATUS_module_relays;
 
 
 esp_err_t status_control_init();
@@ -54,6 +64,7 @@ bool _check_all_modules_status();
 esp_err_t set_can_module_status(module_status_t status);
 esp_err_t set_display_module_status(module_status_t status);
 esp_err_t set_ota_module_status(module_status_t status);
+esp_err_t set_relays_module_status(module_status_t status);
 
 
 

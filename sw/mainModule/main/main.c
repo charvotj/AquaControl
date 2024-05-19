@@ -24,6 +24,8 @@
 #include "CAN_driver.h"
 #include "temp_sensor_driver.h"
 #include "water_level_sensor_driver.h"
+#include "relays_driver.h"
+#include "wifi_driver.h"
 
 
 #define STATS_TASK_PRIO     3
@@ -57,6 +59,9 @@ static void control_task(void *arg)
     // Wait for status control init
     ESP_LOGI(TAG,"control_task -- waiting for init done");
     xSemaphoreTake(sync_status_task_init_done, portMAX_DELAY);
+    // Init services without own task
+    relays_init();
+    
     // Start other tasks 
     xSemaphoreGive(sync_wifi_task);
     xSemaphoreGive(sync_fw_OTA_task);
@@ -80,8 +85,7 @@ static void status_update_task(void *arg)
     // Notify about init done - unblock other tasks
     xSemaphoreGive(sync_status_task_init_done);
     ESP_ERROR_CHECK(status_leds_init());
-    status_leds_update(STATUS_device);
-
+    vTaskDelay(100 / portTICK_PERIOD_MS);
     ESP_LOGI(TAG,"Status update task - %d \n", STATUS_device);
 
     while (1) {
@@ -91,8 +95,8 @@ static void status_update_task(void *arg)
         if(old_status != STATUS_device)
         {
             printf("Device status changed to %d\n", STATUS_device);
-            status_leds_update(STATUS_device);
         }
+        status_leds_update(STATUS_device);
         vTaskDelay(300 / portTICK_PERIOD_MS);
         // status_leds_update(STATUS_device);
     }
@@ -116,8 +120,11 @@ static void wifi_task(void *arg)
     xSemaphoreTake(sync_wifi_task, portMAX_DELAY);
     ESP_LOGI(TAG,"Entering task: wifi_task");
 
+    // Initialize Wi-Fi
+    wifi_init_sta();
+
     while (1) {
-        // TODO
+        wifi_driver_routine();
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
@@ -184,6 +191,14 @@ void app_main(void)
 {
     //Allow other core to finish initialization
     vTaskDelay(pdMS_TO_TICKS(100));
+    
+    // Initialize NVS (Flash)
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 
     //Create semaphores to synchronize
     sync_stats_task = xSemaphoreCreateBinary();
@@ -198,19 +213,19 @@ void app_main(void)
 
     // TODO: update priorities
     //Create stats task
-    xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create status task
-    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, 4, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, 4, NULL, 0);
     //Create wifi task
-    xTaskCreatePinnedToCore(wifi_task, "wifi", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(wifi_task, "wifi", 4096, NULL, STATS_TASK_PRIO, NULL, 1);
     //Create OTA task
-    xTaskCreatePinnedToCore(fw_OTA_task, "fw_OTA_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(fw_OTA_task, "fw_OTA_task", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create CAN task
-    xTaskCreatePinnedToCore(can_bus_task, "can_bus_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(can_bus_task, "can_bus_task", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create status task
-    xTaskCreatePinnedToCore(display_task, "display_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(display_task, "display_task", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create control task
-    xTaskCreatePinnedToCore(control_task, "control_task", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(control_task, "control_task", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
 
     
     //Start control task
@@ -237,6 +252,9 @@ void app_main(void)
     };
 
     esp_err_t st;
+
+    relay_num_t rel_num = RELAY_NUM_1;
+    uint8_t rel_st = 0;
     while (1)
     {
         vTaskDelay(5000 / portTICK_PERIOD_MS);
@@ -247,6 +265,25 @@ void app_main(void)
         st = water_level_sensor_get_data(&wl_node, &wl, &boye);
         if(st == ESP_OK)
             printf("WL: %u, B: %u\n",wl,boye);
+        
+
+        relays_set_state(RELAY_NUM_1, true);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        relays_set_state(RELAY_NUM_2, true);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        relays_set_state(RELAY_NUM_3, true);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        relays_set_state(RELAY_NUM_4, true);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+        relays_set_state(RELAY_NUM_1, false);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        relays_set_state(RELAY_NUM_2, false);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        relays_set_state(RELAY_NUM_3, false);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        relays_set_state(RELAY_NUM_4, false);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
     
 }

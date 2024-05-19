@@ -10,11 +10,13 @@ typedef enum{
 module_status_t* all_modules_status[NUMBER_OF_STATUS_MODULES];
 
 device_status_t STATUS_device           = (device_status_t)DEVST_UNDEFINED;
+wifi_status_t STATUS_wifi               = (wifi_status_t)WIFIST_UNDEFINED;
 
 // Update NUMBER_OF_STATUS_MODULES if add new module and add it with extern to the header
 module_status_t STATUS_module_can       = (module_status_t)MODST_UNDEFINED;
 module_status_t STATUS_module_display   = (module_status_t)MODST_UNDEFINED;
 module_status_t STATUS_module_ota       = (module_status_t)MODST_UNDEFINED;
+module_status_t STATUS_module_relays    = (module_status_t)MODST_UNDEFINED;
 
 esp_err_t status_control_init()
 {
@@ -23,6 +25,7 @@ esp_err_t status_control_init()
     all_modules_status[index++] = &STATUS_module_can;
     all_modules_status[index++] = &STATUS_module_display;
     all_modules_status[index++] = &STATUS_module_ota;
+    all_modules_status[index++] = &STATUS_module_relays;
 
     if(NUMBER_OF_STATUS_MODULES != index)
     {
@@ -123,6 +126,12 @@ esp_err_t set_display_module_status(module_status_t status)
 esp_err_t set_ota_module_status(module_status_t status)
 {
     STATUS_module_ota = status;
+    return ESP_OK;
+}
+
+esp_err_t set_relays_module_status(module_status_t status)
+{
+    STATUS_module_relays = status;
     return ESP_OK;
 }
 
