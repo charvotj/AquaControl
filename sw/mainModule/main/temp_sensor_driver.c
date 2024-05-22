@@ -25,6 +25,13 @@ esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperatur
         return ESP_FAIL;
     }
 
+    // check status
+    if(CANST_OK != rx_status)
+    {
+        ESP_LOGE(TAG,"CAN_TM_TEMP_SENS_GET_TEMP_RES returned %u", rx_status);
+        return ESP_FAIL;
+    }
+
     // check payload length
     if(rx_data_len != 2)
     {

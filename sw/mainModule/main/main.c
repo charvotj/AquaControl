@@ -124,8 +124,8 @@ static void wifi_task(void *arg)
     wifi_init_sta();
 
     while (1) {
-        wifi_driver_routine();
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        // wifi_driver_routine();
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -244,6 +244,7 @@ void app_main(void)
 
     uint8_t wl = 0;
     bool boye =  0;
+    float wl_node_wifi_data[2] = {0.0f};
     can_node_t wl_node = {
         .can_address = NODE_TYPE_WATER_LEVEL_SENSOR,
         .node_type = NODE_TYPE_WATER_LEVEL_SENSOR,
@@ -251,39 +252,45 @@ void app_main(void)
         .status = NODEST_NORMAL
     };
 
+    node_data_t nodes_data[3] = {
+        {
+            .can_node_p = &temp_node,
+            .data_len = 1,
+            .data_p = &temp_from_sensor
+        },
+        {
+            .can_node_p = &wl_node,
+            .data_len = 2,
+            .data_p = &wl_node_wifi_data[0]
+        },
+        {
+            .can_node_p = &wl_node,
+            .data_len = 3,
+            .data_p = NULL
+        }
+    };
+
+
     esp_err_t st;
 
-    relay_num_t rel_num = RELAY_NUM_1;
-    uint8_t rel_st = 0;
+
     while (1)
     {
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
         st = temp_sensor_get_temperature(&temp_node, &temp_from_sensor);
         if(st == ESP_OK)
+        {
             printf("Temperature from sensor: %f ˚C\n",temp_from_sensor);
+        }
 
         st = water_level_sensor_get_data(&wl_node, &wl, &boye);
         if(st == ESP_OK)
+        {
             printf("WL: %u, B: %u\n",wl,boye);
-        
-
-        relays_set_state(RELAY_NUM_1, true);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        relays_set_state(RELAY_NUM_2, true);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        relays_set_state(RELAY_NUM_3, true);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        relays_set_state(RELAY_NUM_4, true);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-        relays_set_state(RELAY_NUM_1, false);
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-        relays_set_state(RELAY_NUM_2, false);
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-        relays_set_state(RELAY_NUM_3, false);
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-        relays_set_state(RELAY_NUM_4, false);
-        vTaskDelay(500 / portTICK_PERIOD_MS);
+            wl_node_wifi_data[0] = (float)wl;
+            wl_node_wifi_data[1] = (float)boye;
+        }
+        wifi_driver_send_sensor_data(2,&nodes_data[0]);
     }
     
 }

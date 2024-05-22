@@ -2,3 +2,5 @@
 
 #define FW_VERSION_MAJOR    0
 #define FW_VERSION_MINOR    1
+
+#define SERIAL_NUMBER   (uint32_t)44u

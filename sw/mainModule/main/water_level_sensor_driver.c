@@ -25,6 +25,14 @@ esp_err_t water_level_sensor_get_data(can_node_t* node_handle, uint8_t* percent_
         return ESP_FAIL;
     }
 
+    // check status
+    if(CANST_OK != rx_status)
+    {
+        ESP_LOGE(TAG,"CAN_TS_WATER_LVL_SENS_GET_LVL returned %u", rx_status);
+        return ESP_FAIL;
+    }
+
+
     // check payload length
     if(rx_data_len != 2)
     {

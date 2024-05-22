@@ -21,14 +21,18 @@
 
 #include "pins.h"
 #include "status_control.h"
+#include "globals.h"
+#include "../../shared/common_types.h"
 
 
 #define WIFI_SSID                 "Milenium Falcon"
 #define WIFI_PASS                 "hansolojetop"
 #define MAX_HTTP_RECV_BUFFER      512
+#define MAX_HTTP_REQ_BUFFER       1024
 #define WIFI_CONN_MAX_RETRY       5
 
 esp_err_t wifi_driver_routine();
+esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data);
 void wifi_init_sta(void);
 esp_err_t _http_event_handler(esp_http_client_event_t *evt);
 

@@ -56,6 +56,13 @@ typedef struct
     node_status_t status;
 } can_node_t;
 
+typedef struct
+{
+    can_node_t* can_node_p;
+    uint8_t data_len;
+    float* data_p;
+} node_data_t;
+
 #define DEFAULT_CAN_NODE {NODE_TYPE_UNKNOWN,0,0,NODEST_UNDEFINED}
 
 
