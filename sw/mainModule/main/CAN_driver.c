@@ -141,21 +141,25 @@ esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t
             {
                 // check payload length before reading memory
                 if(rx_msg->data_length_code < 2)
+                {
+                    vPortFree(rx_msg);
+                    xSemaphoreGive(can_tx_mutex);
                     return ESP_FAIL;
+                }
 
                 // check correct payload
                 if(rx_msg->data[0] == cmd_number)
                 {
                     // save status code 
-                    *rx_status = rx_data[0];
+                    *rx_status = rx_msg->data[1];
                     // save the response 
                     *rx_data_len = rx_msg->data_length_code - 2;
                     if(*rx_data_len > 0)
                         memcpy(rx_data, &(rx_msg->data[2]), *rx_data_len);
-                    // enable for tx other cmds
-                    xSemaphoreGive(can_tx_mutex);
                     // always free the memory after reading from queue
                     vPortFree(rx_msg);
+                    // enable for tx other cmds
+                    xSemaphoreGive(can_tx_mutex);
                     return ESP_OK;
                 }
             }
