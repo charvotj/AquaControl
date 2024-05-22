@@ -45,7 +45,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait)
         goto exit;
     }
 
-    printf("| Task | Run Time | Percentage\n");
+    printf("| Task       | Run Time | Percentage\n");
     //Match each task in start_array to those in the end_array
     for (int i = 0; i < start_array_size; i++) {
         int k = -1;
@@ -62,7 +62,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait)
         if (k >= 0) {
             uint32_t task_elapsed_time = end_array[k].ulRunTimeCounter - start_array[i].ulRunTimeCounter;
             uint32_t percentage_time = (task_elapsed_time * 100UL) / (total_elapsed_time * 2);
-            printf("| %s | %"PRIu32" | %"PRIu32"%%\n", start_array[i].pcTaskName, task_elapsed_time, percentage_time);
+            printf("| %-13s | %7"PRIu32" | %2"PRIu32"%%\n", start_array[i].pcTaskName, task_elapsed_time, percentage_time);
         }
     
     }
