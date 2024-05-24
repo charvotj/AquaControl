@@ -14,6 +14,8 @@
 #define WATER_LEVEL_SENSOR_LIMIT_LOW       (uint16_t)(20000)  // Bottom of sensor is under water
 #define WATER_LEVEL_SENSOR_LIMIT_HIGH      (uint16_t)(34000)  // Whole sensor is under water
 
+#define BOYE_STATE_DEBOUNCE_DELAY          (uint8_t)(10u)     // After 10 iterantion change is propagated
+
 //function for interfacing sensor
 
 // functions for whole modul abstraction level

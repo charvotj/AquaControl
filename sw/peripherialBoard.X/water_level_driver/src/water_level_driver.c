@@ -14,6 +14,11 @@ static uint16_t water_level_raw = 0; //  last reading
 static uint16_t water_level_avg = 0; // averaged reading
 static volatile uint8_t water_level_percent = 0; // computed percent of the sensor
 
+static bool boye_state_raw = 0;
+static bool boye_state_final = 0;
+static uint8_t boye_state_change_counter = 0;
+
+
 uint16_t water_level_get_level(void)
 {
     ADC_DischargeSampleCapacitor();
@@ -27,6 +32,11 @@ uint16_t water_level_get_level(void)
 
 node_status_t water_level_routine(void)
 {
+    // check shield connection
+    if(0 != SHIELD_ON_PIN_GetValue())
+         return NODEST_ERROR_GENERIC;
+    
+        
     water_level_raw = water_level_get_level();
     
     water_level_avg = 0.95*water_level_avg + 0.05*water_level_raw;
@@ -39,7 +49,7 @@ node_status_t water_level_routine(void)
 //        char formattedData[20];
 //        sprintf(formattedData, "WL out of lim: %u", water_level_avg);
 //        CAN_SendDebugPrint(formattedData);
-        return NODEST_ERROR_GENERIC;
+//        return NODEST_ERROR_GENERIC;
     }
     else if (water_level_avg > WATER_LEVEL_SENSOR_LIMIT_HIGH)
     {
@@ -48,10 +58,29 @@ node_status_t water_level_routine(void)
 //        char formattedData[20];
 //        sprintf(formattedData, "WL out of lim: %u", water_level_avg);
 //        CAN_SendDebugPrint(formattedData);
-        return NODEST_ERROR_GENERIC;
+//        return NODEST_ERROR_GENERIC;
+    }
+    else
+    {
+        water_level_percent = 100.0*(water_level_avg - WATER_LEVEL_SENSOR_LIMIT_LOW) / (WATER_LEVEL_SENSOR_LIMIT_HIGH - WATER_LEVEL_SENSOR_LIMIT_LOW);
     }
     
-    water_level_percent = 100.0*(water_level_avg - WATER_LEVEL_SENSOR_LIMIT_LOW) / (WATER_LEVEL_SENSOR_LIMIT_HIGH - WATER_LEVEL_SENSOR_LIMIT_LOW);
+    
+     boye_state_raw = WATER_LEVEL_BOYE_GetValue();
+     if(boye_state_raw != boye_state_final)
+     {
+         boye_state_change_counter++;
+     }
+     else
+     {
+         boye_state_change_counter = 0; // clear counter because values are the same
+     }
+     if(boye_state_change_counter > BOYE_STATE_DEBOUNCE_DELAY)
+     {
+         // change is registered
+         boye_state_final = boye_state_raw;
+     }
+    
     
 //    char formattedData[20];
 //    sprintf(formattedData, "WL: %u", percent);
@@ -71,7 +100,7 @@ void water_level_can_send_data(void)
     {
         data_len = 2u;
         data[0] = water_level_percent;
-        data[1] = 0u; // plovak state should be here TODO
+        data[1] = boye_state_final; 
         st = CANST_OK;
     }
     else
