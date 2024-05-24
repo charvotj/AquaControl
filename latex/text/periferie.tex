@@ -37,36 +37,12 @@
 
 \input{text/periferie/sensor_teploty.tex}
 
-\section{Senzor výšky hladiny}
-\label{sec:perif-sensor-hladina}
+\input{text/periferie/vyska_hladiny.tex}
+
 
 \section{Senzor pH}
 \label{sec:perif-sensor-ph}
 
-\section{Ovládání 230V periferií}
-\label{sec:perif-230v}
-   \textit{    TODO: Text zatím jen drobně revidován... Obrázky nahradím vlastními fotkami spolu s umístěním v šasi. } 
-
-Jak vyplývá z~požadavků zařízení a přehledu používané akvaristické techniky, pro automatizovaný provoz akvária je nutné umožnit řídící jednotce ovládat několik okruhů se síťovým napětím a spínat tak zvlášť zakoupené hotové spotřebiče pracující s~tímto napětím. Jedná se typicky o~ohřev vody, filtr, popř. některé druhy osvětlení. 
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\textwidth]{obrazky/230/rele.jpg}
-    \caption{Relé modul, ilustrační foto. Převzato z~\cite{eshop-laskakit-rele}.}
-    \label{fig:obrazky-230-rele-jpg}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.4\textwidth]{obrazky/230/expander.jpg}
-    \caption{Modul expandéru GPIO pinů, ilustrační foto. Převzato z~\cite{eshop-laskakit-expander}.}
-    \label{fig:obrazky-230-expander-jpg}
-\end{figure}
-
-Aby uživatel mohl zařízení bezpěčně zapojit bez nutnosti odborné způsobilosti, nachází se na hlavním šasi zařízení čtyři standartní zásuvky (typ E) s~jednofázovým napětím \qty{230}{V}. Fázové vodiče jsou uvnitř zařízení přerušeny spínacími relé. Je použit předpřipravený modul disponující osmi relé, čtyři z nich tedy zůstanou nevyužité a slouží jako rezerva pro případ poškození některého z~používaných relé nebo při potřebě budoucího rozšíření o~další zásuvky. 
-
-Z~důvodu nedostatku pinů na mikrokontroleru řídící jednotky (ESP32) je k~relé modulu připojen ještě jeden externí modul a to expandér GPIO pinů komunikující přes sběrnici \acs{i2c}~\cite{eshop-laskakit-expander}. Z~pohledu mikrokontroleru tak budou všechny \qty{230}{V} zásuvky řízeny pomocí dvou datových pinů (SDA, SCL), které je navíc možné dále využít pro připojení jiných periferií jako např. OLED displaye pro zobrazení stavu zařízení. 
-
-Do budoucna by bylo možným zlepšením a rozšířením této práce zahrnutí obou zmíněných modulů přímo na DPS řídící jednotky. 
+\input{text/periferie/230v.tex}
 
 

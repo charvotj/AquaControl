@@ -13,3 +13,8 @@
 	-  BUCK malým
 	- Zkratky
 	-  Sjednotit značení součástek buď U_1 nebo U1
+
+- Obrázky k doplnění:
+	- foto relé v krabici
+	- Foto sensorů - teplota, hladina, led board, pH
+	- 

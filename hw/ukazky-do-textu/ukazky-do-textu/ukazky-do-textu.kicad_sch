@@ -1317,6 +1317,23 @@
     )
   )
 
+  (sheet (at 212.09 115.57) (size 35.56 29.21) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 0f5b59c1-6398-45bf-a3ef-ad59d2793903)
+    (property "Sheetname" "rele" (at 212.09 114.8584 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "relays.kicad_sch" (at 212.09 145.3646 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "ukazky-do-textu"
+        (path "/5ea9602d-a3cc-4e11-96b1-d08bdd6d2ed5" (page "3"))
+      )
+    )
+  )
+
   (sheet (at 210.82 64.77) (size 38.1 27.94) (fields_autoplaced)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
