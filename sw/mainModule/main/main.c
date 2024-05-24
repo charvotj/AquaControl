@@ -299,7 +299,20 @@ void app_main(void)
         }
 
        if(WIFIST_ONLINE == STATUS_wifi)
-            wifi_driver_send_sensor_data(2,&nodes_data[0]);
+       {
+            // wifi_driver_send_sensor_data(2,&nodes_data[0]);
+            cJSON* root = NULL;
+            if(ESP_OK == wifi_driver_get_system_config(&root))
+            {
+                cJSON *configVersion = cJSON_GetObjectItem(root,"lastConfigVersion");
+                printf("Config version from web: %d \n",configVersion->valueint);
+            }
+            else{
+                ESP_LOGE(TAG,"It was bad bro");
+            }
+            cJSON_Delete(root);
+
+       }
     }
     
 }

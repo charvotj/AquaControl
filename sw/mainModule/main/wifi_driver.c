@@ -9,9 +9,11 @@ extern const uint8_t server_root_ca_pem_end[] asm("_binary_isrgrootx1_pem_end");
 
 static int s_retry_num = 0;
 static SemaphoreHandle_t http_req_mutex;
+static SemaphoreHandle_t http_res_saved_mutex;
 SemaphoreHandle_t wifi_routine_sem;
 
 static char http_req_buffer[MAX_HTTP_REQ_BUFFER] = {'\0'};
+static char http_res_buffer[MAX_HTTP_RECV_BUFFER] = {0};
 
 
 
@@ -79,6 +81,17 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
             break;
     }
     #endif WIFI_DEBUG_PRINT_HTTP
+    switch(evt->event_id) {
+        case HTTP_EVENT_ON_DATA:
+            if (!esp_http_client_is_chunked_response(evt->client)) {
+                ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+                memcpy(&http_res_buffer[0],(char*)evt->data,evt->data_len);
+                xSemaphoreGive(http_res_saved_mutex);
+            }
+            break;
+        default:
+    }
+    
     return ESP_OK;
 }
 
@@ -170,7 +183,7 @@ esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data)
         esp_http_client_set_header(client, "Content-Type", "application/json");
         uint16_t req_len = 0u;
         _prepare_sensor_data_payload(&http_req_buffer,&req_len,num_of_nodes,data);
-        printf("len %u: %s\n",req_len,http_req_buffer);
+        // printf("len %u: %s\n",req_len,http_req_buffer);
         esp_http_client_set_post_field(client, &http_req_buffer, req_len);
 
         esp_err_t err = esp_http_client_perform(client);
@@ -188,6 +201,58 @@ esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data)
         return err;
 }
 
+esp_err_t wifi_driver_get_system_config(cJSON** configJSON)
+{
+    // wait for mutex because of static payload string
+    xSemaphoreTake(http_req_mutex, portMAX_DELAY);  
+    char url_buffer[256];
+    // const char *base_url = "https://akvaphp.charvot.cz/api/configuration/get?mainUnitSN=";
+    const char *base_url = "https://akvaphp.charvot.cz/api/ping?mainUnitSN=";
+    sprintf(url_buffer, "%s%" PRIu32, base_url, SERIAL_NUMBER);
+
+    esp_http_client_config_t config = {
+        .url = url_buffer,
+        .event_handler = _http_event_handler,
+        .cert_pem = (char *)server_root_ca_pem_start,  // Adding the root CA certificate
+        .user_data = http_res_buffer
+    };
+
+    printf("%s \n",config.url);
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    // clear mutex before calling
+    xSemaphoreTake(http_res_saved_mutex,0);
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        int status_code = esp_http_client_get_status_code(client);
+        int64_t resp_len = esp_http_client_get_content_length(client);  
+        ESP_LOGI(TAG, "HTTPS Status = %d, content_length = %lld",status_code,resp_len);
+
+        if(200 == status_code && resp_len > 0)
+        {
+            // wait for event handler to save the response or timeout
+            if(xSemaphoreTake(http_res_saved_mutex,2000/portTICK_PERIOD_MS))
+            {
+                printf("len %lld: %.*s\n",resp_len,(int)resp_len,&http_res_buffer[0]);
+                *configJSON = cJSON_Parse(&http_res_buffer[0]);
+            }
+            else // timeout
+            {
+                err = ESP_FAIL;
+            }
+        }
+        else{
+            err = ESP_FAIL;
+        }
+    } else {
+        ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+        xSemaphoreGive(wifi_routine_sem); // force ping request for connection check
+    }
+
+    err |= esp_http_client_cleanup(client);
+    xSemaphoreGive(http_req_mutex);  
+    return err;
+}
 
 
 // Initialize Wi-Fi
@@ -195,6 +260,8 @@ void wifi_init_sta(void)
 {
     wifi_routine_sem = xSemaphoreCreateBinary();
     http_req_mutex = xSemaphoreCreateMutex();
+    http_res_saved_mutex = xSemaphoreCreateBinary();
+
     esp_netif_init();
     esp_event_loop_create_default();
     esp_netif_create_default_wifi_sta();
