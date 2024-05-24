@@ -297,24 +297,24 @@
     #define WATER_LEVEL_BOYE_SetDigitalMode()     do { ANSELAbits.ANSELA1 = 0; } while(0)
 
     // get/set RC5 aliases
-    #define SHIELD_ON_PIN_TRIS                 TRISAbits.TRISC5
-    #define SHIELD_ON_PIN_LAT                  LATAbits.LATC5
-    #define SHIELD_ON_PIN_PORT                 PORTAbits.RC5
-    #define SHIELD_ON_PIN_WPU                  WPUAbits.WPUC5
-    #define SHIELD_ON_PIN_OD                   ODCONAbits.ODCC5
-    #define SHIELD_ON_PIN_ANS                  ANSELAbits.ANSELC5
-    #define SHIELD_ON_PIN_SetHigh()            do { LATAbits.LATC5 = 1; } while(0)
-    #define SHIELD_ON_PIN_SetLow()             do { LATAbits.LATC5 = 0; } while(0)
-    #define SHIELD_ON_PIN_Toggle()             do { LATAbits.LATC5 = ~LATAbits.LATC5; } while(0)
-    #define SHIELD_ON_PIN_GetValue()           PORTAbits.RC5
-    #define SHIELD_ON_PIN_SetDigitalInput()    do { TRISAbits.TRISC5 = 1; } while(0)
-    #define SHIELD_ON_PIN_SetDigitalOutput()   do { TRISAbits.TRISC5 = 0; } while(0)
-    #define SHIELD_ON_PIN_SetPullup()          do { WPUAbits.WPUC5 = 1; } while(0)
-    #define SHIELD_ON_PIN_ResetPullup()        do { WPUAbits.WPUC5 = 0; } while(0)
-    #define SHIELD_ON_PIN_SetPushPull()        do { ODCONAbits.ODCC5 = 0; } while(0)
-    #define SHIELD_ON_PIN_SetOpenDrain()       do { ODCONAbits.ODCC5 = 1; } while(0)
-    #define SHIELD_ON_PIN_SetAnalogMode()      do { ANSELAbits.ANSELC5 = 1; } while(0)
-    #define SHIELD_ON_PIN_SetDigitalMode()     do { ANSELAbits.ANSELC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_TRIS                 TRISCbits.TRISC5
+    #define SHIELD_ON_PIN_LAT                  LATCbits.LATC5
+    #define SHIELD_ON_PIN_PORT                 PORTCbits.RC5
+    #define SHIELD_ON_PIN_WPU                  WPUCbits.WPUC5
+    #define SHIELD_ON_PIN_OD                   ODCONCbits.ODCC5
+    #define SHIELD_ON_PIN_ANS                  ANSELCbits.ANSELC5
+    #define SHIELD_ON_PIN_SetHigh()            do { LATCbits.LATC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetLow()             do { LATCbits.LATC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_Toggle()             do { LATCbits.LATC5 = ~LATCbits.LATC5; } while(0)
+    #define SHIELD_ON_PIN_GetValue()           PORTCbits.RC5
+    #define SHIELD_ON_PIN_SetDigitalInput()    do { TRISCbits.TRISC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetDigitalOutput()   do { TRISCbits.TRISC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_SetPullup()          do { WPUCbits.WPUC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_ResetPullup()        do { WPUCbits.WPUC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_SetPushPull()        do { ODCONCbits.ODCC5 = 0; } while(0)
+    #define SHIELD_ON_PIN_SetOpenDrain()       do { ODCONCbits.ODCC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetAnalogMode()      do { ANSELCbits.ANSELC5 = 1; } while(0)
+    #define SHIELD_ON_PIN_SetDigitalMode()     do { ANSELCbits.ANSELC5 = 0; } while(0)
 #endif
 
 // get/set RB2 aliases
