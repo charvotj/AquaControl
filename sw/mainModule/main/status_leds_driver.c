@@ -19,6 +19,11 @@ esp_err_t status_leds_init(void)
         .resolution_hz = 10 * 1000 * 1000, // 10MHz
         .flags.with_dma = false,
     };
+    led_strip_spi_config_t spi_config = {
+        .clk_src = SPI_CLK_SRC_DEFAULT, // different clock source can lead to different power consumption
+        .flags.with_dma = true, // Using DMA can improve performance and help drive more LEDs
+        .spi_bus = SPI2_HOST,   // SPI bus ID
+    };
 
     // Custom Configuration
     status = status_leds_change_brightness(0.1);
@@ -26,7 +31,10 @@ esp_err_t status_leds_init(void)
         return status;
     // TODO refactor status and erro check
 
-    ESP_ERROR_CHECK(led_strip_new_rmt_device(&strip_config, &rmt_config, &led_strip));
+    status = led_strip_new_rmt_device(&strip_config, &rmt_config, &led_strip);
+    // status = led_strip_new_spi_device(&strip_config, &spi_config, &led_strip);
+    if(ESP_OK != status)
+        return status;
 
     /* Set all LED off to clear all pixels */
     status = led_strip_clear(led_strip);
@@ -43,14 +51,7 @@ esp_err_t status_leds_set_color(status_leds_t led, led_color_t color)
     color.blue *= ledstrip_brightness;
 
     // printf("Set LED color\n");
-    esp_err_t status = led_strip_set_pixel(led_strip, led, color.red, color.green, color.blue);
-    if(status != ESP_OK)
-        return status;
-    
-    /* Refresh the strip to send data */
-    status = led_strip_refresh(led_strip);
-    // printf("Set LED color 2, status: %d\n",status);
-    return status;
+   return led_strip_set_pixel(led_strip, led, color.red, color.green, color.blue);
 }
 
 esp_err_t status_leds_clear(void)
@@ -81,7 +82,7 @@ esp_err_t status_leds_update()
         status_leds_set_color(POWER_LED,COLOR_RED);
         break;
     case DEVST_STARTUP:
-        status_leds_set_color(POWER_LED, COLOR_ORANGE);
+        status_leds_set_color(POWER_LED, COLOR_MAGENTA);
         break;
     case DEVST_UNDEFINED:
         status_leds_set_color(POWER_LED, COLOR_BLUE);
@@ -96,13 +97,13 @@ esp_err_t status_leds_update()
         status_leds_set_color(WIFI_LED,COLOR_GREEN);
         break;
     case WIFIST_CONNECTED:
-        status_leds_set_color(WIFI_LED,COLOR_YELLOW);
+        status_leds_set_color(WIFI_LED,COLOR_ORANGE);
         break;
     case WIFIST_ERROR:
         status_leds_set_color(WIFI_LED,COLOR_RED);
         break;
     case WIFIST_STARTUP:
-        status_leds_set_color(WIFI_LED, COLOR_ORANGE);
+        status_leds_set_color(WIFI_LED, COLOR_MAGENTA);
         break;
     case WIFIST_UNDEFINED:
         status_leds_set_color(WIFI_LED, COLOR_BLUE);
@@ -111,5 +112,10 @@ esp_err_t status_leds_update()
         return ESP_FAIL;
     }
 
-    return ESP_OK;
+    // default
+    status_leds_set_color(ALARM_LED,COLOR_BLACK);
+    status_leds_set_color(USER_LED,COLOR_BLACK);
+
+    /* Refresh the strip to send data */
+    return led_strip_refresh(led_strip);
 }

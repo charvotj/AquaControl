@@ -34,14 +34,15 @@ typedef enum {
 } status_leds_t;
 
 static const led_color_t COLOR_RED = {255, 0, 0};
+static const led_color_t COLOR_ORANGE = {255, 165, 0};
+static const led_color_t COLOR_YELLOW = {255, 255, 0};
 static const led_color_t COLOR_GREEN = {0, 255, 0};
 static const led_color_t COLOR_BLUE = {0, 0, 255};
-static const led_color_t COLOR_YELLOW = {255, 255, 0};
 static const led_color_t COLOR_CYAN = {0, 255, 255};
 static const led_color_t COLOR_MAGENTA = {255, 0, 255};
 static const led_color_t COLOR_WHITE = {255, 255, 255};
-static const led_color_t COLOR_ORANGE = {255, 165, 0};
 static const led_color_t COLOR_PURPLE = {128, 0, 128};
+static const led_color_t COLOR_BLACK = {0, 0, 0};
 
 esp_err_t status_leds_init(void);
 esp_err_t status_leds_set_color(status_leds_t led, led_color_t color);

@@ -9,6 +9,7 @@ extern const uint8_t server_root_ca_pem_end[] asm("_binary_isrgrootx1_pem_end");
 
 static int s_retry_num = 0;
 static SemaphoreHandle_t http_req_mutex;
+SemaphoreHandle_t wifi_routine_sem;
 
 static char http_req_buffer[MAX_HTTP_REQ_BUFFER] = {'\0'};
 
@@ -21,17 +22,21 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
 {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
         esp_wifi_connect();
+        STATUS_wifi = WIFIST_STARTUP;
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        ESP_LOGE(TAG,"connect to the AP fail");
+        STATUS_wifi = WIFIST_ERROR;
         if (s_retry_num < WIFI_CONN_MAX_RETRY) {
             esp_wifi_connect();
             s_retry_num++;
             ESP_LOGI(TAG, "retry to connect to the AP");
-            STATUS_wifi = WIFIST_STARTUP;
+            // STATUS_wifi = WIFIST_STARTUP;
         } else {
-            ESP_LOGE(TAG, "connect to the AP fails");
-            STATUS_wifi = WIFIST_ERROR;
+            ESP_LOGE(TAG, "WIFI error: Wait 30 s before next retries");
+            vTaskDelay(30000/portTICK_PERIOD_MS);
+            s_retry_num = 0; // reset retries
+            esp_wifi_connect();
         }
-        ESP_LOGE(TAG,"connect to the AP fail");
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
@@ -43,6 +48,7 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
 // HTTP event handler
 esp_err_t _http_event_handler(esp_http_client_event_t *evt) 
 {
+    #ifdef WIFI_DEBUG_PRINT_HTTP
     switch(evt->event_id) {
         case HTTP_EVENT_ERROR:
             ESP_LOGI(TAG, "HTTP_EVENT_ERROR");
@@ -72,6 +78,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
             ESP_LOGI(TAG, "HTTP_EVENT_REDIRECT");
             break;
     }
+    #endif WIFI_DEBUG_PRINT_HTTP
     return ESP_OK;
 }
 
@@ -81,7 +88,7 @@ esp_err_t wifi_driver_routine()
     // wait for mutex because of static payload string
     xSemaphoreTake(http_req_mutex, portMAX_DELAY); 
      esp_http_client_config_t config = {
-            .url = "https://akvaphp.charvot.cz/api",
+            .url = "https://akvaphp.charvot.cz/api/ping",
             .event_handler = _http_event_handler,
             .cert_pem = (char *)server_root_ca_pem_start,  // Adding the root CA certificate
         };
@@ -95,7 +102,8 @@ esp_err_t wifi_driver_routine()
             STATUS_wifi = WIFIST_ONLINE;
         } else {
             ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
-            STATUS_wifi = WIFIST_CONNECTED;
+            if(WIFIST_ONLINE == STATUS_wifi)
+                STATUS_wifi = WIFIST_CONNECTED;
         }
 
         err = esp_http_client_cleanup(client);
@@ -172,6 +180,7 @@ esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data)
                     esp_http_client_get_content_length(client));
         } else {
             ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+            xSemaphoreGive(wifi_routine_sem); // force ping request for connection check
         }
 
         err = esp_http_client_cleanup(client);
@@ -184,6 +193,8 @@ esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data)
 // Initialize Wi-Fi
 void wifi_init_sta(void) 
 {
+    wifi_routine_sem = xSemaphoreCreateBinary();
+    http_req_mutex = xSemaphoreCreateMutex();
     esp_netif_init();
     esp_event_loop_create_default();
     esp_netif_create_default_wifi_sta();
@@ -204,7 +215,6 @@ void wifi_init_sta(void)
     esp_wifi_set_mode(WIFI_MODE_STA);
     esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config);
     esp_wifi_start();
-    http_req_mutex = xSemaphoreCreateMutex();
     // enable for tx
     xSemaphoreGive(http_req_mutex);
 }

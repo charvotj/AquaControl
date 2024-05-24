@@ -31,6 +31,10 @@
 #define MAX_HTTP_REQ_BUFFER       1024
 #define WIFI_CONN_MAX_RETRY       5
 
+// #define WIFI_DEBUG_PRINT_HTTP     1
+
+extern SemaphoreHandle_t wifi_routine_sem;
+
 esp_err_t wifi_driver_routine();
 esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data);
 void wifi_init_sta(void);

@@ -97,7 +97,7 @@ static void status_update_task(void *arg)
             printf("Device status changed to %d\n", STATUS_device);
         }
         status_leds_update(STATUS_device);
-        vTaskDelay(300 / portTICK_PERIOD_MS);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
         // status_leds_update(STATUS_device);
     }
 }
@@ -123,9 +123,16 @@ static void wifi_task(void *arg)
     // Initialize Wi-Fi
     wifi_init_sta();
 
+    TickType_t loop_delay = 0;
     while (1) {
-        // wifi_driver_routine();
-        vTaskDelay(10000 / portTICK_PERIOD_MS);
+        wifi_driver_routine();
+
+        if(WIFIST_ONLINE == STATUS_wifi)
+            loop_delay = (30000 / portTICK_PERIOD_MS);
+        else
+            loop_delay = (5000 / portTICK_PERIOD_MS);
+        // Procces routine again after defined delay ms or on demand from other process
+        xSemaphoreTake(can_rx_sem,loop_delay);
     }
 }
 
@@ -290,7 +297,9 @@ void app_main(void)
             wl_node_wifi_data[0] = (float)wl;
             wl_node_wifi_data[1] = (float)boye;
         }
-        wifi_driver_send_sensor_data(2,&nodes_data[0]);
+
+       if(WIFIST_ONLINE == STATUS_wifi)
+            wifi_driver_send_sensor_data(2,&nodes_data[0]);
     }
     
 }
