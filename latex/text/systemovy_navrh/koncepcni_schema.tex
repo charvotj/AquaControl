@@ -1,5 +1,5 @@
 \section{Blokové schéma}
-    Blokové schéma zařízení se nachází na obr.~\ref{fig:blokove-schema}. Pro pohodlné použití je hlavní část zařízení soustředěna do jedné krabičky napájené přívodním síťovým kabelem. Uživatel pak dle potřeby připojí příslušenství pracující s~napětím \qty{230}{V} do integrovaných síťových zásuvek a veškeré další periferie za pomoci jednoho z~univerzálních konektorů. O~stavu zařízení bude uživatel informován sérií notifikačních LED a malým displayem. 
+    Blokové schéma zařízení se nachází na obr.~\ref{fig:blokove-schema}. Pro pohodlné použití je hlavní část zařízení soustředěna do jedné krabičky napájené přívodním síťovým kabelem. Uživatel pak dle potřeby připojí příslušenství pracující s~napětím \qty{230}{V} do integrovaných síťových zásuvek a veškeré další periferie za pomoci jednoho z~univerzálních konektorů. O~stavu zařízení bude uživatel informován sérií notifikačních LED a malým displejem. 
 
     % Blokove schema
     \begin{figure}[h!]
@@ -15,12 +15,12 @@
             \definecolor{barva-ridici}{RGB}{241, 196, 15}
         
             \node (napajeni) [blok, fill=barva-silove] {Napájecí zdroj 24V};
-            \node (ridici) [blok, below of = napajeni, align=center, fill=barva-ridici] {Řídící jednotka \\ (ESP32)};
+            \node (ridici) [blok, below of = napajeni, align=center, fill=barva-ridici] {Řídicí jednotka \\ (ESP32)};
             \node (rele) [blok, right=0.5 of ridici, fill=barva-silove] {Relé modul};
             \node (zasuvky) [blok, right=0.5 of rele, fill=barva-silove] {Zásuvky 230VAC};
             \node (uzel) [style={draw, circle, minimum size=0.1cm, fill}, above=1cm of zasuvky] {};
             \node (sit) [blok, above= of uzel, fill=barva-silove ] {Přívod 230VAC};
-            \node (display) [blok, below left=-0.5cm and 0.65cm of ridici] {Status display};
+            \node (display) [blok, below left=-0.5cm and 0.65cm of ridici] {Status displej};
             \node (ledstrip) [blok, above left=-0.5cm and 0.65cm of ridici] {Status LED pásek};
 
             \node (konektor1) [blok, align=center, below left=1.5cm and -1.2cm of ridici] {Konektor pro periferie \\ \#1};
@@ -71,7 +71,7 @@
     
     Pro napájení vlastní elektroniky zařízení je v~šasi umístěn hotový modul spínaného zdroje převádějící síťové napětí \qty{230}{V} na stejnosměrných \qty{24}{V} se kterými pak zařízení dále pracuje (viz kapitola~\ref{sec:ridici-jendotka-napajeci-obvod}).   
     
-    Z~hlediska bezpečnosti je potřeba zajistit, aby se uživatel ani samotná nízkonapěťová část obvodu nemohli dostat do kontaktu s~nebezpečným napětím. Toho je dosaženo galvanickým oddělením částí zařízení pracujících se síťovým napětím. V~blokovém schématu (obr.~\ref{fig:blokove-schema}) jsou všechny tyto části podbarveny šedou barvou. Pro spínaní síťových zásuvek jsou použita relé, které samy o sobě tvoří galvanickou izolaci, pro ještě lepší ochranu mikrokontroleru je pak zvolena variantu s~optočleny. Pro napájecí zdroj s~výstupem \qty{24}{V} je přítomnost galvanického oddělení kontrolována v~dokumentaci výrobce. 
+    Z~hlediska bezpečnosti je potřeba zajistit, aby se uživatel ani samotná nízkonapěťová část obvodu nemohli dostat do kontaktu s~nebezpečným napětím. Toho je dosaženo galvanickým oddělením částí zařízení pracujících se síťovým napětím. V~blokovém schématu (obr.~\ref{fig:blokove-schema}) jsou všechny tyto části podbarveny šedou barvou. Pro spínaní síťových zásuvek jsou použita relé, které samy o sobě tvoří galvanickou izolaci, pro ještě lepší ochranu mikrokontroléru je pak zvolena variantu s~optočleny. Pro napájecí zdroj s~výstupem \qty{24}{V} je přítomnost galvanického oddělení kontrolována v~dokumentaci výrobce. 
     
 
 

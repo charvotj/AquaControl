@@ -520,12 +520,12 @@
 			% \draw (0,0) -- (4,0);
 			\begin{scope}[]
 				\node (napajeni) [blok, ] {Napájecí zdroj 24V};
-				\node (ridici) [blok, below of = napajeni, align=center, fill=barva-ridici] {Řídící jednotka \\ (ESP32)};
+				\node (ridici) [blok, below of = napajeni, align=center, fill=barva-ridici] {Řídicí jednotka \\ (ESP32)};
 				\node (rele) [blok, right=0.5 of ridici, fill=barva-silove] {Relé modul};
 				\node (zasuvky) [blok, right=0.5 of rele, fill=barva-silove] {Zásuvky 230VAC};
 				\node (uzel) [style={draw, circle, minimum size=0.1cm, fill}, above=1cm of zasuvky] {};
 				\node (sit) [blok, right=3 of uzel, fill=barva-silove ] {Přívod 230VAC};
-				\node (display) [blok, below left=-0.5cm and 0.65cm of ridici] {Status display};
+				\node (display) [blok, below left=-0.5cm and 0.65cm of ridici] {Status displej};
 				\node (ledstrip) [blok, above left=-0.5cm and 0.65cm of ridici] {Status LED pásek};
 	
 				\node (konektor1) [blok, align=center, below left=1.5cm and -1.2cm of ridici] {Konektor pro periferie \\ \#1};
@@ -709,7 +709,7 @@
 	\begin{itemize}
 		\item Použít průmyslovou sběrnici (CAN, RS 485)
 		\begin{itemize}
-			\item Nutnost dalších součástek -- řadiče, kontrolery
+			\item Nutnost dalších součástek -- řadiče, kontroléry
 			\item Složitější ale již existující protokol
 			\item Možná kolize adres -- potřeba tento stav ošetřit
 		\end{itemize}
@@ -843,7 +843,7 @@
 			trim=2.1cm 16cm 20cm 1.3cm, 
 			clip
 		]{obrazky/exportovane/ukazky-do-textu.pdf}
-		% \caption{Ochrana konektorů řídící jednotky, principiální schéma. Vytvořeno v~KiCad 7.0.}%
+		% \caption{Ochrana konektorů řídicí jednotky, principiální schéma. Vytvořeno v~KiCad 7.0.}%
 		\label{fig:ridici-jednotka-konektor-ochrana}
 	\end{figure}
 
