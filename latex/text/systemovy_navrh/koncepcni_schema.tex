@@ -1,5 +1,5 @@
 \section{Blokové schéma}
-    Blokové schéma zařízení se nachází na obr.~\ref{fig:blokove-schema}. Pro pohodlné použití je hlavní část zařízení soustředěna do jedné krabičky napájené přívodním síťovým kabelem. Uživatel pak dle potřeby připojí příslušenství pracující s~napětím \qty{230}{V} do integrovaných síťových zásuvek a veškeré další periferie za pomoci jednoho z~univerzálních konektorů. O~stavu zařízení bude uživatel informován sérií notifikačních LED a malým displejem. 
+    Blokové schéma zařízení se nachází na obr.~\ref{fig:blokove-schema}. Pro pohodlné použití je hlavní část zařízení soustředěna do jedné krabičky napájené přívodním síťovým kabelem. Uživatel pak dle potřeby připojí příslušenství pracující s~napětím \qty{230}{V} do integrovaných síťových zásuvek a veškeré další periferie za pomoci jednoho z~univerzálních konektorů. O~stavu zařízení bude uživatel informován sérií notifikačních \acs{led} a malým displejem. 
 
     % Blokove schema
     \begin{figure}[h!]
@@ -21,7 +21,7 @@
             \node (uzel) [style={draw, circle, minimum size=0.1cm, fill}, above=1cm of zasuvky] {};
             \node (sit) [blok, above= of uzel, fill=barva-silove ] {Přívod 230VAC};
             \node (display) [blok, below left=-0.5cm and 0.65cm of ridici] {Status displej};
-            \node (ledstrip) [blok, above left=-0.5cm and 0.65cm of ridici] {Status LED pásek};
+            \node (ledstrip) [blok, above left=-0.5cm and 0.65cm of ridici] {Status \acs{led} pásek};
 
             \node (konektor1) [blok, align=center, below left=1.5cm and -1.2cm of ridici] {Konektor pro periferie \\ \#1};
             \node (konektor2) [blok, align=center, below right=1.5cm and -1.2cm of ridici] {Konektor pro periferie \\ \#2};
@@ -36,8 +36,8 @@
             % Popisek
             \node (vlastovka) [font=\fontsize{35}{14}\selectfont, yscale=4,  above right=-5.2cm and 0.6cm of per2-1] {\}}; 
 
-            \node (popisek1) [right=0cm of vlastovka,yshift=1cm, align=left] {Připojení senzorů: \\ -- teploměr \\ -- výška hladiny \\ -- pH \\ -- ...};
-            \node (popisek2) [below=1cm of popisek1.south west, anchor=south west, align=left] {Řízení LED svícení};
+            \node (popisek1) [right=0cm of vlastovka,yshift=1cm, align=left] {Připojení senzorů: \\ -- teploměr \\ -- výška hladiny \\ -- \acs{ph} \\ -- ...};
+            \node (popisek2) [below=1cm of popisek1.south west, anchor=south west, align=left] {Řízení \acs{led} svícení};
             \node (popisek3) [below=1cm of popisek2.south west, anchor=south west, align=left] {...};
 
             % Spojovací linie

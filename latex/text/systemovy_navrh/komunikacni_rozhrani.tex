@@ -39,8 +39,8 @@
             \node[anchor=west] (pin1) at (-4,1.4)                            {1,~5,~6,~9: GND};
             \node[below=0.6 of pin1.west,anchor=west] (pin2) {~~~~~~2,~7: \qty{24}{V}};
             \node[below=0.6 of pin2.west,anchor=west] (pin3) {~~~~~~~~~8: \qty{5.2}{V}};
-            \node[anchor=west] at (2,1.1) (pin4) {~~~~~~~~~3: CAN High};
-            \node[below=0.6 of pin4.west,anchor=west] (pin5) {~~~~~~~~~4: CAN Low};
+            \node[anchor=west] at (2,1.1) (pin4) {~~~~~~~~~3: \acs{can} High};
+            \node[below=0.6 of pin4.west,anchor=west] (pin5) {~~~~~~~~~4: \acs{can} Low};
             
         \end{tikzpicture}
         \caption{Přiřazení pinů konektorů D-sub 9 pro připojení periferií.}
@@ -59,7 +59,7 @@
             \hline
             \textbf{Typ} & \textbf{Výhody} & \textbf{Nevýhody} & \textbf{Limitace} \\
             \hline\hline
-            SPI & 
+            \acs{spi} & 
             \begin{tabular}[t]{@{}p{4cm}@{}}
             Více zařízení na sběrnici \\
             Vysoká rychlost přenosu dat \\
@@ -79,13 +79,13 @@
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
             Riziko kolize adres \\
-            Nižší rychlost přenosu dat proti SPI \\
+            Nižší rychlost přenosu dat proti \acs{spi} \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
             Určeno na krátkou vzdálenost \\
             \end{tabular} \\
             \hline
-            CAN &
+            \acs{can} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
             Vysoká spolehlivost \\
             Dlouhé propojení \\
@@ -95,7 +95,7 @@
             Nižší rychlost přenosu dat \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            Nepodporovano běžnými MCU -- nutný externí řadič \\
+            Nepodporovano běžnými \acs{mcu} -- nutný externí řadič \\
             \end{tabular} \\
             \hline
             UART &
@@ -104,7 +104,7 @@
             Možnost asynchronní komunikace \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
-            Nižší rychlost přenosu dat proti SPI \\
+            Nižší rychlost přenosu dat proti \acs{spi} \\
             Pouze 2 zařízení \\
             \end{tabular} &
             \begin{tabular}[t]{@{}p{4cm}@{}}
@@ -124,14 +124,14 @@
         Protože hlavní šasi zařízení nabízí dva konektory, ale žádoucí je připojit větší předem nedefinovaný počet periferií, je potřeba, aby sběrnice umožnila připojení více zařízení. 
         Obecný problém všech sběrnic je omezení jejich maximální délky, s~rostoucí délkou se sběrnice snáze zaruší, navíc z~důvodu parazitních vlastností vedení dochází k~zaoblení ostrých hran signálu, dlouhé vedení se chová jako filtr typu dolní propust. V~důsledku toho se snižuje maximální rychlost sběrnice.
         
-        Sběrnice SPI nebo \acs{i2c} je obecně doporučeno používat pouze v~rámci DPS, tedy na krátké vzdálenosti. Při snížení rychlosti je možné je používat i na větší vzdálenost, ovšem modulární scénář vytvářeného systému teoreticky nestanovuje žádný délkový limit a bylo by velmi obtížné spolehlivě určit, kolik periferií uživatel může za sebe zapojit při zachování spolehlivé komunikace.
+        Sběrnice \acs{spi} nebo \acs{i2c} je obecně doporučeno používat pouze v~rámci \acs{dps}, tedy na krátké vzdálenosti. Při snížení rychlosti je možné je používat i na větší vzdálenost, ovšem modulární scénář vytvářeného systému teoreticky nestanovuje žádný délkový limit a bylo by velmi obtížné spolehlivě určit, kolik periferií uživatel může za sebe zapojit při zachování spolehlivé komunikace.
 
         UART je výhodný svou jednoduchou implementací a umožňuje obousměrnou asynchronní komunikaci. Nevýhodou je že funguje pouze pro dvě zařízení. Jednou z možností jak tuto limitaci obejít by bylo zavedení řetězového způsobu komunikace, kdy by každé zařízení komunikovalo se dvěmi sousedními a informace by se postupně předávala dále až k cílovému zařízení. Tento systém je relativně jednoduchý, ale například v případě poruchy jednoho zařízení se odpojí všechna následující zařízení, což může mít neočekávané následky.
 
-        Sběrnice CAN je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitější a dražší implementace. Většina běžných mikrokontrolérů nemá pro CAN vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontrolér nebo připojit externí ovladač řízený např. přes SPI, dále je nutné přidat i řadič, který převede signál na diferenční a zároveň umožní zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde k ještě lepšímu potlačení šumu.
+        Sběrnice \acs{can} je určena pro provoz v~průmyslovém prostředí (zejména je používána v~automobilovém průmyslu) a díky své robustnější konstrukci ji lze bez problému použít i na delší vzdálenosti a pro více zařízení. Při komunikaci je používán diferenční pár vodičů, takže i odolnost proti rušení je výrazně lepší. Nevýhodou je ale její o něco složitější a dražší implementace. Většina běžných mikrokontrolérů nemá pro \acs{can} vestavěnou periferii a je tak potřeba buďto zvolit dražší mikrokontrolér nebo připojit externí ovladač řízený např. přes \acs{spi}, dále je nutné přidat i řadič, který převede signál na diferenční a zároveň umožní zvýšit provozní napětí na 12  nebo \qty{24}{V}, čímž dojde k ještě lepšímu potlačení šumu.
 
-    \subsection{Sběrnice CAN}
-        Po důkladné rešerši a zvážení zmíněných kladů a záporů byla  zvolena sběrnice CAN. ESP32 jakožto již zvolený mikrokontrolér řídicí jednotky obsahuje vestavený CAN kontrolér a pro moduly periferií byl na základě tohoto rozhodnutí zvolen také vhodný mikrokontrolér. Co se týče nutnosti přidání řadiče, jedná se sice o další součástku, která na první pohled navyšuje cenu zařízení, kromě převodu signálu na diferenční ale zajišťuje také ochranu konektorů proti mnoha nežádoucím jevům jako je zkrat, ESD výboj nebo přepětí. Tímto se ve výsledku celé zapojení zlevní a zjednoduší.
+    \subsection{Sběrnice \acs{can}}
+        Po důkladné rešerši a zvážení zmíněných kladů a záporů byla  zvolena sběrnice \acs{can}. ESP32 jakožto již zvolený mikrokontrolér řídicí jednotky obsahuje vestavený \acs{can} kontrolér a pro moduly periferií byl na základě tohoto rozhodnutí zvolen také vhodný mikrokontrolér. Co se týče nutnosti přidání řadiče, jedná se sice o další součástku, která na první pohled navyšuje cenu zařízení, kromě převodu signálu na diferenční ale zajišťuje také ochranu konektorů proti mnoha nežádoucím jevům jako je zkrat, ESD výboj nebo přepětí. Tímto se ve výsledku celé zapojení zlevní a zjednoduší.
 
 
    

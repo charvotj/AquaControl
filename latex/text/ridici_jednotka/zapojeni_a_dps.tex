@@ -1,6 +1,6 @@
-\section{Návrh zapojení a tvorba DPS}
+\section{Návrh zapojení a tvorba \acs{dps}}
 \label{sec:ridici-jednotka-schema-a-dps}
-    Řídicí jednotka je tvořena jednou speciálně navrženou DPS, která kromě samotného mikrokontroléru obsahuje také měnič napětí typu buck ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V}. Toto napětí je pak dále používáno pro napájení samotného mikrokontroléru řídicí jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné DPS je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další kapitoly. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-ridici-jednotka}.
+    Řídicí jednotka je tvořena jednou speciálně navrženou \acs{dps}, která kromě samotného mikrokontroléru obsahuje také měnič napětí typu buck ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V}. Toto napětí je pak dále používáno pro napájení samotného mikrokontroléru řídicí jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné \acs{dps} je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další kapitoly. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-ridici-jednotka}.
 
     \begin{figure}[h!]
         \centering
@@ -74,7 +74,7 @@
         \textit{TODO: výpočty by asi bylo dobré uvést co?}
 
     \subsection{Deska plošných spojů}
-        Ačkoliv se jedná o relativně jednoduchou DPS, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na DPS je rozhodujícím faktorem pro sp8vnou funkci antény. Další částí vyžadující správný návrh rozložení a propojení součástek je pak buck měnič. 
+        Ačkoliv se jedná o relativně jednoduchou \acs{dps}, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na \acs{dps} je rozhodujícím faktorem pro sp8vnou funkci antény. Další částí vyžadující správný návrh rozložení a propojení součástek je pak buck měnič. 
         
         \begin{figure}[!ht]
             \centering
@@ -89,7 +89,7 @@
                 \node[anchor=south west,inner sep=0,color=red] at (6.8,1.3)  {4.};
                 \node[anchor=south west,inner sep=0,color=red] at (6.8,5)  {5.};
                 % legend
-                \node[anchor=south west,inner sep=0] (leg-blu) at (8.5,10)  {MCU};
+                \node[anchor=south west,inner sep=0] (leg-blu) at (8.5,10)  {\acs{mcu}};
                 \node[anchor=south west,inner sep=0] (leg-ora) at (8.5,9.32) {buck měnič napětí};
                 \node[anchor=south west,inner sep=0] (leg-red) at (8.5,8.64) {Konektory:};
 
@@ -103,13 +103,13 @@
                 % \node[anchor=south west,inner sep=0,color=red] {4.};
                 % \node[anchor=south west,inner sep=0,color=red]          {5.};
             \end{tikzpicture}
-            \caption{Vizualizace DPS řídicí jednotky s vyznačením jednotlivých částí.}
-            \label{fig:ridici-jendotka-dps-popis}
+            \caption{Vizualizace \acs{dps} řídicí jednotky s vyznačením jednotlivých částí.}
+            \label{fig:ridici-jednotka-dps-popis}
         \end{figure}
 
         Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z hlediska EMC. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
 
-        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu DPS tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jendotka-dps-popis} je zobrazen výsledný návrh DPS, v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
+        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu \acs{dps} tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jednotka-dps-popis} je zobrazen výsledný návrh \acs{dps}, v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
 
         \begin{figure}[h!]
             \centering
@@ -147,7 +147,7 @@
                 % \draw[<-,thick] (0,0)       -- +(0.5,-0.5) node[below] {Top Layer};
                 
                 \end{tikzpicture}
-            \caption{Rozložení vrstev DPS řídicí jednotky.}
+            \caption{Rozložení vrstev \acs{dps} řídicí jednotky.}
             \label{fig:ridici-jednotka-stackup-dps}
         \end{figure}
 
@@ -159,9 +159,9 @@
    
 
     \section{Konektivita}
-        Řídicí jednotka je vybavena několika konektory, jak je opět možno vidět na obr.~\ref{fig:ridici-jendotka-dps-popis}. Na levé straně DPS (značeno 1.) se nachází konektory pro připojení periferií připravené pro montáž do panelu, kde pak budou přístupné uživateli. Ostatní vyznačené konektory slouží pro připojení externích modulů v rámci hlavního šasi (viz blokové schéma na obr.~\ref{fig:blokove-schema}) popř. pro programování a testování, nebudou tedy volně přístupné uživateli.
+        Řídicí jednotka je vybavena několika konektory, jak je opět možno vidět na obr.~\ref{fig:ridici-jednotka-dps-popis}. Na levé straně \acs{dps} (značeno 1.) se nachází konektory pro připojení periferií připravené pro montáž do panelu, kde pak budou přístupné uživateli. Ostatní vyznačené konektory slouží pro připojení externích modulů v rámci hlavního šasi (viz blokové schéma na obr.~\ref{fig:blokove-schema}) popř. pro programování a testování, nebudou tedy volně přístupné uživateli.
 
-        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu~\cite{altium-circuit-protection}. Jak je vidět na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný CAN řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky s napájením či zemí, tak proti ESD~\cite{ata-datasheet}. 
+        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu~\cite{altium-circuit-protection}. Jak je vidět na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný \acs{can} řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky s napájením či zemí, tak proti ESD~\cite{ata-datasheet}. 
 
         \begin{figure}[h!]
             \centering

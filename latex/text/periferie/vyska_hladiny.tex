@@ -3,7 +3,7 @@
     Voda v akváriu se průběžně odpořuje a je potřeba ji doplňovat. Účelem této periferie je průběžné monitorování hladiny akvária a upozornění uživatele na nutnost doplnění vody. Také může uživatele varovat v případě poškození nádrže a nežádoucího úniku vody do okolí. 
     K realizaci tohoto modulu jsou použity dva jednoduché sensory přičemž každý funguje na jiném principu a má tedy také odlišné přednosti a nedostatky, v kombinaci tedy zvyšují celkovou spolehlivost modulu. Oba sensory se nachází na obr.~\ref{TODO}. 
 
-    První ze sensorů využivá k určení výšky hladiny vodivost (potažmo odpor) vody. Obsahuje dva sety vodivých plošek, které nejsou vodivě spojeny. Při ponoření měřící části do vody začne mezi ploškami procházet slabý proud, který je přibližně úměrný velikosti ponořené části. Tento proud otevírá tranzistor, na jehož výstupu pak vzniká stejnosměrné napětí v rozsahu přiloženého napájení (zde 0 až \qty{3.3}{V}). Tento signál je přiveden na pin mikrokontroléru a následně zpracován vestaveným převodníkem. PIC18F26 obsahuje integrovanou periferii ADC s rozlišením 12 bitů, teoreticky lze tedy rozlišit \num{4296} úrovní~\cite{PIC18F26Q83}. Pro převod měřené hodnoty na výšku hladiny je potřeba sensor nejprve nakalibrovat. Byla tedy změřena přibližná výstupní hodnota pro minimální a maximální měřitelné ponoření sensoru a údaj je následně mikroprocesorem převeden na procenta. Úvaj v procentech ponořené části je pro uživatele univerzálním ukazatelem nezávislým na umístení sensoru, pro měření absolutní výšky hladiny by musel uživatel v systému nastavit výšku umístění sensoru a také ji pokaždé měnit v případě změny jeho pozice.
+    První ze sensorů využivá k určení výšky hladiny vodivost (potažmo odpor) vody. Obsahuje dva sety vodivých plošek, které nejsou vodivě spojeny. Při ponoření měřící části do vody začne mezi ploškami procházet slabý proud, který je přibližně úměrný velikosti ponořené části. Tento proud otevírá tranzistor, na jehož výstupu pak vzniká stejnosměrné napětí v rozsahu přiloženého napájení (zde 0 až \qty{3.3}{V}). Tento signál je přiveden na pin mikrokontroléru a následně zpracován vestaveným převodníkem. PIC18F26 obsahuje integrovanou periferii \acs{adc} s rozlišením 12 bitů, teoreticky lze tedy rozlišit \num{4296} úrovní~\cite{PIC18F26Q83}. Pro převod měřené hodnoty na výšku hladiny je potřeba sensor nejprve nakalibrovat. Byla tedy změřena přibližná výstupní hodnota pro minimální a maximální měřitelné ponoření sensoru a údaj je následně mikroprocesorem převeden na procenta. Údaj v procentech ponořené části je pro uživatele univerzálním ukazatelem nezávislým na umístení sensoru, pro měření absolutní výšky hladiny by musel uživatel v systému nastavit výšku umístění sensoru a také ji pokaždé měnit v případě změny jeho pozice.
 
     Druhým sensorem je jednoduchý plovák obsahující mechanický spínač, který je při ponoření do vody rozepnut. V případě poklesu hladiny pod zvolenou úroveň je pak spínač sepnut.
 
@@ -26,11 +26,11 @@
             \node[left] at (pin3) {};
             \draw (pin3) -- ++(-0.5,0) to[spst] ++(0,1) -- (pin2);
             
-            % Draw the MCU
+            % Draw the \acs{mcu}
             \draw (5,0) node[anchor=south,rectangle, draw, minimum width=4cm, minimum height=5cm] (mcu) {};
             \node[anchor=north] at (mcu.south) {PIC18F26};
             
-            % Draw the pins on the MCU
+            % Draw the pins on the \acs{mcu}
             \draw (mcu.north west) ++(0,-0.5) coordinate (mcupin1);
             \draw (mcu.north west) ++(0,-3.0) coordinate (mcupin2);
             \draw (mcu.north west) ++(0,-4)   coordinate (mcupin3);
@@ -56,12 +56,12 @@
             \node[right] at (rsenspin2) {SENS};
             \node[right] at (rsenspin3) {GND};
             
-            % Connect plovak to MCU
+            % Connect plovak to \acs{mcu}
             \draw (mcupin1) -- ++(-1,0);
             \draw (pin2) -- (mcupin2);
             \draw (pin3) -- (mcupin3);
 
-            % Connect rsens to MCU
+            % Connect rsens to \acs{mcu}
             \draw (rsenspin1) -- (mcupin4);
             \draw (rsenspin2) -- (mcupin5);
             \draw (rsenspin3) -- (mcupin6);
@@ -70,6 +70,6 @@
             \draw (mcupin1) ++(-1,0) to[R, l_=100k, -*] ++(0,-2.5);
         
         \end{circuitikz}
-        \caption{Připojení sensorů hladiny k MCU.}
+        \caption{Připojení sensorů hladiny k \acs{mcu}.}
         \label{fig:wl-sensor-pripojeni}
     \end{figure}

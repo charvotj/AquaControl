@@ -1,6 +1,6 @@
 \section{Senzor teploty}
 \label{sec:perif-sensor-teploty}
-    Cílem tohoto modulu je kontinuálně měřit teplotu vody a naměřená data poskytovat řidicí jednotce skrze sběrnici CAN. Při volbě konkrétního teplotního čidla je potřeba vzít v potaz několik faktorů:
+    Cílem tohoto modulu je kontinuálně měřit teplotu vody a naměřená data poskytovat řidicí jednotce skrze sběrnici \acs{can}. Při volbě konkrétního teplotního čidla je potřeba vzít v potaz několik faktorů:
     \begin{itemize}
         \item Přesnost a rozsah
         \item Časová stálost
@@ -39,11 +39,11 @@
                 \node[left] at (pin2) {DATA};
                 \node[left] at (pin3) {GND};
                 
-                % Draw the MCU
+                % Draw the \acs{mcu}
                 \draw (7,0) node[rectangle, draw, minimum width=3cm, minimum height=5cm] (mcu) {};
                 \node[anchor=north] at (mcu.south) {PIC18F26};
                 
-                % Draw the pins on the MCU
+                % Draw the pins on the \acs{mcu}
                 \draw (mcu.north west) ++(0,-0.5) coordinate (mcupin1);
                 \draw (mcu.north west) ++(0,-3.0) coordinate (mcupin2);
                 \draw (mcu.north west) ++(0,-4) coordinate (mcupin3);
@@ -51,7 +51,7 @@
                 \node[right] at (mcupin2) {RC7};
                 \node[right] at (mcupin3) {GND};
                 
-                % Connect DS18B20 to MCU
+                % Connect DS18B20 to \acs{mcu}
                 \draw (pin1) -- (mcupin1);
                 \draw (pin2) -- (mcupin2);
                 \draw (pin3) -- (mcupin3);
@@ -60,6 +60,6 @@
                 \draw (mcupin1) ++(-1,0) to[R, l_=4.7k, *-*] ++(0,-2.5);
             
             \end{circuitikz}
-            \caption{Připojení čidla DS18B20 k MCU.}
+            \caption{Připojení čidla DS18B20 k \acs{mcu}.}
             \label{fig:temp-sensor-pripojeni}
         \end{figure}

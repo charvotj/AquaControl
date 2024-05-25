@@ -30,7 +30,7 @@
             \node[module, below=of freertos] (tasks) {Tasks};
             \node[module=1cm, below right=9mm and -7mm of tasks] (task1) {Relé};
             \node[module=1cm, below left= 9mm and -8mm of tasks] (task2) {WiFi};
-            \node[module=1cm, below right= 3mm and 4mm of tasks] (task3) {CAN};
+            \node[module=1cm, below right= 3mm and 4mm of tasks] (task3) {\acs{can}};
             \node[module=1cm, below left= 3mm and 4mm of tasks] (task4) {Status};
 
             \node[fit=(task1) (task2) (task3) (task4) (freertos), draw, inner sep=2mm,label={[yshift=2mm, font=\sffamily]Řídicí jednotka}] (fitridici) {};
@@ -51,7 +51,7 @@
         
             % perif
             \node[module, right=1.5cm of {task3-|fitridici.east}] (isr) {ISR};
-            \node[module, right=3mm of isr.north east, anchor=north west] (can) {Obsluha\\CAN příkazů};
+            \node[module, right=3mm of isr.north east, anchor=north west] (can) {Obsluha\\\acs{can} příkazů};
             \node[module, above= 7mm of can.north east, anchor=south east] 
                 (programloop) {Smyčka programu};
             \node[module, above=5mm of programloop] (dataprocess) {Zpracování dat};
@@ -72,15 +72,15 @@
         \label{fig:sw-blokove-schema}
     \end{figure}
 
-    Jelikož jsou řídicí jednotka i periferie programovány ve stejném jazyce (C/C++), lze mezi nimi část kódu sdílet. Tímto způsobem lze částečně předejít chybám v komunikaci modulů mezi sebou. Společná část kódu obsahuje definice datových typů a konstant používaných při komunikaci po sběrnici CAN.  
+    Jelikož jsou řídicí jednotka i periferie programovány ve stejném jazyce (C/C++), lze mezi nimi část kódu sdílet. Tímto způsobem lze částečně předejít chybám v komunikaci modulů mezi sebou. Společná část kódu obsahuje definice datových typů a konstant používaných při komunikaci po sběrnici \acs{can}.  
 
-\section{Popis CAN komunikace}
-    Protokol CAN je poměrně rozsáhlý a velká část organizace komunikace je řešena přímo hardwarovou periferií mikrokontroléru. Pro úspěšnou a efektivní komunikaci bylo potřeba nastavit oba typy mikrokontrolérů stejně a stanovit společný standart komunikace. Systém popsaný v této práci pracuje s frekvencí \qty{125}{kHz} a používá standartní strukturu rámců s identifikátorem zprávy dlouhým 11 bitů (standart CAN 2.0B umožňuje také délku 29 bitů). Sběrnice CAN má implementovaný princip arbitrace, pokud začne komunikovat více zařízení současně, odešle se zpráva mající identifikátor s nejvyšší prioritou. Logická nula se jeví na sběrnici jako dominantní, jednička naopak jako recesivní. Pokud zařízení odesílá recesivní signál a zároveň čte ze sběrnice signál dominantní, znamená to pro něj ztrátu arbitace a přestává vysílat, jelikož na sběrnici je v danou chvíli vysílaná zpráva s vyšší prioritou. Po skončení vysílání pak přerušené zařízení pokus opakuje.
+\section{Popis \acs{can} komunikace}
+    Protokol \acs{can} je poměrně rozsáhlý a velká část organizace komunikace je řešena přímo hardwarovou periferií mikrokontroléru. Pro úspěšnou a efektivní komunikaci bylo potřeba nastavit oba typy mikrokontrolérů stejně a stanovit společný standart komunikace. Systém popsaný v této práci pracuje s frekvencí \qty{125}{kHz} a používá standartní strukturu rámců s identifikátorem zprávy dlouhým 11 bitů (standart \acs{can} 2.0B umožňuje také délku 29 bitů). Sběrnice \acs{can} má implementovaný princip arbitrace, pokud začne komunikovat více zařízení současně, odešle se zpráva mající identifikátor s nejvyšší prioritou. Logická nula se jeví na sběrnici jako dominantní, jednička naopak jako recesivní. Pokud zařízení odesílá recesivní signál a zároveň čte ze sběrnice signál dominantní, znamená to pro něj ztrátu arbitace a přestává vysílat, jelikož na sběrnici je v danou chvíli vysílaná zpráva s vyšší prioritou. Po skončení vysílání pak přerušené zařízení pokus opakuje.
     
         \begin{figure}[h!]
             \centering
             \includegraphics[width=0.8\textwidth]{obrazky/can-frame.png}
-            \caption{Struktura datového rámce sběrnice CAN. Převzato z~\cite{esp32-datasheet}}
+            \caption{Struktura datového rámce sběrnice \acs{can}. Převzato z~\cite{esp32-datasheet}}
             \label{fig:obrazky/can-frame.png   }
         \end{figure}
         
@@ -104,7 +104,7 @@
         Aby byl kód tzv. thread-safe, tedy bezpečný pro přístup z více vláken, je potřeba ošetřit případy, kdy více tasků pracuje se stejnými daty nebo přistupuje ke stejné periferii mikrokontroléru. K tomuto účelu FreeRTOS nabízí synchronizační objekty jako jsou mutexy, semafory případně fronty. 
 
     \subsection{Indikace stavu zařízení}
-        Šasi řídicí jednotky je vybaveno adresovatelným barevným LED páskem sestávajím ze čtyř diod jejichž úkolem je signalizovat uživateli stav zařízení. Jednotlivé stavy spolu s popisem diod jsou zobrazeny na obr.~\ref{fig:stavove-led-mainboard}. Každý task, který je součástí procesu diagnostiky má svou vlastní globální proměnnou do které ukládá svůj stav. Dvakrát za vteřinu se pak spustí jednoduchá diagnostická funkce (běží v rámci vlastního tasku), která jednotlivé stavové proměnné přečte, vyhodnotí celkový stav zařízení a aktualizuje barvu stavových LED. 
+        Šasi řídicí jednotky je vybaveno adresovatelným barevným \acs{led} páskem sestávajím ze čtyř diod jejichž úkolem je signalizovat uživateli stav zařízení. Jednotlivé stavy spolu s popisem diod jsou zobrazeny na obr.~\ref{fig:stavove-led-mainboard}. Každý task, který je součástí procesu diagnostiky má svou vlastní globální proměnnou do které ukládá svůj stav. Dvakrát za vteřinu se pak spustí jednoduchá diagnostická funkce (běží v rámci vlastního tasku), která jednotlivé stavové proměnné přečte, vyhodnotí celkový stav zařízení a aktualizuje barvu stavových \acs{led}. 
         \begin{figure}[h!]
             \centering
             \begin{tikzpicture}
@@ -145,7 +145,7 @@
                 \filldraw[fill=red,draw=black,thin]     (3*1.5, -9.5*0.8) circle (0.3) node[align=center,above=0.35] {Chyba};
             \end{tikzpicture}
             
-            \caption{Stavové LED řídicí jednotky.}
+            \caption{Stavové \acs{led} řídicí jednotky.}
             \label{fig:stavove-led-mainboard}
         \end{figure}
 
@@ -155,7 +155,7 @@
 
 \section{Firmware periferií}
 \section{Webové rozhraní}
-    Aby bylo možné systém konfigurovat a monitorovat bylo zapotřebí navrhnout a vytvořit webové rozhraní. Důležitým krokem v rozhodování byla volba, zda bude MCU řídicí jednotky sloužit přímo jako webový server nebo pouze jako klient. První scénář klade podstatně vyšší nároky na zatížení a paměť MCU, výhodou je ale velmi jednoduchý systém, který funguje samostetně bez nutnosti externího serveru případně také bez připojení k internetu (ESP32 může sloužit přímo jako přístupový bod). Výhodou druhé varianty je větší flexibilita, externí server má nesrovnatelně vyšší výkon a kapacitu úložiště a umožní tak tvorbu mnohem komplexnější webové stránky, která bude (v případě připojení serveru do internetu) dostupná odkudkoliv. Server zároveň může ukládat měřená data a ta tedy budou dostupná i v případě, že samotné zařízení je mimo provoz nebo není připojeno k síti.
+    Aby bylo možné systém konfigurovat a monitorovat bylo zapotřebí navrhnout a vytvořit webové rozhraní. Důležitým krokem v rozhodování byla volba, zda bude \acs{mcu} řídicí jednotky sloužit přímo jako webový server nebo pouze jako klient. První scénář klade podstatně vyšší nároky na zatížení a paměť \acs{mcu}, výhodou je ale velmi jednoduchý systém, který funguje samostetně bez nutnosti externího serveru případně také bez připojení k internetu (ESP32 může sloužit přímo jako přístupový bod). Výhodou druhé varianty je větší flexibilita, externí server má nesrovnatelně vyšší výkon a kapacitu úložiště a umožní tak tvorbu mnohem komplexnější webové stránky, která bude (v případě připojení serveru do internetu) dostupná odkudkoliv. Server zároveň může ukládat měřená data a ta tedy budou dostupná i v případě, že samotné zařízení je mimo provoz nebo není připojeno k síti.
 
     V rámci realizace této práce byla zvolena varianta externího serveru. Jádro vytvořené webové aplikace tvoří program v jazyce PHP, který zpracovává jak požadavky uživatele, tak i samotného zařízení. Na pozadí dále běží databázový server s otevřeným systémem MySQL sloužící k uchování provozních dat. V databázi jsou uloženy údaje o uživatelích, systémech akvárií (tedy řídicí jednotka a k ní připojené periferie) a jejich konfigurace a data získaná ze senzorů. Struktura tabulek databáze je zobrazena na obr.~\ref{TODO}. V záznamu odpovídajícímu danému systému akvária je uložen číselný údaj o aktuální verzi konfigurace. Pokud uživatel konfiguraci modifikuje, toto číslo se inkrementuje na což následně zareaguje zařízení a vyžádá si ze serveru novou verzi konfigurace. 
 
