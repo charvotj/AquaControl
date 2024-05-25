@@ -31,8 +31,8 @@ esp_err_t status_leds_init(void)
         return status;
     // TODO refactor status and erro check
 
-    status = led_strip_new_rmt_device(&strip_config, &rmt_config, &led_strip);
-    // status = led_strip_new_spi_device(&strip_config, &spi_config, &led_strip);
+    // status = led_strip_new_rmt_device(&strip_config, &rmt_config, &led_strip);
+    status = led_strip_new_spi_device(&strip_config, &spi_config, &led_strip);
     if(ESP_OK != status)
         return status;
 

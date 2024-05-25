@@ -11,9 +11,78 @@
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "esp_err.h"
-
+#include "cJSON.h"
+#include "nvs_flash.h"
+#include "nvs.h"
 
 #include "pins.h"
 #include "status_control.h"
+#include "wifi_driver.h"
+#include "relays_driver.h"
+
+#define NVS_NAMESPACE_MODULE_CONFIG "modulecfg"
+
+
+typedef struct 
+{
+    bool    manual;
+    uint8_t timer_on_hours;
+    uint8_t timer_on_minutes;
+    uint8_t timer_off_hours;
+    uint8_t timer_off_minutes;
+    bool    manual_state;
+} config_relay_t;
+
+typedef struct
+{
+    bool active;
+    float max_value;
+    float min_value;
+} config_alarm_t;
+
+// modules config
+//--------------------
+// NODE_TYPE_LED_BOARD
+typedef struct
+{
+    uint8_t start_time_hours;
+    uint8_t start_time_minutes;
+    uint8_t end_time_hours;
+    uint8_t end_time_minutes;
+    uint8_t fall_time; // duration in minutes
+    uint8_t rise_time; // duration in minutes
+    uint8_t intensity;
+} config_ledstrip_t;
+
+typedef struct
+{
+    config_ledstrip_t ledstrip_0;
+    config_ledstrip_t ledstrip_1;
+} config_module_led_board_t;
+
+// NODE_TYPE_TEMP_SENSOR
+typedef struct
+{
+    config_alarm_t alarm_cfg;
+} config_module_temp_sens_t;
+
+// NODE_TYPE_WATER_LEVEL_SENSOR
+typedef struct
+{
+    config_alarm_t alarm_cfg;
+} config_module_wl_sens_t;
+
+// NODE_TYPE_PH_SENSOR
+typedef struct
+{
+    config_alarm_t alarm_cfg;
+} config_module_ph_sens_t;
+
+
+esp_err_t config_update_from_web();
+esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, void* module_cfg);
+
+
+
 
 #endif /* CONFIG_MANAGER_H*/

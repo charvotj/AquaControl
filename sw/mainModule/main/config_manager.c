@@ -1,6 +1,388 @@
 #include "config_manager.h"
 
-esp_err_t config_get_and_proccess()
+static const char *TAG = "mainBoard - config_manager.c";
+static uint64_t CONFIG_VERSION_current = 0u;
+
+
+static esp_err_t parse_time_hhmm(const char* time_str, uint8_t* hours, uint8_t* minutes) 
 {
-    
+    int temp_hours, temp_minutes;
+    // Docs: On success, the function returns the number of variables filled. In the case of an input failure before any data could be successfully read, EOF is returned.
+    if(2 != sscanf(time_str, "%d:%d", &temp_hours, &temp_minutes))
+        return ESP_FAIL;
+
+    // Ensure values are within valid range for hours and minutes
+    if (temp_hours >= 0 && temp_hours < 24 && temp_minutes >= 0 && temp_minutes < 60) {
+        *hours = (uint8_t)temp_hours;
+        *minutes = (uint8_t)temp_minutes;
+        return ESP_OK;
+    }
+    return ESP_FAIL;
 }
+
+static esp_err_t parse_relays_cfg(cJSON* relaysConfig, config_relay_t* rel_cfg_arr)
+{
+    for (uint8_t i = 0; i < RELAYS_NUM; i++) 
+    {
+        cJSON* relay = cJSON_GetArrayItem(relaysConfig, i);
+        if(NULL == relay) goto jsonError; // prevent memory leak
+        cJSON* manual = cJSON_GetObjectItem(relay, "manual");
+        cJSON* timerOn = cJSON_GetObjectItem(relay, "timerOn");
+        cJSON* timerOff = cJSON_GetObjectItem(relay, "timerOff");
+        cJSON* manualState = cJSON_GetObjectItem(relay, "manualState");
+        if(NULL == manual || NULL == timerOn || NULL == timerOff || NULL == manualState) goto jsonError; // prevent memory leak
+        rel_cfg_arr[i].manual               = (bool)manualState->valueint;
+        rel_cfg_arr[i].manual_state         = (bool)manual->valueint;
+        if(ESP_OK != parse_time_hhmm(timerOn->valuestring,
+            &(rel_cfg_arr[i].timer_on_hours),
+            &(rel_cfg_arr[i].timer_on_minutes))) goto jsonError;
+        if(ESP_OK != parse_time_hhmm(timerOff->valuestring,
+            &(rel_cfg_arr[i].timer_off_hours),
+            &(rel_cfg_arr[i].timer_off_minutes))) goto jsonError;
+        
+        // printf("Relay %d - Manual: %d, TimerOn: %s, TimerOff: %s, ManualState: %d\n", 
+            // i, manual->valueint, timerOn->valuestring, timerOff->valuestring, manualState->valueint);
+    }
+    return ESP_OK;
+    // error labels:
+jsonError:
+    return ESP_FAIL;
+}
+
+static esp_err_t parse_alarm_cfg(cJSON* alarmConfig, config_alarm_t* alarm_cfg)
+{
+    cJSON* active   = cJSON_GetObjectItem(alarmConfig, "active");
+    cJSON* maxValue = cJSON_GetObjectItem(alarmConfig, "maxValue");
+    cJSON* minValue = cJSON_GetObjectItem(alarmConfig, "minValue");
+    if(NULL == active || NULL == maxValue || NULL == minValue) goto jsonError; // prevent memory leak
+
+    alarm_cfg->active = (bool)active->valueint;
+    alarm_cfg->max_value = (float)maxValue->valuedouble;
+    alarm_cfg->min_value = (float)minValue->valuedouble;
+
+    //  printf("Alarm - Active: %d, MaxValue: %f, MinValue: %f\n", 
+    //            active->valueint , maxValue->valuedouble, minValue->valuedouble);
+    return ESP_OK;
+    // error labels:
+jsonError:
+    return ESP_FAIL;
+}
+
+static esp_err_t parse_module_cfg_led_board(cJSON* moduleConfig, config_module_led_board_t* module_cfg)
+{
+    cJSON* ledStrips = cJSON_GetObjectItem(moduleConfig, "ledStrips");
+    if(NULL == ledStrips) goto jsonError; // prevent memory leak
+    if(2 != cJSON_GetArraySize(ledStrips)) goto jsonError; // there should be two led strips
+    for (uint8_t i = 0; i < 2; i++) {
+        cJSON* ledStrip = cJSON_GetArrayItem(ledStrips, i);
+        if(NULL == ledStrips) goto jsonError; // prevent memory leak
+        cJSON* startTime = cJSON_GetObjectItem(ledStrip, "startTime");
+        cJSON* endTime = cJSON_GetObjectItem(ledStrip, "endTime");
+        cJSON* riseTime = cJSON_GetObjectItem(ledStrip, "riseTime");
+        cJSON* fallTime = cJSON_GetObjectItem(ledStrip, "fallTime");
+        cJSON* intensity = cJSON_GetObjectItem(ledStrip, "intensity");
+        if(NULL == endTime || NULL == fallTime || NULL == riseTime || NULL == intensity || NULL == startTime) goto jsonError; // prevent memory leak
+        config_ledstrip_t* curr_led_strip;
+        if(0 == i)
+            curr_led_strip = &(module_cfg->ledstrip_0);
+        else
+            curr_led_strip = &(module_cfg->ledstrip_1);
+        
+        if(ESP_OK != parse_time_hhmm(startTime->valuestring,
+            &(curr_led_strip->start_time_hours),
+            &(curr_led_strip->start_time_minutes))) goto jsonError;
+        if(ESP_OK != parse_time_hhmm(endTime->valuestring,
+            &(curr_led_strip->end_time_hours),
+            &(curr_led_strip->end_time_minutes))) goto jsonError;
+        curr_led_strip->rise_time = riseTime->valueint;
+        curr_led_strip->fall_time = fallTime->valueint;
+        curr_led_strip->intensity = intensity->valueint;
+        // printf("LedStrip %d - EndTime: %s, FallTime: %d, RiseTime: %d, Intensity: %d, StartTime: %s\n", 
+            // j, endTime->valuestring, fallTime->valueint, riseTime->valueint, intensity->valueint, startTime->valuestring);
+    }
+    return ESP_OK;
+    // error labels:
+jsonError:
+    return ESP_FAIL;
+}
+
+static esp_err_t parse_module_cfg_temp_sens(cJSON* moduleConfig, config_module_temp_sens_t* module_cfg)
+{
+    cJSON* alarm = cJSON_GetObjectItem(moduleConfig, "alarm");
+    if(NULL == alarm) goto jsonError; // prevent memory leak
+    
+    return parse_alarm_cfg(alarm,&(module_cfg->alarm_cfg));
+    // error labels:
+jsonError:
+    return ESP_FAIL;
+}
+
+static esp_err_t parse_module_cfg_wl_sens(cJSON* moduleConfig, config_module_wl_sens_t* module_cfg)
+{
+    cJSON* alarm = cJSON_GetObjectItem(moduleConfig, "alarm");
+    if(NULL == alarm) goto jsonError; // prevent memory leak
+    
+    return parse_alarm_cfg(alarm,&(module_cfg->alarm_cfg));
+    // error labels:
+jsonError:
+    return ESP_FAIL;
+}
+
+static esp_err_t parse_module_cfg_ph_sens(cJSON* moduleConfig, config_module_ph_sens_t* module_cfg)
+{
+    cJSON* alarm = cJSON_GetObjectItem(moduleConfig, "alarm");
+    if(NULL == alarm) goto jsonError; // prevent memory leak
+    
+    return parse_alarm_cfg(alarm,&(module_cfg->alarm_cfg));
+    // error labels:
+jsonError:
+    return ESP_FAIL;
+}
+
+static esp_err_t config_module_save_to_nvm(node_sn_t node_sn, node_type_t node_type, void* module_cfg)
+{
+    nvs_handle_t my_handle;
+    esp_err_t ret;
+
+   // convert sn to nvs key
+    char nvs_key[15] = {0};
+    sprintf(nvs_key,"%08lX",node_sn);
+    printf("NVS set, sn: %lu key: %s\n",node_sn, nvs_key);
+
+    size_t nvs_size = 0;
+    switch (node_type)
+    {
+        case NODE_TYPE_LED_BOARD:
+            nvs_size = sizeof(config_module_led_board_t);
+            break;
+
+        case NODE_TYPE_TEMP_SENSOR:
+            nvs_size = sizeof(config_module_temp_sens_t);
+            break;
+
+        case NODE_TYPE_WATER_LEVEL_SENSOR:
+            nvs_size = sizeof(config_module_wl_sens_t);
+            break;
+
+        case NODE_TYPE_PH_SENSOR:
+            nvs_size = sizeof(config_module_ph_sens_t);
+            break;
+    
+        default:
+            ESP_LOGE(TAG,"Cfg of module with this type could not be saved");
+            return ESP_FAIL;
+            break;
+    }
+
+    ret = nvs_open(NVS_NAMESPACE_MODULE_CONFIG, NVS_READWRITE, &my_handle);
+    if(ESP_OK != ret) return ret;
+
+    ret = nvs_set_blob(my_handle,nvs_key,module_cfg,nvs_size);
+    if (ret != ESP_OK) return ret;
+
+    nvs_close(my_handle);
+    
+    return ESP_OK;
+}
+
+esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, void* module_cfg)
+{
+    nvs_handle_t my_handle;
+    esp_err_t ret;
+
+    // convert sn to nvs key
+    char nvs_key[15] = {0};
+    sprintf(nvs_key,"%08lX",node_sn);
+    printf("NVS get, sn: %lu key: %s\n",node_sn, nvs_key);
+
+    size_t nvs_size = 0;
+    switch (node_type)
+    {
+        case NODE_TYPE_LED_BOARD:
+            nvs_size = sizeof(config_module_led_board_t);
+            break;
+
+        case NODE_TYPE_TEMP_SENSOR:
+            nvs_size = sizeof(config_module_temp_sens_t);
+            break;
+
+        case NODE_TYPE_WATER_LEVEL_SENSOR:
+            nvs_size = sizeof(config_module_wl_sens_t);
+            break;
+
+        case NODE_TYPE_PH_SENSOR:
+            nvs_size = sizeof(config_module_ph_sens_t);
+            break;
+    
+        default:
+            ESP_LOGE(TAG,"Cfg of module with this type could not be saved\n");
+            return ESP_FAIL;
+            break;
+    }
+
+    ret = nvs_open(NVS_NAMESPACE_MODULE_CONFIG, NVS_READWRITE, &my_handle);
+    if(ESP_OK != ret) return ret;
+
+    size_t current_nvs_size = 0;
+    // get only size
+    ret = nvs_get_blob(my_handle,nvs_key,NULL,&current_nvs_size);
+    // check if the size matches
+    if(current_nvs_size != 0 && current_nvs_size != nvs_size)
+    {
+        ESP_LOGE(TAG,"Size in NVS is different then expected.\n");
+        return ESP_FAIL;
+    }
+    ret = nvs_get_blob(my_handle,nvs_key,module_cfg,&current_nvs_size);
+    if (ret != ESP_OK) return ret;
+
+    nvs_close(my_handle);
+    
+    return ESP_OK;
+}
+
+esp_err_t config_update_from_web()
+{
+    char err_message[50] = {0};
+    // get config JSON from web 
+    cJSON* root = NULL;
+    if(ESP_OK != wifi_driver_get_system_config(&root))
+    {
+        sprintf(err_message, "Error getting JSON config from web.\n");
+        goto configError;
+    }
+    if(NULL == root) goto jsonError; // prevent memory leak
+
+    // Extract mainUnitSN
+    cJSON* mainUnitSN = cJSON_GetObjectItem(root, "mainUnitSN");
+    if(NULL == mainUnitSN) goto jsonError; // prevent memory leak
+    if(SERIAL_NUMBER != mainUnitSN->valueint)
+    {
+        sprintf(err_message, "Config has wrong mainUnitSN.\n");
+        goto configError;
+    }
+
+    // Extract configVersion
+    cJSON* configVersion = cJSON_GetObjectItem(root, "configVersion");
+    if(NULL == configVersion) goto jsonError; // prevent memory leak
+    if(configVersion->valueint < CONFIG_VERSION_current)
+    {
+        sprintf(err_message, "Config has lower ver. num. then current one.\n");
+        goto configError;
+    }
+
+    // Extract relaysConfig array
+    cJSON* relaysConfig = cJSON_GetObjectItem(root, "relaysConfig");
+    if(NULL == relaysConfig) goto jsonError; // prevent memory leak
+    if(RELAYS_NUM != cJSON_GetArraySize(relaysConfig))
+    {
+        sprintf(err_message, "Wrong num. of relays in config.\n");
+        goto configError;
+    }
+    // Save values to custom struct
+    config_relay_t relays_cfg[RELAYS_NUM];
+    if(ESP_OK != parse_relays_cfg(relaysConfig, &relays_cfg[0]))
+    {
+        sprintf(err_message, "Failed to parse relays cfg.\n");
+        goto configError;
+    }
+    
+
+    // Extract modulesConfig array
+    cJSON* modulesConfig = cJSON_GetObjectItem(root, "modulesConfig");
+    if(NULL == modulesConfig) goto jsonError; // prevent memory leak
+    uint8_t modules_count = cJSON_GetArraySize(modulesConfig);
+
+    for (uint8_t i = 0; i < modules_count; i++) {
+        cJSON* moduleConfig = cJSON_GetArrayItem(modulesConfig, i);
+        if(NULL == moduleConfig) goto jsonError; // prevent memory leak
+        // first get common parameters
+        cJSON* SN = cJSON_GetObjectItem(moduleConfig, "SN");
+        cJSON* nodeType = cJSON_GetObjectItem(moduleConfig, "nodeType");
+        if(NULL == SN || NULL == nodeType) goto jsonError; // prevent memory leak
+        node_sn_t module_sn = SN->valueint;
+        node_type_t module_node_type = nodeType->valueint;
+
+        // printf("Module %d - SN: %d, NodeType: %d\n", i, SN->valueint, nodeType->valueint);
+
+        // get device specific config
+        switch (module_node_type)
+        {
+            case NODE_TYPE_MASTER:
+            case NODE_TYPE_UNKNOWN:
+                ESP_LOGE(TAG,"Module in cfg from web has suspitious node type.");
+                break;
+
+            case NODE_TYPE_LED_BOARD:
+                config_module_led_board_t module_led_cfg;
+                if(ESP_OK != parse_module_cfg_led_board(moduleConfig, &module_led_cfg))
+                {
+                    sprintf(err_message, "Failed to parse module cfg, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                if(ESP_OK != config_module_save_to_nvm(module_sn,module_node_type,&module_led_cfg))
+                {
+                    sprintf(err_message, "Failed to save cfg into nvm, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                break;
+
+            case NODE_TYPE_TEMP_SENSOR:
+                config_module_temp_sens_t module_temp_cfg;
+                if(ESP_OK != parse_module_cfg_temp_sens(moduleConfig, &module_temp_cfg))
+                {
+                    sprintf(err_message, "Failed to parse module cfg, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                if(ESP_OK != config_module_save_to_nvm(module_sn,module_node_type,&module_temp_cfg))
+                {
+                    sprintf(err_message, "Failed to save cfg into nvm, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                break;
+
+            case NODE_TYPE_WATER_LEVEL_SENSOR:
+                config_module_wl_sens_t module_wl_cfg;
+                if(ESP_OK != parse_module_cfg_wl_sens(moduleConfig, &module_wl_cfg))
+                {
+                    sprintf(err_message, "Failed to parse module cfg, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                if(ESP_OK != config_module_save_to_nvm(module_sn,module_node_type,&module_wl_cfg))
+                {
+                    sprintf(err_message, "Failed to save cfg into nvm, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                break;
+
+            case NODE_TYPE_PH_SENSOR:
+                config_module_ph_sens_t module_ph_cfg;
+                if(ESP_OK != parse_module_cfg_ph_sens(moduleConfig, &module_ph_cfg))
+                {
+                    sprintf(err_message, "Failed to parse module cfg, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                if(ESP_OK != config_module_save_to_nvm(module_sn,module_node_type,&module_ph_cfg))
+                {
+                    sprintf(err_message, "Failed to save cfg into nvm, type %u.\n",module_node_type);
+                    goto configError;
+                }
+                break;
+
+        
+        default:
+            break;
+        }
+    }
+    cJSON_Delete(root);
+    return ESP_OK;
+    // error labels:
+jsonError:
+    sprintf(err_message, "Error parsing JSON config from web.\n");
+configError:
+    ESP_LOGE(TAG,"%s",err_message);
+    cJSON_Delete(root);
+    return ESP_FAIL;
+}
+
+
+

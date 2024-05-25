@@ -14,6 +14,7 @@ SemaphoreHandle_t wifi_routine_sem;
 
 static char http_req_buffer[MAX_HTTP_REQ_BUFFER] = {'\0'};
 static char http_res_buffer[MAX_HTTP_RECV_BUFFER] = {0};
+static uint16_t http_res_buffer_len = 0u;
 
 
 
@@ -65,10 +66,10 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
             ESP_LOGI(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
             break;
         case HTTP_EVENT_ON_DATA:
-            if (!esp_http_client_is_chunked_response(evt->client)) {
-                ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-                ESP_LOGI(TAG, "Response: %.*s", evt->data_len, (char*)evt->data);
-            }
+            // if (!esp_http_client_is_chunked_response(evt->client)) {
+            //     ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+            //     ESP_LOGI(TAG, "Response: %.*s", evt->data_len, (char*)evt->data);
+            // }
             break;
         case HTTP_EVENT_ON_FINISH:
             ESP_LOGI(TAG, "HTTP_EVENT_ON_FINISH");
@@ -85,9 +86,20 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         case HTTP_EVENT_ON_DATA:
             if (!esp_http_client_is_chunked_response(evt->client)) {
                 ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-                memcpy(&http_res_buffer[0],(char*)evt->data,evt->data_len);
-                xSemaphoreGive(http_res_saved_mutex);
+                // ESP_LOGI(TAG, "Response: %.*s", evt->data_len, (char*)evt->data);
+                // check if buffer has enough space
+                if(http_res_buffer_len + evt->data_len < MAX_HTTP_RECV_BUFFER)
+                {
+                    memcpy(&http_res_buffer[http_res_buffer_len],(char*)evt->data,evt->data_len);
+                    http_res_buffer_len += evt->data_len;
+                }
             }
+            break;
+        case HTTP_EVENT_ON_FINISH:
+            ESP_LOGI(TAG, "HTTP_EVENT_ON_FINISH");
+            http_res_buffer[http_res_buffer_len] = '\0'; // terminate string if not terminated
+            http_res_buffer_len = 0u;   // clear counter
+            xSemaphoreGive(http_res_saved_mutex);
             break;
         default:
     }
@@ -206,8 +218,8 @@ esp_err_t wifi_driver_get_system_config(cJSON** configJSON)
     // wait for mutex because of static payload string
     xSemaphoreTake(http_req_mutex, portMAX_DELAY);  
     char url_buffer[256];
-    // const char *base_url = "https://akvaphp.charvot.cz/api/configuration/get?mainUnitSN=";
-    const char *base_url = "https://akvaphp.charvot.cz/api/ping?mainUnitSN=";
+    const char *base_url = "https://akvaphp.charvot.cz/api/configuration/get?mainUnitSN=";
+    // const char *base_url = "https://akvaphp.charvot.cz/api/ping?mainUnitSN=";
     sprintf(url_buffer, "%s%" PRIu32, base_url, SERIAL_NUMBER);
 
     esp_http_client_config_t config = {
@@ -233,7 +245,7 @@ esp_err_t wifi_driver_get_system_config(cJSON** configJSON)
             // wait for event handler to save the response or timeout
             if(xSemaphoreTake(http_res_saved_mutex,2000/portTICK_PERIOD_MS))
             {
-                printf("len %lld: %.*s\n",resp_len,(int)resp_len,&http_res_buffer[0]);
+                // printf("len %lld: %.*s\n",resp_len,(int)resp_len,&http_res_buffer[0]);
                 *configJSON = cJSON_Parse(&http_res_buffer[0]);
             }
             else // timeout

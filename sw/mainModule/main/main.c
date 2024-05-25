@@ -26,6 +26,7 @@
 #include "water_level_sensor_driver.h"
 #include "relays_driver.h"
 #include "wifi_driver.h"
+#include "config_manager.h"
 
 
 #define STATS_TASK_PRIO     3
@@ -222,9 +223,9 @@ void app_main(void)
     //Create stats task
     xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create status task
-    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, 4, NULL, 0);
+    xTaskCreatePinnedToCore(status_update_task, "status update", 4096, NULL, 4, NULL, 1);
     //Create wifi task
-    xTaskCreatePinnedToCore(wifi_task, "wifi", 4096, NULL, STATS_TASK_PRIO, NULL, 1);
+    xTaskCreatePinnedToCore(wifi_task, "wifi", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create OTA task
     xTaskCreatePinnedToCore(fw_OTA_task, "fw_OTA_task", 4096, NULL, STATS_TASK_PRIO, NULL, 0);
     //Create CAN task
@@ -281,6 +282,8 @@ void app_main(void)
     esp_err_t st;
 
 
+    config_module_temp_sens_t temp_cfg;
+    config_module_wl_sens_t wl_cfg;
     while (1)
     {
         vTaskDelay(10000 / portTICK_PERIOD_MS);
@@ -301,18 +304,15 @@ void app_main(void)
        if(WIFIST_ONLINE == STATUS_wifi)
        {
             // wifi_driver_send_sensor_data(2,&nodes_data[0]);
-            cJSON* root = NULL;
-            if(ESP_OK == wifi_driver_get_system_config(&root))
-            {
-                cJSON *configVersion = cJSON_GetObjectItem(root,"lastConfigVersion");
-                printf("Config version from web: %d \n",configVersion->valueint);
-            }
-            else{
-                ESP_LOGE(TAG,"It was bad bro");
-            }
-            cJSON_Delete(root);
-
+            
+            config_update_from_web();
        }
+       temp_cfg.alarm_cfg.max_value = 0.0;
+       if(ESP_OK == config_module_load_from_nvm(temp_node.SN, temp_node.node_type, &temp_cfg) && ESP_OK == config_module_load_from_nvm(wl_node.SN, wl_node.node_type, &wl_cfg))
+        {
+            printf("Temp cfg alarm is: %f and %f\n",temp_cfg.alarm_cfg.min_value,temp_cfg.alarm_cfg.max_value);
+            printf("Wl cfg alarm is: %f and %f\n",wl_cfg.alarm_cfg.min_value,wl_cfg.alarm_cfg.min_value);
+        }
     }
     
 }
