@@ -43,11 +43,19 @@
 
         \begin{figure}[h!]
             \centering
-            \includegraphics[width=0.5\textwidth]{obrazky/topeni/topitko.jpg}
+            \begin{tikzpicture}
+                % Include the image
+                \node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=0.5\textwidth]{obrazky/topeni/topitko.jpg}};
+
+                \node (termostat) at (3.8,6.5) {};
+                \node[align=center] (napis) at (6,6.5) {Nastavení\\teploty};
+                \draw[->] (napis) -- (termostat);
+                
+            \end{tikzpicture}
+
             \caption{SUNSUN topítko 100W s~termostatem. Převzato z~\cite{eshop-rostlinna-akvaria}.}
             \label{fig:obrazky-topeni-topitko-jpg}
         \end{figure}
-        % TODO: zmenšit nápis
         
         Z~principu fungování termostatu vyplývá, že výsledná teplota vody není v~čase konstantní, ale osciluje okolo nastavené hodnoty. Rozsah kolísání teploty je pak závislý na hysterezi termostatu, obecně lze říci, že to může být i několik stupňů. Pro většinu aplikací to není velký problém, ale některé druhy ryb mohou být na změny teploty náchylnější, v~takovém případě je potřeba buďto vybrat topítko takové, kde výrobce rozsah teplot uvádí, anebo zvolit jiný způsob regulace. 
 
@@ -72,7 +80,7 @@
 
         Při tvorbě této kapitoly byly jako zdroj informací použity jednak oficiální materiály výrobců, ty ovšem samozřejmě obsahují vždy pouze pozitivní informace, dále pak různé uživatelské recenze na platformě YouTube popř. diskuzních fórech, nejedná se o~zcela seriózní zdroje a proto je nutné také informace z~této kapitoly brát s~rezervou. 
 
-        % TODO: Tento obr. až v GHL kapitole
+        % TODO: Tento obr. až v GHL kapitole - nebudu, NEBUDU TO DĚLAT !!
         \begin{figure}[h!]
             \centering
             \includegraphics[width=0.9\textwidth]{obrazky/trh/GHL-ProfiLux-Mini.jpg}

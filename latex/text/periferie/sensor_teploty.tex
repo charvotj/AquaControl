@@ -17,36 +17,32 @@
         Z hlediska praxe je další často využívanou možností použití zcela integrovaného sensoru s digitálním výstupem. Pro zpracování je sice potřeba mikrokontrolér, ale tyto sensory bývají od výroby kalibrovány a také jejich zapojení je velmi jednoduché, což je výhodou.
 
     \subsection{Realizace sensoru}
-    % TODO: Připsal bych tady krátce jak to fyzicky celé vypadá a připojuje se.
-        Při porovnání uvedených metod se použití termočlánku jeví jako nevhodné, zejména kvůli náročnosti implementace, která současně navyšuje také cenu. Zbývá tedy rozhodnutí mezi termistoru a digitálním čidlem. Ve voděodolném pouzdře lze zakoupit jak několik variant termistorů, tak i digitální čidlo (zde DS18B20). Nejlevněji vychází termistor typu NTC, ale v porovnání s cenou celého zařízení je rozdíl v ceně zanedbatelný. 
+        Při porovnání uvedených metod se použití termočlánku jeví jako nevhodné, zejména kvůli náročnosti implementace, která současně navyšuje také cenu. Zbývá tedy rozhodnutí mezi termistoru a digitálním čidlem. Ve voděodolném pouzdře lze zakoupit jak několik variant termistorů, tak i digitální čidlo (zde DS18B20). Nejlevněji vychází termistor typu NTC, ale v porovnání s cenou celého zařízení je rozdíl v ceně zanedbatelný.     
         
-        Pro realizaci sensoru bylo zvoleno digitální čidlo DS18B20, které narozdíl od termistoru není potřeba kalibrovat a výrobce garantuje přesnost \(\pm \qty{0.5}{\degreeCelsius}\) na celém teplotním rozsahu od \qty{-55}{\degreeCelsius} do \qty{+125}{\degreeCelsius}. Rozlišení sensoru je až 12 bitů přičemž minimální měřitelná změna teploty odpovídá \qty{0.0625}{\degreeCelsius}. Pro komunikace s čidlem se využívá protokol 1-Wire, kdy datový vodič funguje obousměrně. Pro propojení čidla s mikrokontrolérem tedy stačí využít tři vodiče a jeden pull-up rezistor, viz obr.~\ref{fig:temp-sensor-pripojeni}.
-
-
         \begin{figure}[!ht]
             \centering
             \begin{circuitikz}
                 \ctikzset{resistor = european}
                 % Draw the DS18B20 sensor
-                \draw (0,0) node[rectangle, draw, minimum width=3cm, minimum height=5cm] (ds18b20) {};
+                \draw (0,0) node[rectangle, draw, minimum width=3cm, minimum height=4cm] (ds18b20) {};
                 \node[anchor=north] at (ds18b20.south) {DS18B20};
                 
                 % Draw the pins on the DS18B20
                 \draw (ds18b20.north east) ++(0,-0.5) coordinate (pin1);
-                \draw (ds18b20.north east) ++(0,-3.0) coordinate (pin2);
-                \draw (ds18b20.north east) ++(0,-4) coordinate (pin3);
+                \draw (ds18b20.north east) ++(0,-2.5) coordinate (pin2);
+                \draw (ds18b20.north east) ++(0,-3.5) coordinate (pin3);
                 \node[left] at (pin1) {VDD};
                 \node[left] at (pin2) {DATA};
                 \node[left] at (pin3) {GND};
                 
                 % Draw the \acs{mcu}
-                \draw (7,0) node[rectangle, draw, minimum width=3cm, minimum height=5cm] (mcu) {};
+                \draw (7,0) node[rectangle, draw, minimum width=3cm, minimum height=4cm] (mcu) {};
                 \node[anchor=north] at (mcu.south) {PIC18F26};
                 
                 % Draw the pins on the \acs{mcu}
                 \draw (mcu.north west) ++(0,-0.5) coordinate (mcupin1);
-                \draw (mcu.north west) ++(0,-3.0) coordinate (mcupin2);
-                \draw (mcu.north west) ++(0,-4) coordinate (mcupin3);
+                \draw (mcu.north west) ++(0,-2.5) coordinate (mcupin2);
+                \draw (mcu.north west) ++(0,-3.5) coordinate (mcupin3);
                 \node[right] at (mcupin1) {VDD};
                 \node[right] at (mcupin2) {RC7};
                 \node[right] at (mcupin3) {GND};
@@ -55,11 +51,15 @@
                 \draw (pin1) -- (mcupin1);
                 \draw (pin2) -- (mcupin2);
                 \draw (pin3) -- (mcupin3);
-
+                
                 % Add pull-up resistor
-                \draw (mcupin1) ++(-1,0) to[R, l_=4.7k, *-*] ++(0,-2.5);
-            
+                \draw (mcupin1) ++(-1,0) to[R, l_=4.7k, *-*] ++(0,-2);
+                
             \end{circuitikz}
             \caption{Připojení čidla DS18B20 k \acs{mcu}.}
             \label{fig:temp-sensor-pripojeni}
         \end{figure}
+
+        Pro realizaci sensoru bylo zvoleno digitální čidlo DS18B20, které narozdíl od termistoru není potřeba kalibrovat a výrobce garantuje přesnost \(\pm \qty{0.5}{\degreeCelsius}\) na celém teplotním rozsahu od \qty{-55}{\degreeCelsius} do \qty{+125}{\degreeCelsius}. Rozlišení sensoru je až 12 bitů tedy minimální měřitelná změna teploty odpovídá \qty{0.0625}{\degreeCelsius}. Pro komunikace s čidlem se využívá protokol 1-Wire, kdy datový vodič funguje obousměrně, pro propojení čidla s mikrokontrolérem tedy stačí využít tři vodiče a jeden pull-up rezistor, viz obr.~\ref{fig:temp-sensor-pripojeni}. 
+        
+        Fyzické připojení čidla k obecnému module periferie bylo provedeno za pomocí jedné pinové lišty, ke které jsou připájeny vývody čidla a stejně tak i pull-up rezistor. Výsledná podoba realizovaného senzoru je vidět na obr.~\ref{TODO foto}. V budoucnu bude modul vsazen ještě do vlastní krabičky.

@@ -1,25 +1,57 @@
 \section{Návrh zapojení a tvorba \acs{dps}}
 \label{sec:ridici-jednotka-schema-a-dps}
-    Řídicí jednotka je tvořena jednou speciálně navrženou \acs{dps}, která kromě samotného mikrokontroléru obsahuje také měnič napětí typu buck ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V}. Toto napětí je pak dále používáno pro napájení samotného mikrokontroléru řídicí jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné \acs{dps} je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další kapitoly. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-a-dps-ridici-jednotka}.
+    Řídicí jednotka je tvořena jednou \acs{dps}, která kromě samotného mikrokontroléru obsahuje také měnič napětí typu buck ke snížení napájecího napětí externího zdroje na hodnotu \qty{5.2}{V}. Toto napětí je pak dále používáno pro napájení samotného mikrokontroléru řídicí jednotky a zároveň je vyvedeno na konektor pro připojení periferií. Blokové schéma na úrovni logických bloků v~rámci jedné \acs{dps} je na obr.~\ref{fig:ridici-jednotka-blokove-schema}, jednotlivým částem se blíže věnují další kapitoly. Celé schéma je k~dispozici v~příloze~\ref{priloha:schema-a-dps-ridici-jednotka}.
 
+    % Blokove schema
     \begin{figure}[h!]
         \centering
-        % trim=left bottom right top
-        \includegraphics
-        [
-            width=\textwidth, 
-            page=1, 
-            trim=4.5cm 9cm 3cm 4cm, 
-            clip
-        ]{obrazky/exportovane/main-board-schematic.pdf}
-        \caption{Blokové schéma řídicí jednotky. Vytvořeno v~KiCad 7.0.}
+        \begin{tikzpicture}[
+            module/.style={%
+        draw, rounded corners,
+        minimum width=#1,
+        minimum height=7mm,
+        font=\sffamily,
+        align=center
+        },
+    module/.default=2cm,
+    >=LaTeX]
+        
+            % ridici
+            \node[module] (mcu) {MCU};
+            \node[module, left=of mcu] (ldo) {LDO}; 
+            \node[module, above=of ldo] (buck) {DC/DC měnič};
+            \node[module, right=of mcu] (candriver) {\acs{can} řadič};
+            \node[module, above right=10mm and -5mm of candriver] (konperif) {Konektory periferií};
+            \node[module, above=of buck] (24v) {Externí modul\\Zdroj \qty{24}{V}};
+            \node[module, below=of mcu] (konektory) {Konektory};
+            \node[module=1cm, below right=9mm and -7mm of konektory] (konektor1) {Stavové \acs{led}};
+            \node[module=1cm, below left= 9mm and -8mm of konektory] (konektor2) {Displej};
+            \node[module=1cm, below right= 0mm and 6mm of konektory] (konektor3) {Relé};
+            \node[module=1cm, below left= 0mm and 6mm of konektory] (konektor4) {Rozšíření};
+
+            \node[fit=(konektor1) (konektor2) (konektor3) (konektor4) (buck) (konperif) (mcu), draw, inner sep=2mm] (fitridici) {};
+            % Connections
+            \foreach \i in {1,2,3}
+                \draw[->] (konektory)--(konektor\i);
+            \draw[<->] (konektory)--(konektor4);
+            \draw[<->] (konektory)--(mcu);
+            \draw[->] (buck)--(ldo);
+            \draw[->] (ldo)--(mcu);
+            \draw[<->] (candriver)--(mcu);
+            \draw[->] (buck)--(konperif);
+            \draw[<->] (candriver)--(konperif);
+
+            \draw[->,dashed] (24v) to [out=0,in=115] (konperif);
+            \draw[->,dashed] (24v)--(buck);
+        
+        \end{tikzpicture}
+        
+        \caption{Blokové schéma řídicí jednotky.}
         \label{fig:ridici-jednotka-blokove-schema}
     \end{figure}
-    % TODO: jiná blokovka než z kicadu
 
     \subsection{Zapojení ESP32 modulu}
     \label{sec:ridici-jendotka-esp32-modul}
-    % TODO: Označení součástek ve schématu se změnilo
         Při tvorbě schématu bylo vycházeno z~dokumentace výrobce~\cite{esp32-wroom-32e-datasheet} a také ze schématů různých existujících vývojových desek. K~zajištění správné a spolehlivé funkce modulu je potřeba dodržet několik věcí. Výřez schématu obsahující potřebné doplňující obvody pro ESP32 modul je na obr.~\ref{fig:ridici-jednotka-esp-obvody}.
 
         \begin{figure}[h!]
@@ -36,12 +68,12 @@
             \label{fig:ridici-jednotka-esp-obvody}
         \end{figure}
 
-        Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C1, C3). Ke snížení napětí z~původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U4). %TODO jiný part number asi
+        Na napájecí pin (3V3) je třeba přivést stabilní napětí a opatřit ho blokovacími kondenzátory (C3, C4). Ke snížení napětí z~původních \qty{5,2}{V} na požadovaných \qty{3,3}{V} je použit lineární regulátor TLV76133 (U2).
         
         % TODO: Čas ke stabilizaci bude mnohem větší než 50 us. Nejprve totiž musí naběhnout 3V3, což trvá dle datasheetu TLV76133 trvá cca 500 us. Taky bys správně měl zohlednit i náběh 5V2, což je 3 ms.
-        Dále je potřeba přivést kladné napětí na povolovací pin (EN). Z~dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený čas nutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C2) s~časovou konstantou \(\tau\):
+        Dále je potřeba přivést kladné napětí na povolovací pin (EN). Z~dokumentace vyplývá, že by mělo být přivedeno až po ustálení napájecí linky. Uvedený čas nutný ke stabilizaci je roven \(t_{STBL}=\qty{50}{\micro\second}\)~\cite{esp32-datasheet}. Požadované zpoždění zajistí RC článek (R1, C5) s~časovou konstantou \(\tau\):
         \begin{equation}
-            \tau=R_{1}C_{2}=\qty{10}{\kilo\ohm}\cdot \qty{1}{\micro\farad}=\qty{10}{\milli\second}
+            \tau=R_{1}C_{5}=\qty{10}{\kilo\ohm}\cdot \qty{1}{\micro\farad}=\qty{10}{\milli\second}
         \end{equation} 
         Jak je vidět, byla zvolena dostatečná návrhová rezerva. 
 
@@ -51,8 +83,7 @@
 
     \subsection{Napájecí obvod}
         \label{sec:ridici-jendotka-napajeci-obvod}
-        % \textit{TODO: schéma, výpočet hodnot součástek}
-        Pro napájení celého zařízení je použit externí zdroj stejnosměrného napětí \qty{24}{V} a toto napětí je tak0 rozvedeno všem připojeným periferiím. Pro většinu komponent je ale nutné napětí snížit. K~tomuto účelu byl navržen DC/DC měnič typu buck s~požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v~tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídicí jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s~jakými výkonovými požadavky uživatel k~systému připojí. Navržený měnič tak musí fungovat v~širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s~co nejlepší účinností. 
+        Pro napájení celého zařízení je použit externí zdroj stejnosměrného napětí \qty{24}{V} a toto napětí je také rozvedeno všem připojeným periferiím. Pro většinu komponent je ale nutné napětí snížit. K~tomuto účelu byl navržen DC/DC měnič typu buck s~požadovaným výstupním napětím \qty{5.2}{V}. Existuje celá řada čipů vyvinutých pro tento účel. Aplikace v~tomto zařízení je specifická svými požadavky na výstupní proud, zatímco samotná řídicí jednotka nebude odebírat velký proud, není jasně dané, kolik periferí a s~jakými výkonovými požadavky uživatel k~systému připojí. Navržený měnič tak musí fungovat v~širším rozsahu proudů (řádově od desítek mA po jednotky A) a to s~co nejlepší účinností. 
         
         \begin{figure}[h!]
             \centering
@@ -107,7 +138,7 @@
             \label{fig:ridici-jednotka-dps-popis}
         \end{figure}
 
-        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z hlediska EMC. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
+        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z hlediska \acs{EMC}. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
 
         Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu \acs{dps} tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jednotka-dps-popis} je zobrazen výsledný návrh \acs{dps}, v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
 
@@ -129,10 +160,10 @@
                 \node at (2,1.75) {Výkonové cesty (polygony)};
                 \node at (2,0.5) {Signálové cesty};
 
-                \node[anchor=east] at (0,4.25) {Top};
+                \node[anchor=east] at (0,4.25) {Vrchní strana (Front)};
                 \node[anchor=east] at (0,3)    {1. vnitřní vrstva};
                 \node[anchor=east] at (0,1.75) {2. vnitřní vrstva};
-                \node[anchor=east] at (0,0.5)  {Bottom};
+                \node[anchor=east] at (0,0.5)  {Spodní strana (Bottom)};
 
                 \node[anchor=north] at (4,5.25) {Tl. mědi:};
                 \node[anchor=west] at (4,4.25) {\qty{35}{\micro m}};
@@ -176,7 +207,6 @@
             \caption{Zapojení a ochrana konektorů. Vytvořeno v~KiCad 7.0.}
             \label{fig:ridici-jednotka-konektory}
         \end{figure}
-        % TODO: nove schema dodat
 
         Co se týče napájecích vodičů, každý z nich je ošetřen vratnou pojistkou (ang. polyfuse) dimenzovanou podle předpokládaného maximálního odběru zařízení. Při překročení tohoto proudu, např. z důvodu zkratu v některé z periferií, pojistka sepne a proud v obvodu omezí na minimum. Schéma zapojení konektorů spolu s hodnotami vratných pojistek se nachází na obr.~\ref{fig:ridici-jednotka-konektory}.
 
