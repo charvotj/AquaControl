@@ -21,8 +21,10 @@
 #include "relays_driver.h"
 
 #define NVS_NAMESPACE_MODULE_CONFIG "modulecfg"
+#define NVS_NAMESPACE_SYSTEM_CONFIG "syscfg"
 
 extern SemaphoreHandle_t config_control_sem;
+extern uint64_t CONFIG_VERSION_from_web;
 
 
 typedef struct 
@@ -43,6 +45,16 @@ typedef struct
 } config_alarm_t;
 
 #define DEFAULT_CONFIG_ALARM (config_alarm_t){false,0.0,0.0}
+
+// SYSTEM config
+//--------------------
+// not all the attributes from json
+typedef struct 
+{
+    config_relay_t* relays; 
+} config_system_t;
+
+
 
 // modules config
 //--------------------
@@ -94,9 +106,11 @@ typedef struct
 
 esp_err_t config_manager_init();
 
+bool config_is_obsolete();
+
 esp_err_t config_update_from_web();
 esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, void* module_cfg);
-esp_err_t config_load_nvm_all(can_node_t* can_connected_nodes, uint8_t can_num_address_given);
+esp_err_t config_load_nvm_all(config_system_t* system_config, can_node_t* can_connected_nodes, uint8_t can_num_address_given);
 
 
 

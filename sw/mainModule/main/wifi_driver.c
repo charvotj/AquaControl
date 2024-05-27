@@ -10,7 +10,7 @@ extern const uint8_t server_root_ca_pem_end[] asm("_binary_isrgrootx1_pem_end");
 static int s_retry_num = 0;
 static SemaphoreHandle_t http_req_mutex;
 static SemaphoreHandle_t http_res_saved_mutex;
-SemaphoreHandle_t wifi_routine_sem;
+SemaphoreHandle_t wifi_conn_check_sem;
 
 static char http_req_buffer[MAX_HTTP_REQ_BUFFER] = {'\0'};
 static char http_res_buffer[MAX_HTTP_RECV_BUFFER] = {0};
@@ -107,8 +107,54 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-// hodne temp funkce
+
+static TickType_t wifi_conn_check_last = 0;
+static TickType_t wifi_conn_check_period = CONFIG_DEFAULT_WIFI_CONN_CHECK_PER;
+
+static TickType_t wifi_config_check_last = 0;
+static TickType_t wifi_config_check_period = CONFIG_DEFAULT_WIFI_CONFIG_CHECK_PER;
+
+static TickType_t wifi_ntp_check_last = 0;
+static TickType_t wifi_ntp_check_period = CONFIG_DEFAULT_WIFI_NTP_CHECK_PER;
+
 esp_err_t wifi_driver_routine()
+{
+    // 2000 ms is blocking delay when other tasks could do their stuff
+    if(xSemaphoreTake(wifi_conn_check_sem, pdMS_TO_TICKS(2000)) || xTaskGetTickCount() > (wifi_conn_check_last + wifi_conn_check_period))
+    {
+        wifi_conn_check_last = xTaskGetTickCount();
+        wifi_driver_check_connection();
+    }
+
+    if(WIFIST_ONLINE == STATUS_wifi && xTaskGetTickCount() > (wifi_config_check_last + wifi_config_check_period))
+    {
+        uint64_t temp_ver = 0;
+        if(ESP_OK == wifi_driver_check_config_version(&temp_ver))
+        {
+            wifi_config_check_last = xTaskGetTickCount(); // clear counter only after success
+            CONFIG_VERSION_from_web = temp_ver;
+            ESP_LOGI(TAG,"Config version from web: %llu \n",CONFIG_VERSION_from_web);
+        }
+    }
+
+    if(WIFIST_ONLINE == STATUS_wifi && ( ESP_OK != is_time_set() || xTaskGetTickCount() > (wifi_ntp_check_last + wifi_ntp_check_period)))
+    {
+        wifi_ntp_check_last = xTaskGetTickCount();
+        sync_ntp_time();
+        printf("Is time set? : %d \n",is_time_set());
+        print_time();
+    }
+
+    // change periods
+    if(WIFIST_ONLINE == STATUS_wifi)
+        wifi_conn_check_period = CONFIG_MAX_WIFI_CONN_CHECK_PER;
+    else
+        wifi_conn_check_period = CONFIG_DEFAULT_WIFI_CONN_CHECK_PER;
+    
+    return ESP_OK;
+}
+
+esp_err_t wifi_driver_check_connection()
 {
     // wait for mutex because of static payload string
     xSemaphoreTake(http_req_mutex, portMAX_DELAY); 
@@ -220,7 +266,7 @@ esp_err_t wifi_driver_send_sensor_data(can_node_t* can_connected_nodes, uint8_t 
         esp_http_client_set_header(client, "Content-Type", "application/json");
         uint16_t req_len = 0u;
         _prepare_sensor_data_payload(&http_req_buffer,&req_len,can_connected_nodes,can_num_address_given);
-        printf("len %u: %s\n",req_len,http_req_buffer);
+        // printf("len %u: %s\n",req_len,http_req_buffer);
         esp_http_client_set_post_field(client, &http_req_buffer, req_len);
 
         esp_err_t err = esp_http_client_perform(client);
@@ -230,7 +276,7 @@ esp_err_t wifi_driver_send_sensor_data(can_node_t* can_connected_nodes, uint8_t 
                     esp_http_client_get_content_length(client));
         } else {
             ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
-            xSemaphoreGive(wifi_routine_sem); // force ping request for connection check
+            xSemaphoreGive(wifi_conn_check_sem); // force ping request for connection check
         }
 
         err = esp_http_client_cleanup(client);
@@ -283,7 +329,7 @@ esp_err_t wifi_driver_get_system_config(cJSON** configJSON)
         }
     } else {
         ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
-        xSemaphoreGive(wifi_routine_sem); // force ping request for connection check
+        xSemaphoreGive(wifi_conn_check_sem); // force ping request for connection check
     }
 
     err |= esp_http_client_cleanup(client);
@@ -291,11 +337,72 @@ esp_err_t wifi_driver_get_system_config(cJSON** configJSON)
     return err;
 }
 
+esp_err_t wifi_driver_check_config_version(uint64_t* configVersion)
+{
+    // wait for mutex because of static payload string
+    xSemaphoreTake(http_req_mutex, portMAX_DELAY);  
+    char url_buffer[256];
+    const char *base_url = "https://akvaphp.charvot.cz/api/ping?mainUnitSN=";
+    sprintf(url_buffer, "%s%" PRIu32, base_url, SERIAL_NUMBER);
+
+    esp_http_client_config_t config = {
+        .url = url_buffer,
+        .event_handler = _http_event_handler,
+        .cert_pem = (char *)server_root_ca_pem_start,  // Adding the root CA certificate
+        .user_data = http_res_buffer
+    };
+
+    printf("%s \n",config.url);
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    // clear mutex before calling
+    xSemaphoreTake(http_res_saved_mutex,0);
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        int status_code = esp_http_client_get_status_code(client);
+        int64_t resp_len = esp_http_client_get_content_length(client);  
+        ESP_LOGI(TAG, "HTTPS Status = %d, content_length = %lld",status_code,resp_len);
+
+        if(200 == status_code && resp_len > 0)
+        {
+            // wait for event handler to save the response or timeout
+            if(xSemaphoreTake(http_res_saved_mutex,2000/portTICK_PERIOD_MS))
+            {
+                // printf("len %lld: %.*s\n",resp_len,(int)resp_len,&http_res_buffer[0]);
+                cJSON* response = cJSON_Parse(&http_res_buffer[0]);
+                if(NULL != response)
+                {
+                    cJSON* lastConfigVersion = cJSON_GetObjectItem(response,"lastConfigVersion");
+                    if(NULL != lastConfigVersion)
+                        *configVersion = lastConfigVersion->valueint;
+                    else 
+                        err = ESP_FAIL;
+                }
+                else
+                    err = ESP_FAIL;
+            }
+            else // timeout
+            {
+                err = ESP_FAIL;
+            }
+        }
+        else{
+            err = ESP_FAIL;
+        }
+    } else {
+        ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+        xSemaphoreGive(wifi_conn_check_sem); // force ping request for connection check
+    }
+
+    err |= esp_http_client_cleanup(client);
+    xSemaphoreGive(http_req_mutex);  
+    return err;
+}
 
 // Initialize Wi-Fi
 void wifi_init_sta(void) 
 {
-    wifi_routine_sem = xSemaphoreCreateBinary();
+    wifi_conn_check_sem = xSemaphoreCreateBinary();
     http_req_mutex = xSemaphoreCreateMutex();
     http_res_saved_mutex = xSemaphoreCreateBinary();
 

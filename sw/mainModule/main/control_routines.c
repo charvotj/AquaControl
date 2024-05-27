@@ -2,6 +2,8 @@
 
 static const char *TAG = "mainBoard - control_routines.c";
 
+static config_system_t system_config = {.relays = NULL};
+
 static uint8_t can_num_address_given = 0u;
 static can_node_t can_connected_nodes[CONFIG_MAX_CONNECTED_NODES];
 
@@ -70,7 +72,7 @@ esp_err_t control_prepare_can_modules(TickType_t timeout_for_can)
     if(ESP_OK != can_poll_nodes_type(&can_connected_nodes[0],can_num_address_given))
         ESP_LOGE(TAG,"polling node type failed ...");
 
-    if(ESP_OK != config_load_nvm_all(&can_connected_nodes[0],can_num_address_given))
+    if(ESP_OK != config_load_nvm_all(&system_config, &can_connected_nodes[0],can_num_address_given))
         ESP_LOGE(TAG,"load all config failed ...");
 
     return ESP_OK;
@@ -188,6 +190,41 @@ esp_err_t print_nodes_data()
     return ret;
 }
 
+esp_err_t process_config()
+{
+    if(config_is_obsolete())
+    {
+        if(WIFIST_ONLINE == STATUS_wifi && ESP_OK == config_update_from_web())
+        {
+            ESP_LOGI(TAG,"Config updated form the web, reloading nvm... \n");
+            // reload config
+            if(ESP_OK != config_load_nvm_all(&system_config, &can_connected_nodes[0],can_num_address_given))
+            {
+                ESP_LOGE(TAG,"load config from nvm failed ...");
+            }
+        }
+        else
+        {
+            ESP_LOGE(TAG,"config update from web failed \n");
+        }
+    }
+
+    printf("Processing config, eg: \n");
+    if( can_connected_nodes[1].node_type == 3 && NULL != can_connected_nodes[1].config)
+    {
+        config_module_temp_sens_t* cfg = (config_module_temp_sens_t*)can_connected_nodes[1].config; 
+        printf("Max valeu %f \n",cfg->alarm_cfg.max_value);
+        printf("StartTime hours %u \n",system_config.relays[0].timer_on_hours);
+    }
+    else
+    {
+        ESP_LOGE(TAG, "You fucked up\n");
+    }
+
+
+    return ESP_OK;
+}
+
 
 esp_err_t control_routine()
 {
@@ -210,6 +247,8 @@ esp_err_t control_routine()
     control_routine_last = xTaskGetTickCount();
     
     // - process system config 
+    if(ESP_OK != process_config())
+        ESP_LOGE(TAG,"processing config failed ...");
     // - poll modules status 
     if(ESP_OK != can_poll_nodes_status(&can_connected_nodes[0],can_num_address_given))
         ESP_LOGE(TAG,"polling status failed ...");

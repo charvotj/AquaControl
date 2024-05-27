@@ -1,7 +1,8 @@
 #include "config_manager.h"
 
 static const char *TAG = "mainBoard - config_manager.c";
-static uint64_t CONFIG_VERSION_current = 0u;
+static uint64_t CONFIG_VERSION_from_nvm = 0u;
+uint64_t CONFIG_VERSION_from_web = 0u;
 SemaphoreHandle_t config_control_sem;
 
 esp_err_t config_manager_init()
@@ -11,6 +12,11 @@ esp_err_t config_manager_init()
     return ESP_OK;
 }
 
+bool config_is_obsolete()
+{
+    printf("comparing: %llu from web, %llu from nvm \n",CONFIG_VERSION_from_web,CONFIG_VERSION_from_nvm);
+    return (CONFIG_VERSION_from_web > CONFIG_VERSION_from_nvm);
+}
 
 static esp_err_t parse_time_hhmm(const char* time_str, uint8_t* hours, uint8_t* minutes) 
 {
@@ -48,8 +54,8 @@ static esp_err_t parse_relays_cfg(cJSON* relaysConfig, config_relay_t* rel_cfg_a
             &(rel_cfg_arr[i].timer_off_hours),
             &(rel_cfg_arr[i].timer_off_minutes))) goto jsonError;
         
-        // printf("Relay %d - Manual: %d, TimerOn: %s, TimerOff: %s, ManualState: %d\n", 
-            // i, manual->valueint, timerOn->valuestring, timerOff->valuestring, manualState->valueint);
+        printf("Relay %d - Manual: %d, TimerOn: %s, TimerOff: %s, ManualState: %d\n", 
+            i, manual->valueint, timerOn->valuestring, timerOff->valuestring, manualState->valueint);
     }
     return ESP_OK;
     // error labels:
@@ -147,6 +153,156 @@ jsonError:
     return ESP_FAIL;
 }
 
+static esp_err_t config_update_version_nvm(uint64_t config_version)
+{
+    printf("Updating cfg version in nvm to %llu \n", config_version);
+    nvs_handle_t my_handle;
+    esp_err_t ret;
+
+    if(0 == config_version)
+    {
+        ESP_LOGE(TAG,"Config version 0 would not be saved to nvm");
+        return ESP_FAIL;
+    }
+
+    ret = nvs_open(NVS_NAMESPACE_SYSTEM_CONFIG, NVS_READWRITE, &my_handle);
+    if(ESP_OK != ret) return ret;
+
+    // critical section
+    xSemaphoreTake(config_control_sem, portMAX_DELAY);
+    size_t nvs_size = sizeof(uint64_t);   
+    char* nvs_key = "cfgVersion\0";
+    printf("NVS set, key: %s\n", nvs_key);
+    ret |= nvs_set_blob(my_handle,nvs_key,&config_version,nvs_size);
+
+    if(ESP_OK == ret)
+    {
+        ret |= nvs_commit(my_handle);
+        printf("NVS commit \n");
+    }
+    nvs_close(my_handle);
+    xSemaphoreGive(config_control_sem); // release mutex
+    return ret;
+}
+
+static esp_err_t config_get_version_from_nvm(uint64_t* config_version)
+{
+    nvs_handle_t my_handle;
+    esp_err_t ret;
+
+    if(NULL == config_version)
+    {
+        ESP_LOGE(TAG,"Config version cannot be loaded, null is provided \n");
+        return ESP_FAIL;
+    }
+
+    ret = nvs_open(NVS_NAMESPACE_SYSTEM_CONFIG, NVS_READWRITE, &my_handle);
+    if(ESP_OK != ret) return ret;
+
+    // critical section
+    xSemaphoreTake(config_control_sem, portMAX_DELAY);
+    size_t nvs_size = sizeof(uint64_t);   
+    char* nvs_key = "cfgVersion\0";
+    printf("NVS get, key: %s\n", nvs_key);
+    ret |= nvs_get_blob(my_handle,nvs_key,config_version,&nvs_size);
+
+    nvs_close(my_handle);
+    xSemaphoreGive(config_control_sem); // release mutex
+    return ret;
+}
+
+static esp_err_t config_system_save_to_nvm(config_system_t* system_config)
+{
+    nvs_handle_t my_handle;
+    esp_err_t ret;
+
+    ret = nvs_open(NVS_NAMESPACE_SYSTEM_CONFIG, NVS_READWRITE, &my_handle);
+    if(ESP_OK != ret) return ret;
+
+    // critical section
+    xSemaphoreTake(config_control_sem, portMAX_DELAY);
+    // store relays config
+    if(NULL != system_config && NULL != system_config->relays)
+    {
+        char nvs_key[15] = {0};
+        size_t nvs_size = sizeof(config_relay_t);
+
+        for(uint8_t i=0;i<RELAYS_NUM;i++)
+        {
+            sprintf(nvs_key,"relay%02u",i);
+            printf("NVS set, key: %s\n", nvs_key);
+                printf("rel adr: %lu, timerOn val: %u \n)",(uint32_t)&(system_config->relays[i]),system_config->relays[i].timer_on_hours);
+            ret |= nvs_set_blob(my_handle,nvs_key,&(system_config->relays[i]),nvs_size);
+        }
+        if(ESP_OK == ret)
+        {
+            ret |= nvs_commit(my_handle);
+            printf("NVS commit \n");
+        }
+    }
+    else
+    {
+        ret = ESP_FAIL;
+    }
+    nvs_close(my_handle);
+    xSemaphoreGive(config_control_sem); // release mutex
+
+    return ret;
+}
+
+static esp_err_t config_system_load_from_nvm(config_system_t* system_config)
+{
+    nvs_handle_t my_handle;
+    esp_err_t ret;
+
+    ret = nvs_open(NVS_NAMESPACE_SYSTEM_CONFIG, NVS_READWRITE, &my_handle);
+    if(ESP_OK != ret) return ret;
+
+    // critical section
+    xSemaphoreTake(config_control_sem, portMAX_DELAY);
+    // load relays config
+    if(NULL != system_config)
+    {
+        char nvs_key[15] = {0};
+        size_t nvs_size = sizeof(config_relay_t);
+        config_relay_t* temp_relays = (config_relay_t*)pvPortMalloc(RELAYS_NUM * nvs_size);
+        for(uint8_t i=0;i<RELAYS_NUM;i++)
+        {
+            sprintf(nvs_key,"relay%02u",i);
+            size_t current_nvs_size = 0;
+            // get only size
+            printf("NVS get, key: %s \n",nvs_key);
+            ret = nvs_get_blob(my_handle,nvs_key,NULL,&current_nvs_size);
+            // check if the size matches
+            if(current_nvs_size != nvs_size)
+            {
+                ESP_LOGE(TAG,"Size in NVS is different then expected.\n");
+                ret |= ESP_FAIL;
+                continue;
+            }
+            else // size is correct
+            {
+                ret |= nvs_get_blob(my_handle,nvs_key,&(temp_relays[i]),&current_nvs_size);
+            }
+        }
+        if(ESP_OK == ret)
+        {
+            if(NULL != system_config->relays)
+                vPortFree(system_config->relays);
+
+            system_config->relays = temp_relays;
+        }
+    }
+    else
+    {
+        ESP_LOGE(TAG,"Provided NULL system_config reference \n");
+        ret = ESP_FAIL;
+    }
+    nvs_close(my_handle);
+    xSemaphoreGive(config_control_sem); // release mutex
+    return ret;
+}
+
 static esp_err_t config_module_save_to_nvm(node_sn_t node_sn, node_type_t node_type, void* module_cfg)
 {
     nvs_handle_t my_handle;
@@ -191,7 +347,10 @@ static esp_err_t config_module_save_to_nvm(node_sn_t node_sn, node_type_t node_t
     {
         ret = nvs_set_blob(my_handle,nvs_key,module_cfg,nvs_size);
         if(ESP_OK == ret)
+        {
             ret = nvs_commit(my_handle);
+            printf("NVS commit \n");
+        }
     }
     else
     {
@@ -212,6 +371,13 @@ esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, 
     char nvs_key[15] = {0};
     sprintf(nvs_key,"%08lX",node_sn);
     printf("NVS get, sn: %lu key: %s\n",node_sn, nvs_key);
+    
+    // check params 
+    if(NULL == module_cfg)
+    {
+        ESP_LOGE(TAG,"Null pointer provoded as module_cfg \n");
+        return ESP_FAIL;
+    }
 
     size_t nvs_size = 0;
     switch (node_type)
@@ -245,32 +411,29 @@ esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, 
     // get only size
     ret = nvs_get_blob(my_handle,nvs_key,NULL,&current_nvs_size);
     // check if the size matches
-    if(current_nvs_size != 0 && current_nvs_size != nvs_size)
+    if(current_nvs_size != nvs_size)
     {
         ESP_LOGE(TAG,"Size in NVS is different then expected.\n");
-        return ESP_FAIL;
+        ret |= ESP_FAIL;
     }
     
-    // critical section
-    xSemaphoreTake(config_control_sem, portMAX_DELAY);
-    if(NULL != module_cfg)
-        vPortFree(module_cfg);
-
-    module_cfg = pvPortMalloc(nvs_size);
-
-    ret = nvs_get_blob(my_handle,nvs_key,module_cfg,&current_nvs_size);
-    xSemaphoreGive(config_control_sem);
+    if(ESP_OK == ret)
+    {
+        ret = nvs_get_blob(my_handle,nvs_key,module_cfg,&current_nvs_size);
+    }
     
     nvs_close(my_handle);
     return ret;
 }
 
 /* Loads all module and system config from nvm or provide default if failed */
-esp_err_t config_load_nvm_all(can_node_t* can_connected_nodes, uint8_t can_num_address_given)
+esp_err_t config_load_nvm_all(config_system_t* system_config, can_node_t* can_connected_nodes, uint8_t can_num_address_given)
 {
     if(can_num_address_given == CONFIG_MAX_CONNECTED_NODES)
         return ESP_FAIL;
 
+    esp_err_t ret = ESP_OK;
+    // load modules
     for(uint8_t index=0; index<can_num_address_given; index++)
     {
         // check paramaters
@@ -278,6 +441,7 @@ esp_err_t config_load_nvm_all(can_node_t* can_connected_nodes, uint8_t can_num_a
         if(SN <= 0) 
         {
             ESP_LOGE(TAG, "Failed to get config for module without SN \n");
+            ret |= ESP_FAIL;
             break;
         }
 
@@ -285,7 +449,38 @@ esp_err_t config_load_nvm_all(can_node_t* can_connected_nodes, uint8_t can_num_a
         if(node_type >= NODE_TYPE_MAX || NODE_TYPE_MASTER == node_type || NODE_TYPE_UNSUPPORTED == node_type) 
         {
             ESP_LOGE(TAG, "Failed to get config for module with type %u \n",node_type);
+            ret |= ESP_FAIL;
             break;
+        }
+
+        xSemaphoreTake(config_control_sem, portMAX_DELAY);
+        // allocate new memory for config 
+        if(NULL != can_connected_nodes[index].config)
+            vPortFree(can_connected_nodes[index].config);
+
+        switch (node_type)
+        {
+            case NODE_TYPE_LED_BOARD:
+                can_connected_nodes[index].config = (config_module_led_board_t*)pvPortMalloc(sizeof(config_module_led_board_t));
+                break;
+            case NODE_TYPE_TEMP_SENSOR:
+                can_connected_nodes[index].config = (config_module_temp_sens_t*)pvPortMalloc(sizeof(config_module_temp_sens_t));
+                break;
+            case NODE_TYPE_WATER_LEVEL_SENSOR:
+                can_connected_nodes[index].config = (config_module_wl_sens_t*)pvPortMalloc(sizeof(config_module_wl_sens_t));
+                break;
+            case NODE_TYPE_PH_SENSOR:
+                can_connected_nodes[index].config = (config_module_ph_sens_t*)pvPortMalloc(sizeof(config_module_ph_sens_t));
+                break;
+            default:
+                ESP_LOGE(TAG,"Unknown config size for type %d \n", node_type);
+                ret |= ESP_FAIL;
+                break;
+        }
+        if(NULL == can_connected_nodes[index].config)
+        {
+            xSemaphoreGive(config_control_sem);
+            continue; // take another node if there is a problem
         }
 
         if(ESP_OK == config_module_load_from_nvm(SN, node_type, can_connected_nodes[index].config))
@@ -296,38 +491,49 @@ esp_err_t config_load_nvm_all(can_node_t* can_connected_nodes, uint8_t can_num_a
         {
             ESP_LOGI(TAG, "Failed to get config for module with SN %04lX, providing default\n",SN);
             
-            xSemaphoreTake(config_control_sem, portMAX_DELAY);
-            if(NULL != can_connected_nodes[index].config)
-                vPortFree(can_connected_nodes[index].config);
 
             switch (node_type)
             {
                 case NODE_TYPE_LED_BOARD:
-                    can_connected_nodes[index].config = (config_module_led_board_t*)pvPortMalloc(sizeof(config_module_led_board_t));
                     *(config_module_led_board_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_LED_BOARD;
                     break;
                 case NODE_TYPE_TEMP_SENSOR:
-                    can_connected_nodes[index].config = (config_module_temp_sens_t*)pvPortMalloc(sizeof(config_module_temp_sens_t));
                     *(config_module_temp_sens_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_TEMP_SENS;
                     break;
                 case NODE_TYPE_WATER_LEVEL_SENSOR:
-                    can_connected_nodes[index].config = (config_module_wl_sens_t*)pvPortMalloc(sizeof(config_module_wl_sens_t));
                     *(config_module_wl_sens_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_WL_SENS;
                     break;
                 case NODE_TYPE_PH_SENSOR:
-                    can_connected_nodes[index].config = (config_module_ph_sens_t*)pvPortMalloc(sizeof(config_module_ph_sens_t));
                     *(config_module_ph_sens_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_PH_SENS;
                     break;
                 default:
                     ESP_LOGE(TAG,"Default cfg of module with type %d could not be provided\n", node_type);
-                    return ESP_FAIL;
+                    ret |= ESP_FAIL;
                     break;
             }
-
-            xSemaphoreGive(config_control_sem);
         }
+        xSemaphoreGive(config_control_sem);
     }
-    return ESP_OK;
+
+    // load system cfg
+    ret |= config_system_load_from_nvm(system_config);
+
+    // if everything succeed, reload config version variable
+    if(ESP_OK == ret)
+    {
+        uint64_t temp_version = 0;
+        ret |= config_get_version_from_nvm(&temp_version);
+        if(ESP_OK == ret)
+        {
+            CONFIG_VERSION_from_nvm = temp_version;
+            printf("CONFIG_VERSION_from_nvm = %llu",CONFIG_VERSION_from_nvm);
+        }
+        else
+            ESP_LOGE(TAG,"Failed to load cfg version from nvm.\n");
+    }
+
+
+    return ret;
 }
 
 esp_err_t config_update_from_web()
@@ -354,7 +560,7 @@ esp_err_t config_update_from_web()
     // Extract configVersion
     cJSON* configVersion = cJSON_GetObjectItem(root, "configVersion");
     if(NULL == configVersion) goto jsonError; // prevent memory leak
-    if(configVersion->valueint < CONFIG_VERSION_current)
+    if(configVersion->valueint < CONFIG_VERSION_from_nvm)
     {
         sprintf(err_message, "Config has lower ver. num. then current one.\n");
         goto configError;
@@ -375,7 +581,21 @@ esp_err_t config_update_from_web()
         sprintf(err_message, "Failed to parse relays cfg.\n");
         goto configError;
     }
+
+    printf("Relay timerOn hour: ");
+    printf("%u \n",relays_cfg[0].timer_on_hours);
+
+    // Store relays to nvm 
+    config_system_t sys_cfg = {.relays = &relays_cfg[0]};
+
+    printf("Relay timerOn hour: ");
+    printf("%u \n",sys_cfg.relays[0].timer_on_hours);
     
+    if(ESP_OK != config_system_save_to_nvm(&sys_cfg))
+    {
+        sprintf(err_message, "Failed to save sys cfg into nvm.\n");
+        goto configError;
+    }  
 
     // Extract modulesConfig array
     cJSON* modulesConfig = cJSON_GetObjectItem(root, "modulesConfig");
@@ -463,6 +683,12 @@ esp_err_t config_update_from_web()
             break;
         }
     }
+    if(ESP_OK != config_update_version_nvm((uint64_t)(configVersion->valueint)))
+    {
+        sprintf(err_message, "Failed to update cfg version (to %llu) in nvm.\n",(uint64_t)configVersion->valueint);
+        goto configError;
+    }
+
     cJSON_Delete(root);
     return ESP_OK;
     // error labels:

@@ -28,6 +28,9 @@
 #include "wifi_driver.h"
 #include "config_manager.h"
 #include "control_routines.h"
+#include "time_driver.h"
+
+
 
 
 #define STATS_TASK_PRIO     3
@@ -67,6 +70,7 @@ static void control_task(void *arg)
     // Init services without own task
     relays_init();
     config_manager_init();
+    set_timezone("CET-1CEST,M3.5.0/2,M10.5.0/3");
     
     // Start other tasks 
     xSemaphoreGive(sync_wifi_task);
@@ -88,6 +92,7 @@ static void control_task(void *arg)
 
     while (1) {
         // routine is internally checks period of each operation
+        printf("Entering control routine \n");
         control_routine();
     }
 }
@@ -141,16 +146,9 @@ static void wifi_task(void *arg)
     // Initialize Wi-Fi
     wifi_init_sta();
 
-    TickType_t loop_delay = 0;
+
     while (1) {
         wifi_driver_routine();
-
-        if(WIFIST_ONLINE == STATUS_wifi)
-            loop_delay = (30000 / portTICK_PERIOD_MS);
-        else
-            loop_delay = (5000 / portTICK_PERIOD_MS);
-        // Procces routine again after defined delay ms or on demand from other process
-        xSemaphoreTake(wifi_routine_sem,loop_delay);
     }
 }
 
@@ -212,6 +210,8 @@ static void stats_task(void *arg)
 }
 
 
+
+
 void app_main(void)
 {
     //Allow other core to finish initialization
@@ -259,77 +259,13 @@ void app_main(void)
 
     // debug 
 
-    // float temp_from_sensor = 0;
-    // can_node_t temp_node = {
-    //     .can_address = NODE_TYPE_TEMP_SENSOR,
-    //     .node_type = NODE_TYPE_TEMP_SENSOR,
-    //     .SN = 512,
-    //     .status = NODEST_NORMAL
-    // };
-
-    // uint8_t wl = 0;
-    // bool boye =  0;
-    // float wl_node_wifi_data[2] = {0.0f};
-    // can_node_t wl_node = {
-    //     .can_address = NODE_TYPE_WATER_LEVEL_SENSOR,
-    //     .node_type = NODE_TYPE_WATER_LEVEL_SENSOR,
-    //     .SN = 1024,
-    //     .status = NODEST_NORMAL
-    // };
-
-    // node_data_t nodes_data[3] = {
-    //     {
-    //         .can_node_p = &temp_node,
-    //         .data_len = 1,
-    //         .data_p = &temp_from_sensor
-    //     },
-    //     {
-    //         .can_node_p = &wl_node,
-    //         .data_len = 2,
-    //         .data_p = &wl_node_wifi_data[0]
-    //     },
-    //     {
-    //         .can_node_p = &wl_node,
-    //         .data_len = 3,
-    //         .data_p = NULL
-    //     }
-    // };
 
 
-    esp_err_t st;
 
 
-    config_module_temp_sens_t temp_cfg;
-    config_module_wl_sens_t wl_cfg;
     while (1)
     {
         vTaskDelay(10000 / portTICK_PERIOD_MS);
-    //     st = temp_sensor_get_temperature(&temp_node, &temp_from_sensor);
-    //     if(st == ESP_OK)
-    //     {
-    //         printf("Temperature from sensor: %f ˚C\n",temp_from_sensor);
-    //     }
-
-    //     st = water_level_sensor_get_data(&wl_node, &wl, &boye);
-    //     if(st == ESP_OK)
-    //     {
-    //         printf("WL: %u, B: %u\n",wl,boye);
-    //         wl_node_wifi_data[0] = (float)wl;
-    //         wl_node_wifi_data[1] = (float)boye;
-    //     }
-
-    //    if(WIFIST_ONLINE == STATUS_wifi)
-    //    {
-    //         // wifi_driver_send_sensor_data(2,&nodes_data[0]);
-            
-    //         config_update_from_web();
-    //    }
-    //    temp_cfg.alarm_cfg.max_value = 0.0;
-    //    if(ESP_OK == config_module_load_from_nvm(temp_node.SN, temp_node.node_type, &temp_cfg) && ESP_OK == config_module_load_from_nvm(wl_node.SN, wl_node.node_type, &wl_cfg))
-    //     {
-    //         printf("Temp cfg alarm is: %f and %f\n",temp_cfg.alarm_cfg.min_value,temp_cfg.alarm_cfg.max_value);
-    //         printf("Wl cfg alarm is: %f and %f\n",wl_cfg.alarm_cfg.min_value,wl_cfg.alarm_cfg.min_value);
-    //     }
     }
-    
+
 }
