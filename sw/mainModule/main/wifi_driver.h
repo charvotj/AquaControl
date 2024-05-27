@@ -37,7 +37,7 @@
 extern SemaphoreHandle_t wifi_routine_sem;
 
 esp_err_t wifi_driver_routine();
-esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data);
+esp_err_t wifi_driver_send_sensor_data(can_node_t* can_connected_nodes, uint8_t can_num_address_given);
 esp_err_t wifi_driver_get_system_config(cJSON** configJSON);
 void wifi_init_sta(void);
 esp_err_t _http_event_handler(esp_http_client_event_t *evt);

@@ -86,7 +86,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         case HTTP_EVENT_ON_DATA:
             if (!esp_http_client_is_chunked_response(evt->client)) {
                 ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-                // ESP_LOGI(TAG, "Response: %.*s", evt->data_len, (char*)evt->data);
+                ESP_LOGI(TAG, "Response: %.*s", evt->data_len, (char*)evt->data);
                 // check if buffer has enough space
                 if(http_res_buffer_len + evt->data_len < MAX_HTTP_RECV_BUFFER)
                 {
@@ -136,7 +136,7 @@ esp_err_t wifi_driver_routine()
         return err;
 }
 
-static esp_err_t _prepare_sensor_data_payload(const char* buffer_p, uint16_t* payload_len, uint8_t num_of_nodes, node_data_t* data)
+static esp_err_t _prepare_sensor_data_payload(const char* buffer_p, uint16_t* payload_len, can_node_t* can_connected_nodes, uint8_t can_num_address_given)
 {
     *payload_len = 0;
     int16_t n = 0;
@@ -147,38 +147,63 @@ static esp_err_t _prepare_sensor_data_payload(const char* buffer_p, uint16_t* pa
     *payload_len += n;
     
     // loop for each node data structure
-    for(uint8_t i=0;i<num_of_nodes;i++)
+    bool first_item = true;
+    bool first_data = true;
+    for(uint8_t i=0;i<can_num_address_given;i++)
     {
-        node_data_t* curr_node = data+i;
-        // loop for each data - index (here "j") is also dataType
-        for(uint8_t j=0;j<curr_node->data_len;j++)
+        // send only data from OK nodes 
+        if(NODEST_NORMAL != can_connected_nodes[i].status)
+            continue;
+
+        if(first_item)
         {
-            float* curr_data = (curr_node->data_p)+j;
-            n = snprintf(buffer_p+*payload_len, MAX_HTTP_REQ_BUFFER-*payload_len, "{\"SN\":%lu,\"nodeType\":%u,\"dataType\":%u,\"value\":%f}",curr_node->can_node_p->SN,curr_node->can_node_p->node_type,j,*curr_data);
+            first_item = false;
+        }
+        else
+        {
+            // if not the first item, then begin with comma
+            n = snprintf(buffer_p+*payload_len, MAX_HTTP_REQ_BUFFER-*payload_len, ",");
             if(n < 0 || n >= MAX_HTTP_REQ_BUFFER-*payload_len)
                 return ESP_FAIL;
             *payload_len += n;
-            // if not the last item, then insert comma
-            if(i != num_of_nodes-1 || j != curr_node->data_len-1)
+        }
+        node_data_t* curr_node = &(can_connected_nodes[i].data);
+
+        // loop for each data - index (here "j") is also dataType
+        for(uint8_t j=0;j<curr_node->data_len;j++)
+        {
+            if(first_data)
             {
+                first_data = false;
+            }
+            else
+            {
+                // if not the first data, then begin with comma
                 n = snprintf(buffer_p+*payload_len, MAX_HTTP_REQ_BUFFER-*payload_len, ",");
                 if(n < 0 || n >= MAX_HTTP_REQ_BUFFER-*payload_len)
                     return ESP_FAIL;
                 *payload_len += n;
             }
+
+            float* curr_data = (curr_node->data_p)+j;
+            n = snprintf(buffer_p+*payload_len, MAX_HTTP_REQ_BUFFER-*payload_len, "{\"SN\":%lu,\"nodeType\":%u,\"dataType\":%u,\"value\":%f}",can_connected_nodes[i].SN,can_connected_nodes[i].node_type,j,*curr_data);
+            if(n < 0 || n >= MAX_HTTP_REQ_BUFFER-*payload_len)
+                return ESP_FAIL;
+            *payload_len += n;
         }
+        first_data = true; // reset boolean
     }
     n = snprintf(buffer_p+*payload_len, MAX_HTTP_REQ_BUFFER-*payload_len, "]}");
     if(n < 0 || n >= MAX_HTTP_REQ_BUFFER-*payload_len)
         return ESP_FAIL;
     *payload_len += n;
-    // (*payload_len)++; // null character at the end
+
     
     return ESP_OK;
 }
 
 
-esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data)
+esp_err_t wifi_driver_send_sensor_data(can_node_t* can_connected_nodes, uint8_t can_num_address_given)
 {
     // wait for mutex because of static payload string
     xSemaphoreTake(http_req_mutex, portMAX_DELAY);  
@@ -194,8 +219,8 @@ esp_err_t wifi_driver_send_sensor_data(uint8_t num_of_nodes, node_data_t* data)
         esp_http_client_set_method(client, HTTP_METHOD_POST);
         esp_http_client_set_header(client, "Content-Type", "application/json");
         uint16_t req_len = 0u;
-        _prepare_sensor_data_payload(&http_req_buffer,&req_len,num_of_nodes,data);
-        // printf("len %u: %s\n",req_len,http_req_buffer);
+        _prepare_sensor_data_payload(&http_req_buffer,&req_len,can_connected_nodes,can_num_address_given);
+        printf("len %u: %s\n",req_len,http_req_buffer);
         esp_http_client_set_post_field(client, &http_req_buffer, req_len);
 
         esp_err_t err = esp_http_client_perform(client);

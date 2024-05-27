@@ -20,7 +20,7 @@
 #include"../../shared/common_types.h"
 #include"../../shared/CAN_definitions.h"
 
-esp_err_t water_level_sensor_get_data(can_node_t* node_handle, uint8_t* percent_of_wl, bool* boye_state);
+esp_err_t water_level_sensor_get_data(can_node_t* node_handle, float* percent_of_wl, float* boye_state);
 
 
 

@@ -229,7 +229,27 @@ esp_err_t can_slave_get_SN(uint8_t slave_address, node_sn_t* sn)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_SN, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_SN, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data))
+    {
+        ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_GET_SN\n");
+        return ESP_FAIL;
+    }
+
+    // check status
+    if(CANST_OK != rx_status)
+    {
+        ESP_LOGE(TAG,"CAN_TS_GET_SN returned %u\n", rx_status);
+        return ESP_FAIL;
+    }
+
+    // check payload length
+    if(rx_data_len != 4)
+    {
+        ESP_LOGE(TAG,"Wrong payload of CAN_TS_GET_SN\n");
+        return ESP_FAIL;
+    }
+    *sn = (node_sn_t)(rx_data[3] << 24) | (node_sn_t)(rx_data[2] << 16) | (node_sn_t)(rx_data[1] << 8) | (rx_data[0]);
+    return ESP_OK;
 }
 
 esp_err_t can_slave_get_node_type(uint8_t slave_address, node_type_t* node_type)
@@ -240,18 +260,58 @@ esp_err_t can_slave_get_node_type(uint8_t slave_address, node_type_t* node_type)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_NODE_TYPE, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_NODE_TYPE, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data))
+    {
+        ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_GET_NODE_TYPE\n");
+        return ESP_FAIL;
+    }
+
+    // check status
+    if(CANST_OK != rx_status)
+    {
+        ESP_LOGE(TAG,"CAN_TS_GET_NODE_TYPE returned %u\n", rx_status);
+        return ESP_FAIL;
+    }
+
+    // check payload length
+    if(rx_data_len != 1)
+    {
+        ESP_LOGE(TAG,"Wrong payload of CAN_TS_GET_NODE_TYPE\n");
+        return ESP_FAIL;
+    }
+    *node_type = (node_type_t)(rx_data[0]);
+    return ESP_OK;
 }
 
 esp_err_t can_slave_get_node_status(uint8_t slave_address, node_status_t* status)
 {
-uint8_t tx_data_len = 0u;
+    uint8_t tx_data_len = 0u;
     uint8_t tx_data[TWAI_FRAME_MAX_DLC-1] = {0u};
     uint8_t rx_data_len = 0u;
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_STATUS, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_STATUS, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data))
+    {
+        ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_GET_STATUS\n");
+        return ESP_FAIL;
+    }
+
+    // check status
+    if(CANST_OK != rx_status)
+    {
+        ESP_LOGE(TAG,"CAN_TS_GET_STATUS returned %u\n", rx_status);
+        return ESP_FAIL;
+    }
+
+    // check payload length
+    if(rx_data_len != 1)
+    {
+        ESP_LOGE(TAG,"Wrong payload of CAN_TS_GET_STATUS\n");
+        return ESP_FAIL;
+    }
+    *status = (node_status_t)(rx_data[0]);
+    return ESP_OK;
 }
 
 esp_err_t can_slave_get_temperature(uint8_t slave_address, node_temp_t* temp)
@@ -276,6 +336,141 @@ esp_err_t can_slave_get_uptime(uint8_t slave_address, node_uptime_t* uptime)
     return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_UPTIME, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
 }
 
+// HELPERS
+esp_err_t can_perform_addresing(can_node_t* can_connected_nodes, uint8_t* can_num_address_given)
+{
+    // now only simple addressing is implemented
+    // first 10 addresses are checked and for every connected node config is optained
+
+    *can_num_address_given = 0u;
+
+    for(uint8_t adr=1; adr<=10;adr++)
+    {
+        if(*can_num_address_given == CONFIG_MAX_CONNECTED_NODES) return ESP_FAIL;
+
+        if(ESP_OK == can_slave_ping(adr))
+        {
+            // free config memory before clearing the struct 
+            xSemaphoreTake(config_control_sem, portMAX_DELAY);
+                if(NULL != can_connected_nodes[*can_num_address_given].config)
+                    vPortFree(can_connected_nodes[*can_num_address_given].config);
+                if(NULL != can_connected_nodes[*can_num_address_given].data.data_p)
+                    vPortFree(can_connected_nodes[*can_num_address_given].data.data_p);
+                INIT_CAN_NODE(can_connected_nodes[*can_num_address_given]);
+            xSemaphoreGive(config_control_sem);
+            can_connected_nodes[*can_num_address_given].can_address = adr;
+            printf("Adr 0x%02X found and added \n",adr);
+            (*can_num_address_given) += 1;
+        }
+        else
+        {
+            printf("Adr 0x%02X not found \n",adr);
+        }
+    }
+
+    return ESP_OK;
+}
+
+esp_err_t can_poll_nodes_sn(can_node_t* can_connected_nodes, uint8_t can_num_address_given)
+{
+    if(can_num_address_given == CONFIG_MAX_CONNECTED_NODES)
+        return ESP_FAIL;
+
+    esp_err_t ret = ESP_OK;
+    for(uint8_t index=0; index<can_num_address_given; index++)
+    {
+        uint8_t adr = can_connected_nodes[index].can_address;
+        if(0 == adr)
+        {
+            ret |= ESP_FAIL;
+            ESP_LOGE(TAG,"Node with index %u has no address \n",index);
+            continue; // try another node
+        }
+
+        node_sn_t sn = 0;
+        if(ESP_OK == can_slave_get_SN(adr,&sn))
+        {
+            // check value 
+            if(sn > 0)
+            {
+                can_connected_nodes[index].SN = sn;
+                printf("Adr 0x%02X has SN %04lX \n",adr,sn);
+                continue; // correct - lets take another
+            }
+        }
+        ESP_LOGE(TAG,"Adr 0x%02X -- failed to get SN \n",adr);
+        ret |= ESP_FAIL;
+    }
+    return ret;
+}
+
+esp_err_t can_poll_nodes_status(can_node_t* can_connected_nodes, uint8_t can_num_address_given)
+{
+    if(can_num_address_given == CONFIG_MAX_CONNECTED_NODES)
+        return ESP_FAIL;
+
+    esp_err_t ret = ESP_OK;
+    for(uint8_t index=0; index<can_num_address_given; index++)
+    {
+        uint8_t adr = can_connected_nodes[index].can_address;
+        if(0 == adr)
+        {
+            ret |= ESP_FAIL;
+            ESP_LOGE(TAG,"Node with index %u has no address \n",index);
+            continue; // try another node
+        }
+
+        node_status_t status = NODEST_UNDEFINED;
+        if(ESP_OK == can_slave_get_node_status(adr,&status))
+        {
+            // check value 
+            if(status < NODEST_MAXSTATUS)
+            {
+                can_connected_nodes[index].status = status;
+                printf("Adr 0x%02X has status %u \n",adr,status);
+                continue; // correct - lets take another
+            }
+
+        }
+        ESP_LOGE(TAG,"Adr 0x%02X -- failed to get status \n",adr);
+        ret |= ESP_FAIL;
+    }
+    return ret;
+}
+
+esp_err_t can_poll_nodes_type(can_node_t* can_connected_nodes, uint8_t can_num_address_given)
+{
+    if(can_num_address_given == CONFIG_MAX_CONNECTED_NODES)
+        return ESP_FAIL;
+
+    esp_err_t ret = ESP_OK;
+    for(uint8_t index=0; index<can_num_address_given; index++)
+    {
+        uint8_t adr = can_connected_nodes[index].can_address;
+        if(0 == adr)
+        {
+            ret |= ESP_FAIL;
+            ESP_LOGE(TAG,"Node with index %u has no address \n",index);
+            continue; // try another node
+        }
+
+        node_type_t type = NODEST_UNDEFINED;
+        if(ESP_OK == can_slave_get_node_type(adr,&type))
+        {
+            // check value 
+            if(type < NODE_TYPE_MAX && NODE_TYPE_MASTER != type && NODE_TYPE_UNSUPPORTED != type)
+            {
+                can_connected_nodes[index].node_type = type;
+                printf("Adr 0x%02X has node type %u \n",adr,type);
+                continue; // correct - lets take another
+            }
+        }
+        ESP_LOGE(TAG,"Adr 0x%02X -- failed to get node type \n",adr);
+        ret |= ESP_FAIL;
+
+    }
+    return ESP_OK;
+}
 
 esp_err_t can_driver_deinit()
 {

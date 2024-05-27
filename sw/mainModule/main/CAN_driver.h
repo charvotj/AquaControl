@@ -17,6 +17,8 @@
 #include "../../shared/CAN_definitions.h"
 #include "../../shared/common_types.h"
 #include "status_control.h"
+#include "globals.h"
+#include "config_manager.h"
 
 
 #define CAN_DEBUG_PRINTS                1
@@ -62,6 +64,11 @@ esp_err_t can_slave_get_node_type(uint8_t slave_address, node_type_t* node_type)
 esp_err_t can_slave_get_node_status(uint8_t slave_address, node_status_t* status);
 esp_err_t can_slave_get_temperature(uint8_t slave_address, node_temp_t* temp);
 esp_err_t can_slave_get_uptime(uint8_t slave_address, node_uptime_t* uptime);
+
+esp_err_t can_perform_addresing(can_node_t* can_connected_nodes, uint8_t* can_num_address_given);
+esp_err_t can_poll_nodes_sn(can_node_t* can_connected_nodes, uint8_t can_num_address_given);
+esp_err_t can_poll_nodes_status(can_node_t* can_connected_nodes, uint8_t can_num_address_given);
+esp_err_t can_poll_nodes_type(can_node_t* can_connected_nodes, uint8_t can_num_address_given);
 
 esp_err_t can_driver_deinit();
 

@@ -21,21 +21,21 @@ esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperatur
 
     if(ESP_OK != can_tx_cmd_to_slave(node_handle->can_address, CAN_TS_TEMP_SENS_GET_TEMP,tx_data_len, tx_data,&rx_status, &rx_data_len, &rx_data[0]))
     {
-        ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_TEMP_SENS_GET_TEMP");
+        ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_TEMP_SENS_GET_TEMP\n");
         return ESP_FAIL;
     }
 
     // check status
     if(CANST_OK != rx_status)
     {
-        ESP_LOGE(TAG,"CAN_TM_TEMP_SENS_GET_TEMP_RES returned %u", rx_status);
+        ESP_LOGE(TAG,"CAN_TM_TEMP_SENS_GET_TEMP_RES returned %u\n", rx_status);
         return ESP_FAIL;
     }
 
     // check payload length
     if(rx_data_len != 2)
     {
-        ESP_LOGE(TAG,"Wrong payload of CAN_TM_TEMP_SENS_GET_TEMP_RES");
+        ESP_LOGE(TAG,"Wrong payload of CAN_TM_TEMP_SENS_GET_TEMP_RES\n");
         return ESP_FAIL;
     }
     // printf("0:%d, 1:%d \n",rx_data[0],rx_data[1]);

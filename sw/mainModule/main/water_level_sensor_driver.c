@@ -3,7 +3,7 @@
 static const char *TAG = "mainBoard - water_level_driver.c";
 
 
-esp_err_t water_level_sensor_get_data(can_node_t* node_handle, uint8_t* percent_of_wl, bool* boye_state)
+esp_err_t water_level_sensor_get_data(can_node_t* node_handle, float* percent_of_wl, float* boye_state)
 {
     // TODO: check CAN status and node status maybe
     // check node type
@@ -40,7 +40,7 @@ esp_err_t water_level_sensor_get_data(can_node_t* node_handle, uint8_t* percent_
         return ESP_FAIL;
     }
     // printf("0:%d, 1:%d \n",rx_data[0],rx_data[1]);
-    *percent_of_wl = rx_data[0];
-    *boye_state    = (0x01 & rx_data[1]);
+    *percent_of_wl = (float)rx_data[0];
+    *boye_state    = (float)(0x01 & rx_data[1]);
     return ESP_OK;
 }

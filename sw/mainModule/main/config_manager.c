@@ -2,6 +2,14 @@
 
 static const char *TAG = "mainBoard - config_manager.c";
 static uint64_t CONFIG_VERSION_current = 0u;
+SemaphoreHandle_t config_control_sem;
+
+esp_err_t config_manager_init()
+{
+    config_control_sem = xSemaphoreCreateMutex();
+    xSemaphoreGive(config_control_sem);
+    return ESP_OK;
+}
 
 
 static esp_err_t parse_time_hhmm(const char* time_str, uint8_t* hours, uint8_t* minutes) 
@@ -169,7 +177,7 @@ static esp_err_t config_module_save_to_nvm(node_sn_t node_sn, node_type_t node_t
             break;
     
         default:
-            ESP_LOGE(TAG,"Cfg of module with this type could not be saved");
+            ESP_LOGE(TAG,"Cfg of module with type %d could not be saved \n", node_type);
             return ESP_FAIL;
             break;
     }
@@ -177,12 +185,22 @@ static esp_err_t config_module_save_to_nvm(node_sn_t node_sn, node_type_t node_t
     ret = nvs_open(NVS_NAMESPACE_MODULE_CONFIG, NVS_READWRITE, &my_handle);
     if(ESP_OK != ret) return ret;
 
-    ret = nvs_set_blob(my_handle,nvs_key,module_cfg,nvs_size);
-    if (ret != ESP_OK) return ret;
-
+    // critical section
+    xSemaphoreTake(config_control_sem, portMAX_DELAY);
+    if(NULL != module_cfg)
+    {
+        ret = nvs_set_blob(my_handle,nvs_key,module_cfg,nvs_size);
+        if(ESP_OK == ret)
+            ret = nvs_commit(my_handle);
+    }
+    else
+    {
+        ret = ESP_FAIL;
+    }
     nvs_close(my_handle);
-    
-    return ESP_OK;
+    xSemaphoreGive(config_control_sem); // release mutex
+
+    return ret;
 }
 
 esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, void* module_cfg)
@@ -215,7 +233,7 @@ esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, 
             break;
     
         default:
-            ESP_LOGE(TAG,"Cfg of module with this type could not be saved\n");
+            ESP_LOGE(TAG,"Cfg of module with type %d could not be loaded\n", node_type);
             return ESP_FAIL;
             break;
     }
@@ -232,11 +250,83 @@ esp_err_t config_module_load_from_nvm(node_sn_t node_sn, node_type_t node_type, 
         ESP_LOGE(TAG,"Size in NVS is different then expected.\n");
         return ESP_FAIL;
     }
-    ret = nvs_get_blob(my_handle,nvs_key,module_cfg,&current_nvs_size);
-    if (ret != ESP_OK) return ret;
-
-    nvs_close(my_handle);
     
+    // critical section
+    xSemaphoreTake(config_control_sem, portMAX_DELAY);
+    if(NULL != module_cfg)
+        vPortFree(module_cfg);
+
+    module_cfg = pvPortMalloc(nvs_size);
+
+    ret = nvs_get_blob(my_handle,nvs_key,module_cfg,&current_nvs_size);
+    xSemaphoreGive(config_control_sem);
+    
+    nvs_close(my_handle);
+    return ret;
+}
+
+/* Loads all module and system config from nvm or provide default if failed */
+esp_err_t config_load_nvm_all(can_node_t* can_connected_nodes, uint8_t can_num_address_given)
+{
+    if(can_num_address_given == CONFIG_MAX_CONNECTED_NODES)
+        return ESP_FAIL;
+
+    for(uint8_t index=0; index<can_num_address_given; index++)
+    {
+        // check paramaters
+        node_sn_t SN = can_connected_nodes[index].SN;
+        if(SN <= 0) 
+        {
+            ESP_LOGE(TAG, "Failed to get config for module without SN \n");
+            break;
+        }
+
+        node_type_t node_type = can_connected_nodes[index].node_type;
+        if(node_type >= NODE_TYPE_MAX || NODE_TYPE_MASTER == node_type || NODE_TYPE_UNSUPPORTED == node_type) 
+        {
+            ESP_LOGE(TAG, "Failed to get config for module with type %u \n",node_type);
+            break;
+        }
+
+        if(ESP_OK == config_module_load_from_nvm(SN, node_type, can_connected_nodes[index].config))
+        {
+            printf("Module cfg for SN %04lX loaded from nvm\n",SN);
+        }
+        else 
+        {
+            ESP_LOGI(TAG, "Failed to get config for module with SN %04lX, providing default\n",SN);
+            
+            xSemaphoreTake(config_control_sem, portMAX_DELAY);
+            if(NULL != can_connected_nodes[index].config)
+                vPortFree(can_connected_nodes[index].config);
+
+            switch (node_type)
+            {
+                case NODE_TYPE_LED_BOARD:
+                    can_connected_nodes[index].config = (config_module_led_board_t*)pvPortMalloc(sizeof(config_module_led_board_t));
+                    *(config_module_led_board_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_LED_BOARD;
+                    break;
+                case NODE_TYPE_TEMP_SENSOR:
+                    can_connected_nodes[index].config = (config_module_temp_sens_t*)pvPortMalloc(sizeof(config_module_temp_sens_t));
+                    *(config_module_temp_sens_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_TEMP_SENS;
+                    break;
+                case NODE_TYPE_WATER_LEVEL_SENSOR:
+                    can_connected_nodes[index].config = (config_module_wl_sens_t*)pvPortMalloc(sizeof(config_module_wl_sens_t));
+                    *(config_module_wl_sens_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_WL_SENS;
+                    break;
+                case NODE_TYPE_PH_SENSOR:
+                    can_connected_nodes[index].config = (config_module_ph_sens_t*)pvPortMalloc(sizeof(config_module_ph_sens_t));
+                    *(config_module_ph_sens_t*)can_connected_nodes[index].config = DEFAULT_CONFIG_MODULE_PH_SENS;
+                    break;
+                default:
+                    ESP_LOGE(TAG,"Default cfg of module with type %d could not be provided\n", node_type);
+                    return ESP_FAIL;
+                    break;
+            }
+
+            xSemaphoreGive(config_control_sem);
+        }
+    }
     return ESP_OK;
 }
 

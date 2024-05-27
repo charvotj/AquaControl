@@ -11,9 +11,11 @@
 #define DEVICE_TYPE DEVICE_TYPE_WATER_LEVEL_SENSOR
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #define FW_VERSION_MAJOR    0
-#define FW_VERSION_MINOR    1
+#define FW_VERSION_MINOR    2
 
-node_type_t GLOBAL_device_type = DEVICE_TYPE;
+#define SERIAL_NUMBER       (uint32_t)(100 + DEVICE_TYPE) // just for example use now, later load from eeprom
+
+const node_type_t GLOBAL_device_type = DEVICE_TYPE;
 node_status_t GLOBAL_device_status = NODEST_UNDEFINED;
 
 

@@ -131,6 +131,15 @@ void CAN1_RX_TS_FIFOHandler(void)
                     case CAN_TS_RST:
                         can_cmd_reset();
                         break;
+                    case CAN_TS_GET_SN:
+                        can_cmd_send_sn();
+                        break;
+                    case CAN_TS_GET_NODE_TYPE:
+                        can_cmd_send_node_type();
+                        break;
+                    case CAN_TS_GET_STATUS:
+                        can_cmd_send_status();
+                        break;
                         
                     #ifndef DEVICE_TYPE
                         #error "Device type not defined in this context"

@@ -16,8 +16,8 @@
 
 #include "pins.h"
 
-#define STATUS_DEVICE_STARTUP_TIMEOUT_MS 10000u
-#define NUMBER_OF_STATUS_MODULES 4u
+#define STATUS_DEVICE_STARTUP_TIMEOUT_MS 30000u
+#define NUMBER_OF_STATUS_MODULES 5u
 
 
 typedef enum {
@@ -54,6 +54,7 @@ extern module_status_t STATUS_module_can;
 extern module_status_t STATUS_module_display;
 extern module_status_t STATUS_module_ota;
 extern module_status_t STATUS_module_relays;
+extern module_status_t STATUS_module_control;
 
 
 esp_err_t status_control_init();
@@ -65,7 +66,7 @@ esp_err_t set_can_module_status(module_status_t status);
 esp_err_t set_display_module_status(module_status_t status);
 esp_err_t set_ota_module_status(module_status_t status);
 esp_err_t set_relays_module_status(module_status_t status);
-
+esp_err_t set_control_module_status(module_status_t status);
 
 
 

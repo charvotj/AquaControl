@@ -22,7 +22,8 @@ typedef enum
     NODE_TYPE_LED_BOARD = DEVICE_TYPE_LED_BOARD,
     NODE_TYPE_TEMP_SENSOR = DEVICE_TYPE_TEMP_SENSOR,
     NODE_TYPE_WATER_LEVEL_SENSOR = DEVICE_TYPE_WATER_LEVEL_SENSOR,
-    NODE_TYPE_PH_SENSOR = DEVICE_TYPE_PH_SENSOR
+    NODE_TYPE_PH_SENSOR = DEVICE_TYPE_PH_SENSOR,
+    NODE_TYPE_MAX
 } node_type_t;
 
 typedef uint32_t node_sn_t;
@@ -34,7 +35,8 @@ typedef enum {
     NODEST_STARTUP,
     NODEST_ERROR_GENERIC,
     NODEST_UNDEFINED,
-    NODEST_OFFLINE
+    NODEST_OFFLINE,
+    NODEST_MAXSTATUS, // to check enum overflow
 } node_status_t;
 
 typedef enum {
@@ -47,6 +49,12 @@ typedef enum {
     CANST_PH_SENSOR_SPECIFIC_ER = 10*DEVICE_TYPE_PH_SENSOR,
 } can_cmd_status;
 
+typedef struct
+{
+    uint8_t data_len;
+    float* data_p;
+} node_data_t;
+#define DEFAULT_NODE_DATA (node_data_t){0,NULL}
 
 typedef struct
 {
@@ -54,16 +62,22 @@ typedef struct
     uint8_t can_address;
     node_sn_t SN;
     node_status_t status;
+    void* config;
+    node_data_t data;
 } can_node_t;
 
-typedef struct
-{
-    can_node_t* can_node_p;
-    uint8_t data_len;
-    float* data_p;
-} node_data_t;
+// #define DEFAULT_CAN_NODE ((can_node_t){NODE_TYPE_UNKNOWN,0,0,NODEST_UNDEFINED,NULL,DEFAULT_NODE_DATA})
+#define INIT_CAN_NODE(node) \
+    do { \
+        (node).node_type = NODE_TYPE_UNKNOWN; \
+        (node).can_address = 0; \
+        (node).SN = 0; \
+        (node).status = NODEST_UNDEFINED; \
+        (node).config = NULL; \
+        (node).data = DEFAULT_NODE_DATA; \
+    } while(0)
 
-#define DEFAULT_CAN_NODE {NODE_TYPE_UNKNOWN,0,0,NODEST_UNDEFINED}
+
 
 
 

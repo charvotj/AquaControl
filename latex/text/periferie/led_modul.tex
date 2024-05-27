@@ -31,7 +31,6 @@
 
     
 \subsubsection{Popis schématu a výpočty hodnot součástek}
-% TODO: projet ještě jednou poznámky od Pavla
     Zjednodušené schéma pro jeden ovládaný kanál se nachází na obr.~\ref{fig:led-board-simp-schema}, při výpočtech bude použito označení součástek z tohoto schématu. Úplné schéma modulu pak lze nalézt v příloze~\ref{priloha:schema-led-board}.
 
     Jako buck kontrolér je zvolen čip AP63356Q vyvinutý společností Diodes incorporated, jedná se o úspornou a velmi malou součástku, která v sobě integruje oba potřebné MOSFET tranzistory a spíná s pevně danou frekvencí \(f_{SW}=\qty{450}{kHz} \) ~\cite{Diodes_AP63356Q}. Pro snímání proudu poslouží čip INA180A4 firmy Texas Instruments~\cite{TI_INA180A4}.
@@ -54,7 +53,7 @@
 
     TODO: Kompenzace
 
-    V dalším kroku je stanovena hodnota induktoru L1. Výrobce doporučuje zvolit zvlnění proudu induktorem (ripple) \(\Delta I_{L}  \) jako 30 až \qty{50}{\percent} maximálního proudu čipu. Při zvolení střední hodnoty \qty{40}{\percent} získáme:
+    V dalším kroku je stanovena hodnota induktoru L1. Výrobce doporučuje zvolit zvlnění proudu induktorem (ripple) \(\Delta I_{L}  \) jako 30 až \qty{50}{\percent} maximálního odběru. Pro výpočet induktoru je uvažován maximální povolený proud čipem, tím je zajištěno, že čip bude fungovat i po překročení maximálního očekávaného proudu \(I_{max} = \qty{1.66}{A} \). Při zvolení střední hodnoty \qty{40}{\percent} získáme:
     \begin{equation}
         \Delta I_{L} = \num{0.4}\cdot I_{IC-max} = \num{0.4} \cdot  \num{3.5} = \qty{1.4}{A}
     \end{equation}
@@ -66,7 +65,7 @@
     \begin{equation}
         L_{1} = \frac{12\cdot (24 -12 ) }{24 \cdot \num{1.4}\cdot \qty{450}{k}  } = \qty{9.52}{\micro H}
     \end{equation}
-    Zvolíme nejbližší běžně používanou hodnotu \(L_{1} = \qty{10}{\micro H}\).
+    Zvolíme nejbližší běžně používanou hodnotu \(L_{1} = \qty{10}{\micro H}\). 
 
     Pro vstupní (C1) a výstupní (C6) kapacitu použijeme hodnoty doporučené výrobcem, stejně tak pro bootstrap kondenzátor C3. 
     
@@ -89,6 +88,7 @@
     \end{equation} 
 
     \textit{TODO: Zde velký question: Pokusit se o přesnější výpočet ztrát a účinnosti nebo se odkázat na kalkulačku výrobce, která stejně bude nejpřesnější?}
+    % Jestli chceš tak nebo tak je to celkem jedno. Nicméně kalkulačka výrobce vůbec nemusí být nejpřesnější. Naopak výrobci kolikrát kecají a ukáží ti lepší výsledek.
 
 \subsection{Tvorba \acs{dps}}
     Jak již bylo zmíněno v úvodu kapitoly, jedná se o dceřinnou desku pro obecný modul periferie, čímž jsou jasně určeny její maximální rozměry. Stejně jako u předešlých návrhů, i zde je použita čtyřvrstvá struktura viz obr.~\ref{fig:ridici-jednotka-stackup-dps}. Vizualizace návrhu se nachází na obr.~\ref{fig:perif-led-dps} spolu s ukázkou sesazaní s obecným modulem periferie. 

@@ -16,6 +16,10 @@
 #include "string.h"
 
 void can_cmd_reset(void);
+void can_cmd_send_sn(void);
+void can_cmd_send_node_type(void);
+void can_cmd_send_status(void);
+
 void can_cmd_unsupported(uint8_t cmd_num);
 
 
