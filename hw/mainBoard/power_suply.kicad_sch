@@ -1673,7 +1673,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid edfc2bf0-df26-45bc-87b2-1486ee38e577)
   )
-  (text "V_FB = 0.8V \n      = V_out*R15/(R15+R16)\n	 => R16=54.9kOhm\n(Datasheet sec. 8.3.8)"
+  (text "V_FB = 0.8V \n      = V_out*R7/(R7+R8)\n	 => R8=54.9kOhm\n(Datasheet sec. 8.3.8)"
     (at 95.25 147.32 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid f0c2004f-9052-40ee-bf9b-12d92b20d607)
