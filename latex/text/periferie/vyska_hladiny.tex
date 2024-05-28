@@ -1,7 +1,16 @@
 \section{Senzor výšky hladiny}
 \label{sec:perif-sensor-hladina}
     Voda v akváriu se průběžně odpařuje a je potřeba ji doplňovat. Účelem této periferie je průběžné monitorování hladiny akvária a upozornění uživatele na nutnost doplnění vody. Také může uživatele varovat v případě poškození nádrže a nežádoucího úniku vody do okolí. 
-    K realizaci tohoto modulu jsou použity dva jednoduché sensory.Každý funguje na jiném principu a má tedy také odlišné přednosti a nedostatky, v kombinaci tak zvyšují celkovou spolehlivost modulu. Oba sensory se nachází na obr.~\ref{TODO foto}, který zároveň zobrazuje realizaci jejich připojení k obecnému modulu periferií za pomocí prototypové desky. 
+
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.8\textwidth]{obrazky/foto/sensor_hladiny.jpeg}
+        \caption{Realizovaný sensor výšky hladiny.}
+        \label{fig:obrazky-foto-sensor_hladiny-jpeg}
+    \end{figure}
+    
+
+    K realizaci tohoto modulu jsou použity dva jednoduché sensory.Každý funguje na jiném principu a má tedy také odlišné přednosti a nedostatky, v kombinaci tak zvyšují celkovou spolehlivost modulu. Oba sensory se nachází na obr.~\ref{fig:obrazky-foto-sensor_hladiny-jpeg}, který zároveň zobrazuje realizaci jejich připojení k obecnému modulu periferií za pomocí prototypové desky. 
 
     \subsection{Popis zvolených sensorů}
     První ze sensorů využívá k určení výšky hladiny vodivost (potažmo odpor) vody. Obsahuje dva sety vodivých plošek, které nejsou vodivě spojeny. Při ponoření měřící části do vody začne mezi ploškami procházet slabý proud, který je přibližně úměrný velikosti ponořené části. Tento proud otevírá tranzistor, na jehož výstupu pak vzniká stejnosměrné napětí v rozsahu přiloženého napájení (zde 0 až \qty{3.3}{V}). Tento signál je přiveden na pin mikrokontroléru a následně zpracován vestaveným převodníkem. PIC18F26 obsahuje integrovanou periferii \acs{adc} s rozlišením 12 bitů, teoreticky lze tedy rozlišit \num{4296} úrovní~\cite{PIC18F26Q83}. Pro převod měřené hodnoty na výšku hladiny je potřeba sensor nejprve nakalibrovat. Byla tedy změřena přibližná výstupní hodnota pro minimální a maximální měřitelné ponoření sensoru a údaj je následně mikroprocesorem převeden na procenta. Údaj v procentech ponořené části je pro uživatele univerzálním ukazatelem nezávislým na umístění sensoru. Pro měření absolutní výšky hladiny by musel uživatel v systému nastavit výšku umístění sensoru a také ji pokaždé měnit v případě změny jeho pozice.

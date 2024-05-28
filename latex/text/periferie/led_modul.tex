@@ -51,7 +51,7 @@
     \end{equation}  
     Toto napětí by mělo být dostatečně nízké k úplnému zhasnutí \acs{led} pásku.
 
-    TODO: Kompenzace
+    Pro zajištění stability obvodu je navržena externí kompenzační síť. Je složena ze tří součástek připojených mezi pin COMP a zem. Tyto sítě se navrhují z důvodů zlepšení odezvy systému na rychlé změny výstupního proudu. V ideálním případě chceme, aby systém zareagoval co nejrychleji, ale současně nedošlo k jeho rozkmitání. Vzhledem ke scénáři, kdy MCU uměle vstupuje do zpětnovazební smyčky, je riskantní pohybovat se na zmíněné hranici. Pro zachování stability byla proto zvolena velmi pomalá odezva systému. Požadoveného zpomalení je dosaženo vysokou hodnota kapacity kompenzačního kondenzátoru, \(C_{4}=\qty{100}{nF} \).
 
     V dalším kroku je stanovena hodnota induktoru L1. Výrobce doporučuje zvolit zvlnění proudu induktorem (ripple) \(\Delta I_{L}  \) jako 30 až \qty{50}{\percent} maximálního odběru. Pro výpočet induktoru je uvažován maximální povolený proud čipem, tím je zajištěno, že čip bude fungovat i po překročení maximálního očekávaného proudu \(I_{max} = \qty{1.66}{A} \). Při zvolení střední hodnoty \qty{40}{\percent} získáme:
     \begin{equation}
@@ -87,8 +87,9 @@
         \Delta U_{out} = \num{1.4} \cdot  \left(\frac{\qty{15}{m}}{3}+\frac{1}{8\cdot \qty{450}{k} \cdot 3\cdot \qty{22}{\micro\,} }\right)  = \qty{13}{mV}
     \end{equation} 
 
-    \textit{TODO: Zde velký question: Pokusit se o přesnější výpočet ztrát a účinnosti nebo se odkázat na kalkulačku výrobce, která stejně bude nejpřesnější?}
-    % Jestli chceš tak nebo tak je to celkem jedno. Nicméně kalkulačka výrobce vůbec nemusí být nejpřesnější. Naopak výrobci kolikrát kecají a ukáží ti lepší výsledek.
+    Výpočet výsledné účinnosti synchronního buck měniče je poměrně komplexním problémem~\cite{texasBuckEfficiency}. K jejímu odhadu je potřeba stanovit hodnotu ztrátového výkonu jednotlivých částí měniče. U integrovaného řešení, jako je i použitý čip AP63356Q, výrobce často uvádí pouze hodnoty základních parametrů. Chybí detaily zejména o integrovaných tranzistorech, které jsou klíčové pro výpočet spínacích ztrát. Jako možnost tedy zbývá přibližný odečet z grafů katalogového listu nebo využití kalkulačky dodané výrobcem~\cite{diodesAP6335xQ}, která v sobě obsahuje přesnější výpočetní rovnice. 
+
+    Po dosazení odpovídajích hodnot do kalkulačky výrobce je odhadovaná účinnost celého obvodu (při maximálním zatížení jednoho kanálu) \(\eta=\qty{96}{\percent}\) a ztrátový výkon \(P_{Z} = \qty{0.84}{W}\). 
 
 \subsection{Tvorba \acs{dps}}
     Jak již bylo zmíněno v úvodu kapitoly, jedná se o dceřinnou desku pro obecný modul periferie, čímž jsou jasně určeny její maximální rozměry. Stejně jako u předešlých návrhů, i zde je použita čtyřvrstvá struktura viz obr.~\ref{fig:ridici-jednotka-stackup-dps}. Vizualizace návrhu se nachází na obr.~\ref{fig:perif-led-dps} spolu s ukázkou sesazení s obecným modulem periferie. 
