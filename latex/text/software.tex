@@ -251,7 +251,50 @@
 \section{Webové rozhraní}
     Aby bylo možné systém konfigurovat a monitorovat, bylo zapotřebí navrhnout a vytvořit webové rozhraní. Důležitým krokem v rozhodování byla volba, zda bude \acs{mcu} řídicí jednotky sloužit přímo jako webový server nebo pouze jako klient. První scénář klade podstatně vyšší nároky na zatížení a paměť \acs{mcu}, výhodou je ale velmi jednoduchý systém, který funguje samostetně bez nutnosti externího serveru případně také bez připojení k internetu (ESP32 může sloužit přímo jako přístupový bod). Výhodou druhé varianty je větší flexibilita, externí server má nesrovnatelně vyšší výkon a kapacitu úložiště a umožní tak tvorbu mnohem komplexnější webové stránky, která bude (v případě připojení serveru do internetu) dostupná odkudkoliv. Server zároveň může ukládat měřená data a ta tedy budou dostupná i v případě, že samotné zařízení je mimo provoz nebo není připojeno k síti.
 
-    V rámci realizace této práce byla zvolena varianta externího serveru. Jádro vytvořené webové aplikace tvoří program v jazyce PHP, který zpracovává jak požadavky uživatele, tak i samotného zařízení. Na pozadí dále běží databázový server s otevřeným systémem MySQL, sloužící k uchování provozních dat. V databázi jsou uloženy údaje o uživatelích, systémech akvárií (tedy řídicí jednotka a k ní připojené periferie) a jejich konfigurace a data získaná ze senzorů. Struktura tabulek databáze je zobrazena na obr.~\ref{TODO}. V záznamu odpovídajícímu danému systému akvária je uložen číselný údaj o aktuální verzi konfigurace. Pokud uživatel konfiguraci modifikuje, toto číslo se inkrementuje, na což následně zareaguje zařízení a vyžádá si ze serveru novou verzi konfigurace. 
+    V rámci realizace této práce byla zvolena varianta externího serveru. Jádro vytvořené webové aplikace tvoří program v jazyce PHP, který zpracovává jak požadavky uživatele, tak i samotného zařízení. Na pozadí dále běží databázový server s otevřeným systémem MySQL, sloužící k uchování provozních dat. V databázi jsou uloženy údaje o uživatelích, systémech akvárií (tedy řídicí jednotka a k ní připojené periferie) a jejich konfiguraci. Také jsou zde ukládána data ze senzorů. V záznamu odpovídajícímu danému systému akvária je uložen číselný údaj o aktuální verzi konfigurace. Pokud uživatel změní některé nastavení, toto číslo se inkrementuje. Na verzi konfigurace se zařízení pravidelně dotazuje a v případě změny si následně stáhne zažádá o celou novou konfiguraci.
 
+    \subsection{API rozhraní -- komunikace z pohledu zařízení}
     Zařízení komunikuje s webem pomocí aplikačního rozhraní (API), které tvoří nenáročný způsob komunikace využívající formát JSON. Jednotlivé adresy API rozhraní jsou přehledně popsány v tab.~\ref{TODO}. 
 
+    \begin{table}[h]
+        \centering
+        \caption{Přehled periferií.}
+        \label{tab:prehled-periferii}
+        \begin{tabular}{|l|l|l|l|}
+            \hline
+            Adresa & Funkce & Odchozí data\(^{*}\)  & Příchozí data\(^{*}\)  \\ \hline\hline
+           
+            /ping & Kontrola dostupnosti & - & -  \\ \hline
+            /ping?SN= & Kontrola konfigurace & Sériové číslo & Verze konfigurace  \\ \hline
+            /config/get?SN= & Stažení konfigurace & Sériové číslo & Plná konfigurace  \\ \hline
+            /data/add & Odeslání dat & Provozní data & -  \\ \hline
+            /data/view & Načtení dat & - & Data pro zobrazení na webu  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+                            %     & S &  &  & A  \\ \hline
+            \end{tabular}
+            \begin{tabular}{c}
+                \(^{*}\)Z pohledu  řídicí jednotky.
+            \end{tabular}   
+    \end{table}
+
+    \subsection{Uživatelská aplikace}
+        Z pohledu uživatele je možnost se na webu registrovat a přihlásit. Teprve po přihlášení je zobrazeno grafické menu. Webová aplikace slouží dvěma hlavním funkcím, kterým odpovídají také položky menu. 
+        
+        První položkou je zobrazení stavu zařízení. Kliknutí na odkaz přivede uživatele na podstránku zobrazující grafy všech dostupných dat jeho akvarijního systému. V grafech je v tuto chvíli zobrazeno vždy 100 posledních hodnot. 
+
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[width=\textwidth]{obrazky/web.png}
+            \caption{Ukázka jedné ze stránek webové aplikace.}
+            \label{fig:obrazky-web.png}
+        \end{figure}
+        
+
+        Druhou položka je zde nazvaná jako \uv{Scénáře} a nachází se v ní konfigurace systému a nastavení jednotlivých modulů. Pro sensory lze nastavit úrovně, které má systém vyhodnotit jako alarmující. Pro každou síťovou zásuvku je pak možné přepnout mezi dvěma režimi. V manuálním režimu uživatel přímo nastaví sepnutí nebo rozepnutí zásuvky, druhým režimeme je pak časovač, kdy lze nastavit pravidelné časy vypnutí a zapnutí.
+
+        Pro představu o vzhledu webu je zde přiložen obr.~\ref{TODO screenshot}, v elektronické příloze je pak snímků více.
