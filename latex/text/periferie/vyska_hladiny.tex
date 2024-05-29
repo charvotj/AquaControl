@@ -1,6 +1,6 @@
 \section{Senzor výšky hladiny}
 \label{sec:perif-sensor-hladina}
-    Voda v akváriu se průběžně odpařuje a je potřeba ji doplňovat. Účelem této periferie je průběžné monitorování hladiny akvária a upozornění uživatele na nutnost doplnění vody. Také může uživatele varovat v případě poškození nádrže a nežádoucího úniku vody do okolí. 
+    Voda v~akváriu se průběžně odpařuje a je potřeba ji doplňovat. Účelem této periferie je průběžné monitorování hladiny akvária a upozornění uživatele na nutnost doplnění vody. Také může uživatele varovat v~případě poškození nádrže a nežádoucího úniku vody do okolí. 
 
     \begin{figure}[h!]
         \centering
@@ -10,14 +10,14 @@
     \end{figure}
     
 
-    K realizaci tohoto modulu jsou použity dva jednoduché sensory.Každý funguje na jiném principu a má tedy také odlišné přednosti a nedostatky, v kombinaci tak zvyšují celkovou spolehlivost modulu. Oba sensory se nachází na obr.~\ref{fig:obrazky-foto-sensor_hladiny-jpeg}, který zároveň zobrazuje realizaci jejich připojení k obecnému modulu periferií za pomocí prototypové desky. 
+    K~realizaci tohoto modulu jsou použity dva jednoduché sensory.Každý funguje na jiném principu a má tedy také odlišné přednosti a nedostatky, v~kombinaci tak zvyšují celkovou spolehlivost modulu. Oba sensory se nachází na obr.~\ref{fig:obrazky-foto-sensor_hladiny-jpeg}, který zároveň zobrazuje realizaci jejich připojení k~obecnému modulu periferií za pomocí prototypové desky. 
 
     \subsection{Popis zvolených sensorů}
-    První ze sensorů využívá k určení výšky hladiny vodivost (potažmo odpor) vody. Obsahuje dva sety vodivých plošek, které nejsou vodivě spojeny. Při ponoření měřící části do vody začne mezi ploškami procházet slabý proud, který je přibližně úměrný velikosti ponořené části. Tento proud otevírá tranzistor, na jehož výstupu pak vzniká stejnosměrné napětí v rozsahu přiloženého napájení (zde 0 až \qty{3.3}{V}). Tento signál je přiveden na pin mikrokontroléru a následně zpracován vestaveným převodníkem. PIC18F26 obsahuje integrovanou periferii \acs{adc} s rozlišením 12 bitů, teoreticky lze tedy rozlišit \num{4296} úrovní~\cite{PIC18F26Q83}. Pro převod měřené hodnoty na výšku hladiny je potřeba sensor nejprve nakalibrovat. Byla tedy změřena přibližná výstupní hodnota pro minimální a maximální měřitelné ponoření sensoru a údaj je následně mikroprocesorem převeden na procenta. Údaj v procentech ponořené části je pro uživatele univerzálním ukazatelem nezávislým na umístění sensoru. Pro měření absolutní výšky hladiny by musel uživatel v systému nastavit výšku umístění sensoru a také ji pokaždé měnit v případě změny jeho pozice.
+    První ze sensorů využívá k~určení výšky hladiny vodivost (potažmo odpor) vody. Obsahuje dva sety vodivých plošek, které nejsou vodivě spojeny. Při ponoření měřící části do vody začne mezi ploškami procházet slabý proud, který je přibližně úměrný velikosti ponořené části. Tento proud otevírá tranzistor, na jehož výstupu pak vzniká stejnosměrné napětí v~rozsahu přiloženého napájení (zde 0 až \qty{3.3}{V}). Tento signál je přiveden na pin mikrokontroléru a následně zpracován vestaveným převodníkem. PIC18F26 obsahuje integrovanou periferii \acs{adc} s~rozlišením 12 bitů, teoreticky lze tedy rozlišit \num{4296} úrovní~\cite{PIC18F26Q83}. Pro převod měřené hodnoty na výšku hladiny je potřeba sensor nejprve nakalibrovat. Byla tedy změřena přibližná výstupní hodnota pro minimální a maximální měřitelné ponoření sensoru a údaj je následně mikroprocesorem převeden na procenta. Údaj v~procentech ponořené části je pro uživatele univerzálním ukazatelem nezávislým na umístění sensoru. Pro měření absolutní výšky hladiny by musel uživatel v~systému nastavit výšku umístění sensoru a také ji pokaždé měnit v~případě změny jeho pozice.
 
-    Druhým sensorem je jednoduchý plovák obsahující mechanický spínač, který je při ponoření do vody rozepnut. V případě poklesu hladiny pod zvolenou úroveň je pak spínač opět sepnut.
+    Druhým sensorem je jednoduchý plovák obsahující mechanický spínač, který je při ponoření do vody rozepnut. V~případě poklesu hladiny pod zvolenou úroveň je pak spínač opět sepnut.
 
-    Propojení mikrokontroléru s oběma sensory se nachází na obr.~\ref{fig:wl-sensor-pripojeni}.
+    Propojení mikrokontroléru s~oběma sensory se nachází na obr.~\ref{fig:wl-sensor-pripojeni}.
 
     \begin{figure}[!ht]
         \centering
@@ -80,6 +80,6 @@
             \draw (mcupin1) ++(-1,0) to[R, l_=100k, -*] ++(0,-2.5);
         
         \end{circuitikz}
-        \caption{Připojení sensorů hladiny k \acs{mcu}.}
+        \caption{Připojení sensorů hladiny k~\acs{mcu}.}
         \label{fig:wl-sensor-pripojeni}
     \end{figure}

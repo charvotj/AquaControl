@@ -100,12 +100,12 @@
         \end{figure}
 
         
-        Aby bylo vyhověno zmíněným požadavkům a zachována návrhová rezerva, byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}. Jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Tento čip funguje pouze jako buck kontrolér a zapojení je potřeba doplnit dvěma externími MOSFET tranzistory. Většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a generované teplo se lépe rozloží. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných parametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru zadaným hodnotám. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Kompletní schéma zapojení spolu s odkazy k relevantním kapitolám katalogového listu se nachází v příloze~\ref{priloha:schema-ridici-jednotka-napajeci-obvod}, pro přibližnou představu pak postačí zjednodušené schéma na obr.~\ref{fig:ridici-jednotka-napajeni-simp}. 
+        Aby bylo vyhověno zmíněným požadavkům a zachována návrhová rezerva, byl jako základ buck měniče zvolen čip LM5148~\cite{lm5148-datasheet}. Jedná se o~moderní součástku firmy Texas Instruments s~velkou výkonovou rezervou. Tento čip funguje pouze jako buck kontrolér a zapojení je potřeba doplnit dvěma externími MOSFET tranzistory. Většina tepelných ztrát vzniká právě na nich, čímž se sníží ohřev samotného čipu a generované teplo se lépe rozloží. Na volbě tranzistorů závisí také výsledná účinnost měniče. Při návrhu zapojení této součástky byl použit nástroj Webench Power Designer~\cite{webench-power-designer}, který podle zadaných parametrů navrhne konkrétní schéma zapojení, provede simulaci a zobrazí grafy upravené na míru zadaným hodnotám. Tento nástroj uvádí přibližnou účinnost zapojení jako \qty{88}{\percent}. V~navrženém schématu bylo posléze provedeno několik změn, aby vše odpovídalo požadavkům uvedeným v~katalogovém listu součástky~\cite{lm5148-datasheet}. Kompletní schéma zapojení spolu s~odkazy k~relevantním kapitolám katalogového listu se nachází v~příloze~\ref{priloha:schema-ridici-jednotka-napajeci-obvod}, pro přibližnou představu pak postačí zjednodušené schéma na obr.~\ref{fig:ridici-jednotka-napajeni-simp}. 
 
         \subsubsection{Hodnoty součástek}
-        Označení součástek používané v této kapitole je vztaženo ke zjednodušenému schématu na obr.~\ref{fig:ridici-jednotka-napajeni-simp}. Součástky okolo čipu LM5148 lze rozdělit na dvě skupiny. V prvé řadě ty součástky, které spolu s čipem tvoří jádro buck měniče. Jsou jimi externí tranzistory Q1 (high-side) a Q2 (low-side), induktor L2, vstupní kapacitory (C7,C8) a výstupní kapacitory (C13). Také sem lze zaředit snímací rezistor R13. Pro tyto součástky byly použity hodnoty doporučené výrobcem v katalogovém listu pro danou aplikaci~\cite{lm5148-datasheet}. Druhou skupinu tvoří součástky nutné ke správnému nastavení buck kontroléru. Jejich možné hodnoty pro různá nastavení jsou opět specifikovány v katalogovém listu. 
+        Označení součástek používané v~této kapitole je vztaženo ke zjednodušenému schématu na obr.~\ref{fig:ridici-jednotka-napajeni-simp}. Součástky okolo čipu LM5148 lze rozdělit na dvě skupiny. V~prvé řadě ty součástky, které spolu s~čipem tvoří jádro buck měniče. Jsou jimi externí tranzistory Q1 (high-side) a Q2 (low-side), induktor L2, vstupní kapacitory (C7,C8) a výstupní kapacitory (C13). Také sem lze zaředit snímací rezistor R13. Pro tyto součástky byly použity hodnoty doporučené výrobcem v~katalogovém listu pro danou aplikaci~\cite{lm5148-datasheet}. Druhou skupinu tvoří součástky nutné ke správnému nastavení buck kontroléru. Jejich možné hodnoty pro různá nastavení jsou opět specifikovány v~katalogovém listu. 
 
-        Rezistor R12 slouží k nastavení frekvence spínání, ze zvolené hodnoty vyplývá frekvence:
+        Rezistor R12 slouží k~nastavení frekvence spínání, ze zvolené hodnoty vyplývá frekvence:
         \begin{equation}
             f_{SW}[\unit{kHz}] = \frac{\num{10e6}}{45\cdot R_{12}[\unit{k\ohm}]+53 }
         \end{equation}
@@ -113,7 +113,7 @@
             f_{SW} = \frac{\num{10e6}}{45\cdot \num{35.7}+53 } = \qty{602.59}{kHz}
         \end{equation}
 
-        Výstupní napětí je dáno poměrem odporového děliče R9 a R10. Na pinu FB je udržováno konstantní napětí \(U_{FB} = \qty{0.8}{V}\), z této podmínky pak vyplývá vztah pro výstpní napětí:
+        Výstupní napětí je dáno poměrem odporového děliče R9 a R10. Na pinu FB je udržováno konstantní napětí \(U_{FB} = \qty{0.8}{V}\), z~této podmínky pak vyplývá vztah pro výstpní napětí:
         \begin{equation}
             U_{OUT}  = U_{FB}\cdot \frac{R_{9} +R_{10}}{R_{10}}
         \end{equation}
@@ -121,15 +121,15 @@
             U_{OUT}  = \num{0.8}\cdot \frac{\num{54.9e3} +\num{10e3}}{\num{10e3}} = \qty{5.192}{V}
         \end{equation}
 
-        Připojením pull-up rezistoru R8 mezi piny EXTCOMP a VDDA dojde k nastavení interní kompenzace, která je v tuto chvíli dostatečná a není potřeba tvořit kompenzační síť. Pro jistotu byl ale na výsledné DPS vyhrazen prostor i pro součástky kompenzační sítě, viz úplné schéma v příloze~\ref{priloha:schema-ridici-jednotka-napajeci-obvod}. 
+        Připojením pull-up rezistoru R8 mezi piny EXTCOMP a VDDA dojde k~nastavení interní kompenzace, která je v~tuto chvíli dostatečná a není potřeba tvořit kompenzační síť. Pro jistotu byl ale na výsledné DPS vyhrazen prostor i pro součástky kompenzační sítě, viz úplné schéma v~příloze~\ref{priloha:schema-ridici-jednotka-napajeci-obvod}. 
 
-        Čip LM5148 nabízí možnost pracovat paralelně v synchronizaci s druhým stejným čipem. Tato funkce zde nebude potřeba, tak stačí synchronizační pin PG/SYNCOUT pull-up rezistorem R11 spojit s napětím VCC, tím se přepne do módu indikátoru správnosti výstupního napětí (PG = Power Good). 
+        Čip LM5148 nabízí možnost pracovat paralelně v~synchronizaci s~druhým stejným čipem. Tato funkce zde nebude potřeba, tak stačí synchronizační pin PG/SYNCOUT pull-up rezistorem R11 spojit s~napětím VCC, tím se přepne do módu indikátoru správnosti výstupního napětí (PG = Power Good). 
 
         Poslední důležitou součástkou je rezistor R7 sloužící pro zbylá nastavení. Hodnota \(R_{7} = \qty{41.2}{k\ohm}\) indikuje nastavení módu primárního kontroléru (viz předešlý odstavec). Dále zapříčiňuje vypnutí módu Dual Phase a zapnutí použití rozprostřeného spektra (Spread spectrum).
 
 
     \subsection{Deska plošných spojů}
-        Ačkoliv se jedná o relativně jednoduchou \acs{dps}, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na \acs{dps} je rozhodujícím faktorem pro správnou funkci antény. Další částí vyžadující optimální návrh rozložení a propojení součástek je pak buck měnič. 
+        Ačkoliv se jedná o~relativně jednoduchou \acs{dps}, je potřeba při návrhu dbát jistých pravidel a doporučení. Modul ESP32 je vybaven anténou a volba jeho umístění na \acs{dps} je rozhodujícím faktorem pro správnou funkci antény. Další částí vyžadující optimální návrh rozložení a propojení součástek je pak buck měnič. 
         
         \begin{figure}[!ht]
             \centering
@@ -158,13 +158,13 @@
                 % \node[anchor=south west,inner sep=0,color=red] {4.};
                 % \node[anchor=south west,inner sep=0,color=red]          {5.};
             \end{tikzpicture}
-            \caption{Vizualizace \acs{dps} řídicí jednotky s vyznačením jednotlivých částí.}
+            \caption{Vizualizace \acs{dps} řídicí jednotky s~vyznačením jednotlivých částí.}
             \label{fig:ridici-jednotka-dps-popis}
         \end{figure}
 
-        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z hlediska \acs{EMC}. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
+        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z~hlediska \acs{EMC}. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s~jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v~přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
 
-        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu \acs{dps} tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jednotka-dps-popis} je zobrazen výsledný návrh \acs{dps}, kde v modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
+        Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu \acs{dps} tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jednotka-dps-popis} je zobrazen výsledný návrh \acs{dps}, kde v~modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v~kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
 
         \begin{figure}[h!]
             \centering
@@ -208,22 +208,22 @@
 
 
         \subsubsection{Měnič napětí}
-            Při tvorbě části desky s měničem napětí typu buck je potřeba dodržet obecná doporučení týkající se návrhu \acs{dps} se spínanými zdroji. Tato doporučení jsou spolu s příklady detailně popsána v katalogovém listu součástky~\cite{lm5148-datasheet} a dalších návrhových příručkách firmy Texas Instruments (výrobce čipu LM5148). Pohled na výsledný návrh propojení součástek na \acs{dps} je zobrazen na obr.~\ref{fig:lm5148buck-edit-png}. Zobrazena je zde pouze strana součástek (vrchní strana DPS). 
+            Při tvorbě části desky s~měničem napětí typu buck je potřeba dodržet obecná doporučení týkající se návrhu \acs{dps} se spínanými zdroji. Tato doporučení jsou spolu s~příklady detailně popsána v~katalogovém listu součástky~\cite{lm5148-datasheet} a dalších návrhových příručkách firmy Texas Instruments (výrobce čipu LM5148). Pohled na výsledný návrh propojení součástek na \acs{dps} je zobrazen na obr.~\ref{fig:lm5148buck-edit-png}. Zobrazena je zde pouze strana součástek (vrchní strana DPS). 
             
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=0.7\textwidth]{obrazky/exportovane/lm5148buck-edit.png}
-                \caption{Návrh rozložení součástek buck měniče, vrchní strana DPS. Exportováno z programu Kicad 7.0.}
+                \caption{Návrh rozložení součástek buck měniče, vrchní strana DPS. Exportováno z~programu Kicad 7.0.}
                 \label{fig:lm5148buck-edit-png}
             \end{figure}
             
-            V levém dolním rohu obrázku lze vidět oddělení signálové země za pomoci vlastního ohraničeného polygonu. Tento krok zajistí lepší stabilitu konfiguračních obvodů buck kontroléru. Umístěním tranzistorů a induktoru blízko sebe dojde k minimalizaci plochy spínacího uzlu.
+            V~levém dolním rohu obrázku lze vidět oddělení signálové země za pomoci vlastního ohraničeného polygonu. Tento krok zajistí lepší stabilitu konfiguračních obvodů buck kontroléru. Umístěním tranzistorů a induktoru blízko sebe dojde k~minimalizaci plochy spínacího uzlu.
             Vstupní kapacitory jsou umístěny co nejblíže high-side tranzistoru, výstupní kapacitory pak blízko výstupního uzlu. Vstupní a výstupní napětí jsou přivedeny resp. odvedeny pomocí měděných polygonů na druhé vnitřní vrstvě. První vnitřní plocha je pak celá provedena jako zemnící, zkracuje tak délku proudových smyček. Zbylé signálové cesty jsou vedeny na spodní vrstvě \acs{dps}.
 
     \section{Konektivita}
-        Řídicí jednotka je vybavena několika konektory, jak je opět možno vidět na obr.~\ref{fig:ridici-jednotka-dps-popis}. Na levé straně \acs{dps} (značeno 1.) se nachází konektory pro připojení periferií připravené pro montáž do panelu, kde pak budou přístupné uživateli. Ostatní vyznačené konektory slouží pro připojení externích modulů v rámci hlavního šasi (viz blokové schéma na obr.~\ref{fig:blokove-schema}) popř. pro programování a testování, nebudou tedy volně přístupné uživateli.
+        Řídicí jednotka je vybavena několika konektory, jak je opět možno vidět na obr.~\ref{fig:ridici-jednotka-dps-popis}. Na levé straně \acs{dps} (značeno 1.) se nachází konektory pro připojení periferií připravené pro montáž do panelu, kde pak budou přístupné uživateli. Ostatní vyznačené konektory slouží pro připojení externích modulů v~rámci hlavního šasi (viz blokové schéma na obr.~\ref{fig:blokove-schema}) popř. pro programování a testování, nebudou tedy volně přístupné uživateli.
 
-        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu~\cite{altium-circuit-protection}. Jak je vidět na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný \acs{can} řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky s napájením či zemí, tak proti ESD~\cite{ata-datasheet}. 
+        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu~\cite{altium-circuit-protection}. Jak je vidět na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný \acs{can} řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky s~napájením či zemí, tak proti ESD~\cite{ata-datasheet}. 
 
         \begin{figure}[h!]
             \centering
@@ -239,7 +239,7 @@
             \label{fig:ridici-jednotka-konektory}
         \end{figure}
 
-        Co se týče napájecích vodičů, každý z nich je ošetřen vratnou pojistkou (ang. polyfuse) dimenzovanou podle předpokládaného maximálního odběru zařízení. Při překročení tohoto proudu, např. z důvodu zkratu v některé z periferií, pojistka sepne a proud v obvodu omezí na minimum. Schéma zapojení konektorů spolu s hodnotami vratných pojistek se nachází na obr.~\ref{fig:ridici-jednotka-konektory}.
+        Co se týče napájecích vodičů, každý z~nich je ošetřen vratnou pojistkou (ang. polyfuse) dimenzovanou podle předpokládaného maximálního odběru zařízení. Při překročení tohoto proudu, např. z~důvodu zkratu v~některé z~periferií, pojistka sepne a proud v~obvodu omezí na minimum. Schéma zapojení konektorů spolu s~hodnotami vratných pojistek se nachází na obr.~\ref{fig:ridici-jednotka-konektory}.
 
 
             

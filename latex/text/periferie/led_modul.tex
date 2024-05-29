@@ -1,19 +1,19 @@
 \section{\acs{led} osvětlení}
 \label{sec:perif-led-osvetleni}
 
-    Úkolem této periferie je zajistit osvětlení akvária a umožnit jeho ovládání. V porovnání s ostatními moduly je zapojení relativně komplexní a proto byla pro tuto periferii navržena a zhotovena vlastní \acs{dps} (fungující jako dceřinná deska, viz.~\ref{sec:modul-periferie}). Jako typ svítidla byly zvoleny \acs{led} pásky pracující s napětím \qty{12}{V}. Modul musí být schopen samostatně ovládat 2 \acs{led} pásky, kdy za pomocí regulace proudu do \acs{led} pásku nastaví intenzitu osvětlení. 
+    Úkolem této periferie je zajistit osvětlení akvária a umožnit jeho ovládání. V~porovnání s~ostatními moduly je zapojení relativně komplexní a proto byla pro tuto periferii navržena a zhotovena vlastní \acs{dps} (fungující jako dceřinná deska, viz.~\ref{sec:modul-periferie}). Jako typ svítidla byly zvoleny \acs{led} pásky pracující s~napětím \qty{12}{V}. Modul musí být schopen samostatně ovládat 2 \acs{led} pásky, kdy za pomocí regulace proudu do \acs{led} pásku nastaví intenzitu osvětlení. 
 
 \subsection{Návrh zapojení}
-    Na začátku návrhu je potřeba specifikovat si požadavky na elektrické parametry zapojení. Uvažujme délku každého pásku \(l=\qty{1}{m}\), vstupní napětí získané z konektoru D-sub \(U_{in} =\qty{24}{V}\) a výstupní napětí pro které je pásek určen \(U_{out} =\qty{12}{V}\). Pro stanovení maximálního proudu bylo vycházeno z údajů na e-shopu \acs{led} Solution~\cite{eshop-ledsolution-svetlo}, kdy nejvýkonější nabízený \acs{led} pásek pro dané napětí má příkon \(P_{i}= \qty{20}{W/m}\). Pak každý kanál musí být schopen dodat proud odpovídající nejnáročnějšímu scénáři:
+    Na začátku návrhu je potřeba specifikovat si požadavky na elektrické parametry zapojení. Uvažujme délku každého pásku \(l=\qty{1}{m}\), vstupní napětí získané z~konektoru D-sub \(U_{in} =\qty{24}{V}\) a výstupní napětí pro které je pásek určen \(U_{out} =\qty{12}{V}\). Pro stanovení maximálního proudu bylo vycházeno z~údajů na e-shopu \acs{led} Solution~\cite{eshop-ledsolution-svetlo}, kdy nejvýkonější nabízený \acs{led} pásek pro dané napětí má příkon \(P_{i}= \qty{20}{W/m}\). Pak každý kanál musí být schopen dodat proud odpovídající nejnáročnějšímu scénáři:
     \begin{equation}  
         I_{max} = \frac{P_{i}\cdot l }{U_{out}} = \frac{20\cdot 1 }{12} = \qty{1.66}{A}
     \end{equation}
 
-    Jelikož se jedná o dceřinnou desku pro obecný modul, rozměr výsledné \acs{dps} je omezen a část plochy je navíc využita konektory pro vsazení do obecného modulu. Je tedy potřeba zvolit co nejvíce integrované řešení, které současně slibuje dobrou účinnost a tedy co nejnižší ohřev zařízení během provozu.
+    Jelikož se jedná o~dceřinnou desku pro obecný modul, rozměr výsledné \acs{dps} je omezen a část plochy je navíc využita konektory pro vsazení do obecného modulu. Je tedy potřeba zvolit co nejvíce integrované řešení, které současně slibuje dobrou účinnost a tedy co nejnižší ohřev zařízení během provozu.
 
-    Pro řízení \acs{led} osvětlení je často používán proudový zdroj, který umožňuje lineárně regulovat výstupní proud a tím i intenzitu osvětlení. Na trhu existuje opět celá řada čipů určena přímo k ovládání \acs{led} pásků~\cite{TI_\acs{led}_Drivers}, problém je zde ale v tom, že uživatel velmi pravděpodobně připojí pásek s nižším, předem neznámým příkonem. Maximální proud je tedy specifický danému \acs{led} pásku a proudový zdroj by musel zároveň spolehlivě zaručit, že nebude překročeno napětí \(U_{out} =\qty{12}{V} \).
+    Pro řízení \acs{led} osvětlení je často používán proudový zdroj, který umožňuje lineárně regulovat výstupní proud a tím i intenzitu osvětlení. Na trhu existuje opět celá řada čipů určena přímo k~ovládání \acs{led} pásků~\cite{TI_\acs{led}_Drivers}, problém je zde ale v~tom, že uživatel velmi pravděpodobně připojí pásek s~nižším, předem neznámým příkonem. Maximální proud je tedy specifický danému \acs{led} pásku a proudový zdroj by musel zároveň spolehlivě zaručit, že nebude překročeno napětí \(U_{out} =\qty{12}{V} \).
 
-    Touto funkcí většina čipů nedisponuje a pokud ano, nejsou dostatečně integrované pro použití v této aplikaci. Po důkladné rešerši a několika iteracích návrhu se nakonec jeví jako nejlepší možnost použití napěťového měniče typu buck spolu se zesilovačem pro snímání proudu. Snímaný proud je následně zpracován mikrokontrolérem a jsou upraveny poměry ve zpětné vazbě měniče, aby napětí odpovídalo požadovanému proudu.
+    Touto funkcí většina čipů nedisponuje a pokud ano, nejsou dostatečně integrované pro použití v~této aplikaci. Po důkladné rešerši a několika iteracích návrhu se nakonec jeví jako nejlepší možnost použití napěťového měniče typu buck spolu se zesilovačem pro snímání proudu. Snímaný proud je následně zpracován mikrokontrolérem a jsou upraveny poměry ve zpětné vazbě měniče, aby napětí odpovídalo požadovanému proudu.
 
     \begin{figure}[h!]
         \centering
@@ -31,17 +31,17 @@
 
     
 \subsubsection{Popis schématu a výpočty hodnot součástek}
-    Zjednodušené schéma pro jeden ovládaný kanál se nachází na obr.~\ref{fig:led-board-simp-schema}, při výpočtech bude použito označení součástek z tohoto schématu. Úplné schéma modulu pak lze nalézt v příloze~\ref{priloha:schema-led-board}.
+    Zjednodušené schéma pro jeden ovládaný kanál se nachází na obr.~\ref{fig:led-board-simp-schema}, při výpočtech bude použito označení součástek z~tohoto schématu. Úplné schéma modulu pak lze nalézt v~příloze~\ref{priloha:schema-led-board}.
 
-    Jako buck kontrolér je zvolen čip AP63356Q vyvinutý společností Diodes incorporated, jedná se o úspornou a velmi malou součástku, která v sobě integruje oba potřebné MOSFET tranzistory a spíná s pevně danou frekvencí \(f_{SW}=\qty{450}{kHz} \) ~\cite{Diodes_AP63356Q}. Pro snímání proudu poslouží čip INA180A4 firmy Texas Instruments~\cite{TI_INA180A4}.
+    Jako buck kontrolér je zvolen čip AP63356Q vyvinutý společností Diodes incorporated, jedná se o~úspornou a velmi malou součástku, která v~sobě integruje oba potřebné MOSFET tranzistory a spíná s~pevně danou frekvencí \(f_{SW}=\qty{450}{kHz} \) ~\cite{Diodes_AP63356Q}. Pro snímání proudu poslouží čip INA180A4 firmy Texas Instruments~\cite{TI_INA180A4}.
 
-    Z obrázku je vidět, že pro ovládání jednoho kanálu \acs{led} pásků jsou využity 4 piny \acs{mcu}. RA4 a RB1 fungují jako vstupy, RA2 a RA3 pak jako výstupy. Rezistor \(R_{1}\) drží buck měnič ve vypnutém stavu, dokud mikrokontrolér nenastaví hodnotu pinu RA2 na logickou 1. Pin RA4 je pak čipem (U1) stažen k zemi vždy, když na výstupu není odpovídající nastavené napětí.  
+    Z~obrázku je vidět, že pro ovládání jednoho kanálu \acs{led} pásků jsou využity 4 piny \acs{mcu}. RA4 a RB1 fungují jako vstupy, RA2 a RA3 pak jako výstupy. Rezistor \(R_{1}\) drží buck měnič ve vypnutém stavu, dokud mikrokontrolér nenastaví hodnotu pinu RA2 na logickou 1. Pin RA4 je pak čipem (U1) stažen k~zemi vždy, když na výstupu není odpovídající nastavené napětí.  
     
-    Nastavení výstupního napětí měniče je dosaženo za pomoci zpětnovazební smyčky mezi výstupním uzlem (I.) a zpětnovazebním pinem FB (uzel II.). V uzlu II. je drženo konstantní napětí \qty{0.8}{V}~\cite{Diodes_AP63356Q}, poměrem rezistorů R3 a R4 je pak definováno výstupní napětí. Zvolíme hodnotu odporu \(R_{4} = \qty{10}{k\ohm}\), pro maximální požadované napětí \(U_{outMAX} = \qty{12}{V}\) platí:
+    Nastavení výstupního napětí měniče je dosaženo za pomoci zpětnovazební smyčky mezi výstupním uzlem (I.) a zpětnovazebním pinem FB (uzel II.). V~uzlu II. je drženo konstantní napětí \qty{0.8}{V}~\cite{Diodes_AP63356Q}, poměrem rezistorů R3 a R4 je pak definováno výstupní napětí. Zvolíme hodnotu odporu \(R_{4} = \qty{10}{k\ohm}\), pro maximální požadované napětí \(U_{outMAX} = \qty{12}{V}\) platí:
     \begin{equation}
         R_{3} = R_{4}\cdot \left(\frac{U_{outMAX} }{\num{0.8}}-1\right) = \qty{10}{k}\cdot \left(\frac{12}{\num{0.8}}-1\right) = \qty{140}{k\ohm}
     \end{equation} 
-    Na pin RA3 mikrokontroléru je přivedeno analogové napětí z periferie \acs{dac} popř. \acs{pwm} signál. Skrze rezistor R5 (a ochrannou diodu) pak teče proud do rezistoru R4, úbytek napětí na tomto rezistoru je ale konstantní (\qty{0.8}{V}) a tedy je konstantní i proud rezistorem. Z prvního Kirchhoffova zákona pak víme, že proud rezistorem R3 klesne o hodnotu proudu dodanou z pinu RA3, tím klesne také napětí na výstupu měniče a dojde ke ztlumení jasu \acs{led} pásku. Citlivost (nebo také rozsah) změny je definována hodnotou R5, snížením jeho hodnoty lze dosáhnout na výstupu ještě nižšího napětí. Pro hodnotu \(R_{5} = \qty{100}{k\ohm}\) zobrazenou ve schématu lze nejnižší možné napětí vypočítat následovně:
+    Na pin RA3 mikrokontroléru je přivedeno analogové napětí z~periferie \acs{dac} popř. \acs{pwm} signál. Skrze rezistor R5 (a ochrannou diodu) pak teče proud do rezistoru R4, úbytek napětí na tomto rezistoru je ale konstantní (\qty{0.8}{V}) a tedy je konstantní i proud rezistorem. Z~prvního Kirchhoffova zákona pak víme, že proud rezistorem R3 klesne o~hodnotu proudu dodanou z~pinu RA3, tím klesne také napětí na výstupu měniče a dojde ke ztlumení jasu \acs{led} pásku. Citlivost (nebo také rozsah) změny je definována hodnotou R5, snížením jeho hodnoty lze dosáhnout na výstupu ještě nižšího napětí. Pro hodnotu \(R_{5} = \qty{100}{k\ohm}\) zobrazenou ve schématu lze nejnižší možné napětí vypočítat následovně:
     \begin{equation}
         U_{outMIN} = \num{0.8}+R_{3} \cdot I_{3} = \num{0.8}+R_{3} \cdot \left(\frac{\num{0.8}}{R_{4}} - \frac{U_{VDD} - U_{D1}}{R_{4}+R_{5}} \right) 
     \end{equation}  
@@ -49,11 +49,11 @@
     \begin{equation}
         U_{outMIN} = \num{0.8}+\qty{140}{k} \cdot \left(\frac{\num{0.8}}{\qty{10}{k}} - \frac{\num{3.3} - \num{0.35}}{\qty{10}{k}+\qty{100}{k}} \right) = \qty{8.25}{V}
     \end{equation}  
-    Toto napětí by mělo být dostatečně nízké k úplnému zhasnutí \acs{led} pásku.
+    Toto napětí by mělo být dostatečně nízké k~úplnému zhasnutí \acs{led} pásku.
 
-    Pro zajištění stability obvodu je navržena externí kompenzační síť. Je složena ze tří součástek připojených mezi pin COMP a zem. Tyto sítě se navrhují z důvodů zlepšení odezvy systému na rychlé změny výstupního proudu. V ideálním případě chceme, aby systém zareagoval co nejrychleji, ale současně nedošlo k jeho rozkmitání. Vzhledem ke scénáři, kdy MCU uměle vstupuje do zpětnovazební smyčky, je riskantní pohybovat se na zmíněné hranici. Pro zachování stability byla proto zvolena velmi pomalá odezva systému. Požadoveného zpomalení je dosaženo vysokou hodnota kapacity kompenzačního kondenzátoru, \(C_{4}=\qty{100}{nF} \).
+    Pro zajištění stability obvodu je navržena externí kompenzační síť. Je složena ze tří součástek připojených mezi pin COMP a zem. Tyto sítě se navrhují z~důvodů zlepšení odezvy systému na rychlé změny výstupního proudu. V~ideálním případě chceme, aby systém zareagoval co nejrychleji, ale současně nedošlo k~jeho rozkmitání. Vzhledem ke scénáři, kdy MCU uměle vstupuje do zpětnovazební smyčky, je riskantní pohybovat se na zmíněné hranici. Pro zachování stability byla proto zvolena velmi pomalá odezva systému. Požadoveného zpomalení je dosaženo vysokou hodnota kapacity kompenzačního kondenzátoru, \(C_{4}=\qty{100}{nF} \).
 
-    V dalším kroku je stanovena hodnota induktoru L1. Výrobce doporučuje zvolit zvlnění proudu induktorem (ripple) \(\Delta I_{L}  \) jako 30 až \qty{50}{\percent} maximálního odběru. Pro výpočet induktoru je uvažován maximální povolený proud čipem, tím je zajištěno, že čip bude fungovat i po překročení maximálního očekávaného proudu \(I_{max} = \qty{1.66}{A} \). Při zvolení střední hodnoty \qty{40}{\percent} získáme:
+    V~dalším kroku je stanovena hodnota induktoru L1. Výrobce doporučuje zvolit zvlnění proudu induktorem (ripple) \(\Delta I_{L}  \) jako 30 až \qty{50}{\percent} maximálního odběru. Pro výpočet induktoru je uvažován maximální povolený proud čipem, tím je zajištěno, že čip bude fungovat i po překročení maximálního očekávaného proudu \(I_{max} = \qty{1.66}{A} \). Při zvolení střední hodnoty \qty{40}{\percent} získáme:
     \begin{equation}
         \Delta I_{L} = \num{0.4}\cdot I_{IC-max} = \num{0.4} \cdot  \num{3.5} = \qty{1.4}{A}
     \end{equation}
@@ -69,8 +69,8 @@
 
     Pro vstupní (C1) a výstupní (C6) kapacitu použijeme hodnoty doporučené výrobcem, stejně tak pro bootstrap kondenzátor C3. 
     
-    Poslední součástkou zůstává měřicí rezistor R6. Tímto rezistorem protéká celý výstupní proud měniče, v rámci minimalizace ztrátového výkonu by měl mít tedy co nejmenší odpor. Musíme ovšem také brát v potaz rozsah měřicího zesilovače INA180A4. Tato součástka se vyrábí v několika variantách, byla zvolena varianta s nejvyšším ziskem \(G_{INA}=200 \) pro zachování co nejnižší hodnoty rezistoru, výstupní napětí zesilovače je v rozsahu 0 až \qty{3.3}{V} (VDD mikrokontroléru).
-    Při maximálním očekávaném proudu chceme dosáhnout horní hranice rozsahu zesilovače, z této podmínky vyplývá vztah pro výpočet odporu rezirtoru R6:
+    Poslední součástkou zůstává měřicí rezistor R6. Tímto rezistorem protéká celý výstupní proud měniče, v~rámci minimalizace ztrátového výkonu by měl mít tedy co nejmenší odpor. Musíme ovšem také brát v~potaz rozsah měřicího zesilovače INA180A4. Tato součástka se vyrábí v~několika variantách, byla zvolena varianta s~nejvyšším ziskem \(G_{INA}=200 \) pro zachování co nejnižší hodnoty rezistoru, výstupní napětí zesilovače je v~rozsahu 0 až \qty{3.3}{V} (VDD mikrokontroléru).
+    Při maximálním očekávaném proudu chceme dosáhnout horní hranice rozsahu zesilovače, z~této podmínky vyplývá vztah pro výpočet odporu rezirtoru R6:
     \begin{equation}
         R_{6} = \frac{U_{VDD}}{I_{max} \cdot G_{INA} } = \frac{\num{3.3}}{\num{1.66}\cdot 200} = \qty{9.94}{m\ohm}
     \end{equation} 
@@ -78,7 +78,7 @@
 
 
 \subsubsection{Očekávané parametry}
-    Pro výpočet výstupního zvlnění (v uzlu I.) chybí údaj o ekvivalentním sériovém odporu (ESR) výstupních kondenzátorů (C6), který výrobce neuvádí. Vyjdeme tedy z typické hodnoty pro keramický kondenzátor \(ESR=\qty{15}{m\ohm}\)~\cite{wikipedia2024esr}, kdy počítáme s paralelní kombinací tří kondenzátorů.
+    Pro výpočet výstupního zvlnění (v~uzlu I.) chybí údaj o~ekvivalentním sériovém odporu (ESR) výstupních kondenzátorů (C6), který výrobce neuvádí. Vyjdeme tedy z~typické hodnoty pro keramický kondenzátor \(ESR=\qty{15}{m\ohm}\)~\cite{wikipedia2024esr}, kdy počítáme s~paralelní kombinací tří kondenzátorů.
     Očekávané výstupní zvlnění je tedy přibližně:
     \begin{equation}
         \label{rovnice:led_modul}
@@ -88,12 +88,12 @@
         \Delta U_{out} = \num{1.4} \cdot  \left(\frac{\qty{15}{m}}{3}+\frac{1}{8\cdot \qty{450}{k} \cdot 3\cdot \qty{22}{\micro\,} }\right)  = \qty{13}{mV}
     \end{equation} 
 
-    Výpočet výsledné účinnosti synchronního buck měniče je poměrně komplexním problémem~\cite{texasBuckEfficiency}. K jejímu odhadu je potřeba stanovit hodnotu ztrátového výkonu jednotlivých částí měniče. U integrovaného řešení, jako je i použitý čip AP63356Q, výrobce často uvádí pouze hodnoty základních parametrů. Chybí detaily zejména o integrovaných tranzistorech, které jsou klíčové pro výpočet spínacích ztrát. Jako možnost tedy zbývá přibližný odečet z grafů katalogového listu nebo využití kalkulačky dodané výrobcem~\cite{diodesAP6335xQ}, která v sobě obsahuje přesnější výpočetní rovnice. 
+    Výpočet výsledné účinnosti synchronního buck měniče je poměrně komplexním problémem~\cite{texasBuckEfficiency}. K~jejímu odhadu je potřeba stanovit hodnotu ztrátového výkonu jednotlivých částí měniče. U~integrovaného řešení, jako je i použitý čip AP63356Q, výrobce často uvádí pouze hodnoty základních parametrů. Chybí detaily zejména o~integrovaných tranzistorech, které jsou klíčové pro výpočet spínacích ztrát. Jako možnost tedy zbývá přibližný odečet z~grafů katalogového listu nebo využití kalkulačky dodané výrobcem~\cite{diodesAP6335xQ}, která v~sobě obsahuje přesnější výpočetní rovnice. 
 
     Po dosazení odpovídajích hodnot do kalkulačky výrobce je odhadovaná účinnost celého obvodu (při maximálním zatížení jednoho kanálu) \(\eta=\qty{96}{\percent}\) a ztrátový výkon \(P_{Z} = \qty{0.84}{W}\). 
 
 \subsection{Tvorba \acs{dps}}
-    Jak již bylo zmíněno v úvodu kapitoly, jedná se o dceřinnou desku pro obecný modul periferie, čímž jsou jasně určeny její maximální rozměry. Stejně jako u předešlých návrhů, i zde je použita čtyřvrstvá struktura viz obr.~\ref{fig:ridici-jednotka-stackup-dps}. Vizualizace návrhu se nachází na obr.~\ref{fig:perif-led-dps} spolu s ukázkou sesazení s obecným modulem periferie. 
+    Jak již bylo zmíněno v~úvodu kapitoly, jedná se o~dceřinnou desku pro obecný modul periferie, čímž jsou jasně určeny její maximální rozměry. Stejně jako u~předešlých návrhů, i zde je použita čtyřvrstvá struktura viz obr.~\ref{fig:ridici-jednotka-stackup-dps}. Vizualizace návrhu se nachází na obr.~\ref{fig:perif-led-dps} spolu s~ukázkou sesazení s~obecným modulem periferie. 
 
 
     \begin{figure}[!ht]
@@ -119,5 +119,5 @@
         \label{fig:perif-led-dps}
     \end{figure}
 
-    Za účelem zvětšení plochy pro umístění součástek byly z konektorů obecného modulu vyvedeny pouze některé piny, i přesto bylo nakonec potřeba umístit komponenty také na spodní stranu \acs{dps}. Rozmístění součástek je obdobné pro oba měniče napětí a respektuje doporučení výrobce a tedy i obecná pravidla pro návrh měničů napětí~\cite{Diodes_AP63356Q}. Je kladen důraz na to, aby smyčka ze spínacího uzlu přes výstupní kapacitu a zem zpět do kontroléru byla co nejkratší a vedena za pomoci polygonů. Stejně tak vstupní kapacitor je umístěn přímo vedle vstupních pinů kontroléru.
+    Za účelem zvětšení plochy pro umístění součástek byly z~konektorů obecného modulu vyvedeny pouze některé piny, i přesto bylo nakonec potřeba umístit komponenty také na spodní stranu \acs{dps}. Rozmístění součástek je obdobné pro oba měniče napětí a respektuje doporučení výrobce a tedy i obecná pravidla pro návrh měničů napětí~\cite{Diodes_AP63356Q}. Je kladen důraz na to, aby smyčka ze spínacího uzlu přes výstupní kapacitu a zem zpět do kontroléru byla co nejkratší a vedena za pomoci polygonů. Stejně tak vstupní kapacitor je umístěn přímo vedle vstupních pinů kontroléru.
     

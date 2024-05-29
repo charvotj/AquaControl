@@ -1,5 +1,5 @@
 \chapter{Volba a návrh periferií}
-    Tato kapitola se již věnuje návrhu konkrétních periferií, tedy jednotlivých senzorů a akčních členů. Po technické stránce jsou všechny zmíněné moduly nadstavbou pro \uv{obecný modul periferie} popsaný detailně v předešlé kapitole. Jelikož je celý systém modulární, je pravděpodobné, že postupem času bude dále rozšiřován o nové typy periferií a i v současné chvíli je jich v plánu více, než je v možnostech této práce. Pro lepší přehlednost se v tab.~\ref{tab:prehled-periferii} nachází přehled všech realizovaných i v tuto chvíli pouze plánovaných periferií.
+    Tato kapitola se již věnuje návrhu konkrétních periferií, tedy jednotlivých senzorů a akčních členů. Po technické stránce jsou všechny zmíněné moduly nadstavbou pro \uv{obecný modul periferie} popsaný detailně v~předešlé kapitole. Jelikož je celý systém modulární, je pravděpodobné, že postupem času bude dále rozšiřován o~nové typy periferií a i v~současné chvíli je jich v~plánu více, než je v~možnostech této práce. Pro lepší přehlednost se v~tab.~\ref{tab:prehled-periferii} nachází přehled všech realizovaných i v~tuto chvíli pouze plánovaných periferií.
 
     \begin{table}[h]
         \centering
@@ -8,14 +8,14 @@
         \begin{tabular}{|l|l|l|l|l|}
             \hline
             Název & Typ & Napájení & Funkce & Realizováno \\ \hline\hline
-            Sensor teploty  & S & \qty{5}{V}    & Teplota vody                       & Ano, kap.~\ref{sec:perif-sensor-teploty}  \\ \hline
-            Sensor hladiny  & S & \qty{5}{V}    & Výška hladiny (spojitě + skokově)  & Ano, kap.~\ref{sec:perif-sensor-hladina}  \\ \hline
-            \acs{led} osvětlení   & A & \qty{24}{V}   & Intenzita osvětlení                & Ano, kap.~\ref{sec:perif-led-osvetleni}  \\ \hline
-            Sensor \acs{ph}       & S & \qty{5}{V}    & \acs{ph} vody                            & Ne, kap.~\ref{sec:perif-sensor-ph}  \\ \hline
-            Topné těleso    & A & \qty{230}{V}  & Ohřev vody                         & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
-            Filtr vody      & A & \qty{230}{V}  & Filtrace vody                      & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
-            Krmítko         & A & \qty{24}{V}   & Dávkování krmiva                   & Ne  \\ \hline
-            Sensor průtoku  & S & -             & Voda tekoucí filtrem               & Ne  \\ \hline
+            Sensor teploty  & S~& \qty{5}{V}    & Teplota vody                       & Ano, kap.~\ref{sec:perif-sensor-teploty}  \\ \hline
+            Sensor hladiny  & S~& \qty{5}{V}    & Výška hladiny (spojitě + skokově)  & Ano, kap.~\ref{sec:perif-sensor-hladina}  \\ \hline
+            \acs{led} osvětlení   & A~& \qty{24}{V}   & Intenzita osvětlení                & Ano, kap.~\ref{sec:perif-led-osvetleni}  \\ \hline
+            Sensor \acs{ph}       & S~& \qty{5}{V}    & \acs{ph} vody                            & Ne, kap.~\ref{sec:perif-sensor-ph}  \\ \hline
+            Topné těleso    & A~& \qty{230}{V}  & Ohřev vody                         & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
+            Filtr vody      & A~& \qty{230}{V}  & Filtrace vody                      & Ano, kap.~\ref{sec:perif-230v}  \\ \hline
+            Krmítko         & A~& \qty{24}{V}   & Dávkování krmiva                   & Ne  \\ \hline
+            Sensor průtoku  & S~& -             & Voda tekoucí filtrem               & Ne  \\ \hline
                             % & S &  &  & A  \\ \hline
                             %     & S &  &  & A  \\ \hline
                             %     & S &  &  & A  \\ \hline
@@ -27,7 +27,7 @@
                             %     & S &  &  & A  \\ \hline
             \end{tabular}
             \begin{tabular}{c}
-                S = sensor, A = akční člen \\
+                S~= sensor, A~= akční člen \\
             \end{tabular}
    
     \end{table}
@@ -43,18 +43,18 @@
 
 \section{Senzor \acs{ph}}
 \label{sec:perif-sensor-ph}
-Kapitola~\ref{sec:monitorovani} stručně popisuje význam měření pH vody v akváriu. Ačkoliv informace o pH vody může být velmi užitečná, lze konstatovat, že kontinální měření této veličiny není pro provoz akvária nutností. Vývoj této periferie proto neměl v rámci práce nejvyšší prioritu a z důvodu nedostatku času nakonec nebyla realizována.
+Kapitola~\ref{sec:monitorovani} stručně popisuje význam měření pH vody v~akváriu. Ačkoliv informace o~pH vody může být velmi užitečná, lze konstatovat, že kontinální měření této veličiny není pro provoz akvária nutností. Vývoj této periferie proto neměl v~rámci práce nejvyšší prioritu a z~důvodu nedostatku času nakonec nebyla realizována.
 
-Nejjednodušším způsobem nepřetržitého měření je použití pH sondy. V rámci této práce byla zvolena elektrochemická sonda E201, kterou je možno vidět na obr.~\ref{fig:obrazky-foto-ph_sonda-jpeg}. Sonda se kládá ze dvou elektrod, referenční a měřicí. Měřicí elektroda je umístěna ve skleněném pouzdře opatřeném iontově sensitivní úpravou. Elektroda reaguje na kationty vodíku H+, které přímo souvisí s pH měřeného roztoku. Princip měření je potenciometrický. Referenční elektroda generuje stabilní potenciál, naopak na elektrodě měřicí vzniká potenciál závislý na pH roztoku. Potenciálový rozdíl je pak měřitelný dalšími obvody. Pro korektní převod měřené hodnoty je potřeba sensor kalibrovat. Jednoduchou kalibraci lze provést vložením sondy do dvou roztoků známého pH a následným proložením měřených hodnot kalibrační přímkou. K vytvoření kalibračních roztoků se využívá speciálních prášků, které lze zakoupit spolu se samotnou sondou.
+Nejjednodušším způsobem nepřetržitého měření je použití pH sondy. V~rámci této práce byla zvolena elektrochemická sonda E201, kterou je možno vidět na obr.~\ref{fig:obrazky-foto-ph_sonda-jpeg}. Sonda se kládá ze dvou elektrod, referenční a měřicí. Měřicí elektroda je umístěna ve skleněném pouzdře opatřeném iontově sensitivní úpravou. Elektroda reaguje na kationty vodíku H+, které přímo souvisí s~pH měřeného roztoku. Princip měření je potenciometrický. Referenční elektroda generuje stabilní potenciál, naopak na elektrodě měřicí vzniká potenciál závislý na pH roztoku. Potenciálový rozdíl je pak měřitelný dalšími obvody. Pro korektní převod měřené hodnoty je potřeba sensor kalibrovat. Jednoduchou kalibraci lze provést vložením sondy do dvou roztoků známého pH a následným proložením měřených hodnot kalibrační přímkou. K~vytvoření kalibračních roztoků se využívá speciálních prášků, které lze zakoupit spolu se samotnou sondou.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\textwidth]{obrazky/foto/ph_sonda.jpeg}
-    \caption{pH sonda E201 spolu s kalibračními prášky.}
+    \caption{pH sonda E201 spolu s~kalibračními prášky.}
     \label{fig:obrazky-foto-ph_sonda-jpeg}
 \end{figure}
 
-Z hlediska mikrokontroléru je zapotřebí periferie ADC (analogově digitální převodník). Použitý PIC18F26 je vybaven převodníkem s rozlišením  12 bitů, což je pro danou aplikaci více než dostatečné. Aby samotný sensor nebyl příliš proudově zatížen, bude pravděpodobně nutné přidat mezi sensor a mikrokontrolér ještě operační zesilovač. 
+Z~hlediska mikrokontroléru je zapotřebí periferie ADC (analogově digitální převodník). Použitý PIC18F26 je vybaven převodníkem s~rozlišením  12 bitů, což je pro danou aplikaci více než dostatečné. Aby samotný sensor nebyl příliš proudově zatížen, bude pravděpodobně nutné přidat mezi sensor a mikrokontrolér ještě operační zesilovač. 
 
 \input{text/periferie/230v.tex}
 
