@@ -49,16 +49,16 @@
   urldate = {2023-12-11}
 }
 
-@online{altium-esd-protection,
-  author       = {Zachariah PETERSON},
-  title        = {Beginner's Guide to ESD Protection Circuit Design for PCBs},
-  organization = {Altium Resources},
-  notprintmonth        = {September 21},
-  year         = {2021},
-  note         = {Aktualizováno 13.6. 2023},
-  url          = {https://resources.altium.com/p/beginners-guide-esd-protection-circuit-design-pcbs},
-  urldate = {2023-12-10}
-}
+% @online{altium-esd-protection,
+%   author       = {Zachariah PETERSON},
+%   title        = {Beginner's Guide to ESD Protection Circuit Design for PCBs},
+%   organization = {Altium Resources},
+%   notprintmonth        = {September 21},
+%   year         = {2021},
+%   note         = {Aktualizováno 13.6. 2023},
+%   url          = {https://resources.altium.com/p/beginners-guide-esd-protection-circuit-design-pcbs},
+%   urldate = {2023-12-10}
+% }
 
 @online{altium-circuit-protection,
   title        = {Methods of Circuit Protection},
@@ -188,16 +188,16 @@
   keywords  = {Akvaristika; Automatizace akvária; AVR; ATMEGA; ESP32; pH; LCD; Řízení teploty; Automatické krmení; Keywords Aquaristics; Aquarium automation; LCD Temperature Control; Automatic Feeding}
 }
 
-@MastersThesis{HedvicekMichal2017Nkas,
-  author    = {Michal HEDVÍČEK},
-  title     = {Návrh komplexního automatizovaného systému pro akvaristy},
-  school = {Vysoké učení technické v Brně. Fakulta elektrotechniky a komunikačních technologií},
-  year      = {2017},
-  type       = {Diplomová práce},
-  language  = {czech},
-  abstract  = {Diplomová práce se zabývá teoretickým návrhem automatizovaného řídicího systému pro akvárium a jeho následnou simulací v softwarovém prostředí Proteus ISIS. Díky simulačnímu programu lze ověřit chování procesoru při žádaných funkcích, správnost elektrických zapojení a chyby ve zdrojovém kódu. V další části práce je uveden rozbor komerčních systémů, jejich vlastností a možnosti použití. Kromě dostupných komerčních systémů je zde uveden základní přehled běžně používaných periferií v akvaristice, včetně jejich srovnání a zhodnocení. Následně je provedena realizace komplexního systému a jsou popsány postupy a metody potřebné k nastavení systému. Prostor je zde věnován také problematice chlazení a testům spolehlivosti.},
-  keywords  = {akvaristika mh; automatické systémy ovládací et; elektrické přístroje en; simulační programy ma; diplomové práce; automatizace akvária; chemismus vody; obvod reálného času; maticová klávesnice; dávkování hnojiva; Arduino}
-}
+% @MastersThesis{HedvicekMichal2017Nkas,
+%   author    = {Michal HEDVÍČEK},
+%   title     = {Návrh komplexního automatizovaného systému pro akvaristy},
+%   school = {Vysoké učení technické v Brně. Fakulta elektrotechniky a komunikačních technologií},
+%   year      = {2017},
+%   type       = {Diplomová práce},
+%   language  = {czech},
+%   abstract  = {Diplomová práce se zabývá teoretickým návrhem automatizovaného řídicího systému pro akvárium a jeho následnou simulací v softwarovém prostředí Proteus ISIS. Díky simulačnímu programu lze ověřit chování procesoru při žádaných funkcích, správnost elektrických zapojení a chyby ve zdrojovém kódu. V další části práce je uveden rozbor komerčních systémů, jejich vlastností a možnosti použití. Kromě dostupných komerčních systémů je zde uveden základní přehled běžně používaných periferií v akvaristice, včetně jejich srovnání a zhodnocení. Následně je provedena realizace komplexního systému a jsou popsány postupy a metody potřebné k nastavení systému. Prostor je zde věnován také problematice chlazení a testům spolehlivosti.},
+%   keywords  = {akvaristika mh; automatické systémy ovládací et; elektrické přístroje en; simulační programy ma; diplomové práce; automatizace akvária; chemismus vody; obvod reálného času; maticová klávesnice; dávkování hnojiva; Arduino}
+% }
 
 @MastersThesis{MusilLibor2018Isps,
   author    = {Libor MUSIL},
@@ -234,7 +234,6 @@
 
 @online{jlcpcb,
   title = {JLCPCB},
-  author = {{JLCPCB}},
   organization = {{JLCPCB}},
   url = {https://jlcpcb.com/},
   urldate = {2024-04-28},
@@ -259,25 +258,27 @@
 % TODO correct:
 @manual{ata-datasheet,
   title        = {{ATA6560 Datasheet}},
-  author       = {{TI}},
-  year         = {2022},
-  version      = {3.3},
-  url          = {https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/esp-hardware-design-guidelines-en-master-esp32.pdf}
+  author       = {{Microchip}},
+  year         = {2019},
+  version      = {Rev. B},
+  url          = {https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/20005991B.pdf}
 }
 
-@Manual{PIC18F26Q83,
+@manual{PIC18F26Q83,
   title        = {PIC18F26Q83},
-  author = {Microchip},
+  year         = {2021},
+  version      = {Rev. C},
+  author       = {Microchip},
   url          = {https://www.microchip.com/en-us/product/pic18f26q83},
-  urldate      = {2023-12-13}
+
 }
 
-@misc{wikipedia2024esr,
-  author = {Wikipedia contributors},
+@online{wikipedia2024esr,
+  organization = {Wikipedia},
   title = {Equivalent Series Resistance},
   year = {2024},
-  howpublished = {\url{https://en.wikipedia.org/wiki/Equivalent_series_resistance}},
-  note = {Accessed: 2024-05-15}
+  url = {https://en.wikipedia.org/wiki/Equivalent_series_resistance},
+  urldate = {2024-05-15}
 }
 
 @article{texasBuckEfficiency,
@@ -293,39 +294,42 @@
   author    = {Nick Davis},
   journal   = {All About Circuits},
   year      = {2022},
-  url       = {https://www.allaboutcircuits.com/technical-articles/introduction-temperature-sensors-thermistors-thermocouples-thermometer-ic/}
+  url       = {https://www.allaboutcircuits.com/technical-articles/introduction-temperature-sensors-thermistors-thermocouples-thermometer-ic/},
+  urldate = {2024-05-15}
 }
 
-@misc{TI_LED_Drivers,
-  author       = {Texas Instruments},
+@online{TI_LED_Drivers,
+organization = {Texas Instruments},
   title        = {LED Drivers Overview},
   year         = {2024},
   url          = {https://www.ti.com/power-management/led-drivers/overview.html},
-  note         = {Accessed: 2024-05-15}
+  urldate         = {2024-05-15}
 }
 
-@misc{TI_INA180A4,
-  author       = {Texas Instruments},
+@manual{TI_INA180A4,
+  author       = {{Texas Instruments}},
   title        = {INAx180 Low- or High-Side, Voltage Output, Current-Sense Amplifier},
   year         = {2022},
+  version      = {Rev. H},
   url          = {https://www.ti.com/lit/ds/symlink/ina180.pdf},
-  note         = {Accessed: 2024-05-15}
+  note         = {2024-05-15}
 }
 
-@misc{Diodes_AP63356Q,
-  author       = {Diodes Incorporated},
+@manual{Diodes_AP63356Q,
+  author       = {{Diodes Incorporated}},
   title        = {AP63356Q 3.5A, 36V Synchronous Buck Converter},
   year         = {2020},
   url          = {https://www.diodes.com/assets/Datasheets/AP63356Q_AP63357Q.pdf},
-  note         = {Accessed: 2024-05-15}
+  version      = {Rev. 1 - 2},
+  urldate         = {2024-05-15}
 }
 
-@misc{TechieScience_Thermocouples,
-  author       = {Techie Science},
+@online{TechieScience_Thermocouples,
+  organization       = {Techie Science},
   title        = {Thermocouples and Temperature Measurement},
   year         = {2023},
   url          = {https://techiescience.com/thermocouples-and-temperature/},
-  note         = {Accessed: 2024-05-15}
+  urldate         = {2024-05-15}
 }
 
 @online{espressif-idf,
@@ -335,10 +339,10 @@
   urldate = {2024-05-25}
 }
 
-@misc{diodesAP6335xQ,
-    author       = {Diodes Incorporated},
+@online{diodesAP6335xQ,
+    organization       = {Diodes Incorporated},
     title        = {AP6335x-Q Power Calculation},
     year         = {2024},
     url          = {https://www.diodes.com/assets/Calculators/AP6335x-Q_Power_Calculation.xlsx},
-    note         = {Accessed: 2024-05-25}
+    urldate         = {2024-05-25}
 }

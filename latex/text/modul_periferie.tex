@@ -23,7 +23,7 @@
             \end{itemize}
         \end{itemize}
 
-        Na základě těchto kritérií byl vybrán mikrokontrolér \textbf{PIC18F26Q83} od firmy Microchip, ten splňuje všechna kritéria a disponuje také množstvím dalších periferií, které by mohly být v~budoucnu užitečné~\cite{PIC18F26Q83}.
+        Na základě těchto kritérií byl vybrán mikrokontrolér PIC18F26Q83 od firmy Microchip, ten splňuje všechna kritéria a disponuje také množstvím dalších periferií, které by mohly být v~budoucnu užitečné~\cite{PIC18F26Q83}.
 
     \section{Návrh zapojení a tvorba \acs{dps}}
         Celé schéma pro obecný modul periferie se nachází v~příloze~\ref{priloha:schema-modul-periferii}. Návrh zapojení lze rozdělit na tři části. V~prvním kroku je zapojen mikrokontrolér tak, aby byly opět splněny všechny požadavky výrobce. Mikrokontroléry řady PIC se vyznačují značnou jednoduchostí použití a ke správnému chodu jim stačí jen minimum dalších součástek. V~případě PIC18F26Q83 postačí připojit blokovací kondenzátor (C6) na napájení (pin VCC) a přivést kladné napětí na resetovací pin (MCLR). \acs{mcu} je dále doplněn resetovacím tlačítkem pro pohodlnější práci při vývoji a testování firmwaru a regulátorem napětí (U1) s~výstupem \qty{3.3}{V}. 

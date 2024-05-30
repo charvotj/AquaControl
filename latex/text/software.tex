@@ -75,11 +75,11 @@
     Jelikož jsou řídicí jednotka i periferie programovány ve stejném jazyce (C/C++), lze mezi nimi část kódu sdílet. Tímto způsobem lze částečně předejít chybám v~komunikaci modulů mezi sebou. Společná část kódu obsahuje definice datových typů a konstant používaných při komunikaci po sběrnici \acs{can}.  
 
 \section{Popis \acs{can} komunikace}
-    Protokol \acs{can} je poměrně rozsáhlý a velká část organizace komunikace je řešena přímo hardwarovou periferií mikrokontroléru. Pro úspěšnou a efektivní komunikaci je potřeba nastavit oba typy mikrokontrolérů stejně a stanovit společný standart komunikace. Systém popsaný v~této práci pracuje s~frekvencí \qty{125}{kHz} a používá standartní strukturu rámců s~identifikátorem zprávy dlouhým 11 bitů (standart \acs{can} 2.0B umožňuje také délku 29 bitů). Struktura datového rámce je zobrazena na obr.~\ref{fig:obrazky/can-frame.png }. Sběrnice \acs{can} má implementovaný princip arbitrace, pokud začne komunikovat více zařízení současně, odešle se zpráva mající identifikátor s~nejvyšší prioritou. Logická nula se jeví na sběrnici jako dominantní, jednička naopak jako recesivní. Pokud zařízení odesílá recesivní signál a zároveň čte ze sběrnice signál dominantní, znamená to pro něj ztrátu arbitace a přestává vysílat, jelikož na sběrnici je v~danou chvíli vysílaná zpráva s~vyšší prioritou. Po skončení vysílání pak přerušené zařízení pokus opakuje.
+    Protokol \acs{can} je poměrně rozsáhlý a velká část organizace komunikace je řešena přímo hardwarovou periferií mikrokontroléru. Pro úspěšnou a efektivní komunikaci je potřeba nastavit oba typy mikrokontrolérů stejně a stanovit společný standart komunikace. Systém popsaný v~této práci pracuje s~frekvencí \qty{125}{kHz} a používá standartní strukturu rámců s~identifikátorem zprávy dlouhým 11 bitů (standart \acs{can} 2.0B umožňuje také délku 29 bitů~\cite{PIC18F26Q83,esp32-tecnical-reference}). Struktura datového rámce je zobrazena na obr.~\ref{fig:obrazky/can-frame.png }. Sběrnice \acs{can} má implementovaný princip arbitrace, pokud začne komunikovat více zařízení současně, odešle se zpráva mající identifikátor s~nejvyšší prioritou. Logická nula se jeví na sběrnici jako dominantní, jednička naopak jako recesivní. Pokud zařízení odesílá recesivní signál a zároveň čte ze sběrnice signál dominantní, znamená to pro něj ztrátu arbitace a přestává vysílat, jelikož na sběrnici je v~danou chvíli vysíláná zpráva s~vyšší prioritou. Po skončení vysílání pak přerušené zařízení pokus opakuje.
     
         \begin{figure}[h!]
             \centering
-            \includegraphics[width=0.8\textwidth]{obrazky/can-frame.png}
+            \includegraphics[width=0.9\textwidth]{obrazky/can-frame.png}
             \caption{Struktura datového rámce sběrnice \acs{can}. Převzato z~\cite{esp32-datasheet}}
             \label{fig:obrazky/can-frame.png   }
         \end{figure}
@@ -88,7 +88,7 @@
     V~navrženém systému nese identifikátor zprávy dvě informace. První tři odesílané bity značí typ zprávy. Rozlišena je zpráva určené všem jednotkám (BR -- Broadcast), zpráva od řídicí jednotky k~periferiím (TS -- master To Slave), od periferie zpět k~řídicí jednotce (TM -- slave To Master) a debug zpráva sloužící k~odeslání diagnostických dat nezávisle na ostatní komunikaci. Zbylých 8 bitů pak tvoří adresu jednotky odesílající zprávu (v~případě TM) resp. zprávu přijímající (v~případě TS). 
     
     \subsection{Adresace}
-    Adresy jednotlivých modulů by měly být po startu systému nebo připojení nové jednotky automaticky přiděleny tak, aby nedošlo ke kolizi adres ani v~případě připojení několika sensorů stejného typu. Princip adresace spočívá v~sérii několika BR zpráv. Po startu systému pošle řídicí jednotka požadavek na adresaci, jako odpověď odešlou jednotky periferíí své unikátní sériové číslo přičemž pouze jedna ze zpráv vyhraje arbitraci. Řídicí jednotka odpoví zprávou, která obsahuje sériové číslo úspěšné jednotky a přidělenou osmibitovou adresu. Následně zopakuje požadavek adresace a odpoví již pouze jednotky bez adresy, po dokončené adresaci pak neodpoví žádná jednotka. Pokud je do běžícího systému připojena nová periferie, odešle sama BR zprávu s~požadavkem na přidělení adresy.
+    Adresy jednotlivých modulů by měly být po startu systému nebo připojení nové jednotky automaticky přiděleny tak, aby nedošlo ke kolizi adres ani v~případě připojení několika sensorů stejného typu. Princip adresace spočívá v~sérii několika BR zpráv. Po startu systému pošle řídicí jednotka požadavek na adresaci, jako odpověď odešlou jednotky periferií své unikátní sériové číslo přičemž pouze jedna ze zpráv vyhraje arbitraci. Řídicí jednotka odpoví zprávou, která obsahuje sériové číslo úspěšné jednotky a přidělenou osmibitovou adresu. Následně zopakuje požadavek adresace a odpoví již pouze jednotky bez adresy, po dokončené adresaci pak neodpoví žádná jednotka. Pokud je do běžícího systému připojena nová periferie, odešle sama BR zprávu s~požadavkem na přidělení adresy.
 
     Ačkoliv je tento princip vymyšlen, v~rámci prototypu prozatím není implementován a otestován a každý typ periferie má pevně přidělenou adresu, lze tedy připojit pouze jednu periferii stejného typu. V~současné chvíli je toto řešení dostačující.
 
@@ -106,7 +106,7 @@
 
     \subsection{Indikace stavu zařízení}
     \label{kap:indikace-stavu-ridici-jednoty}
-        Šasi řídicí jednotky je vybaveno adresovatelným barevným \acs{led} páskem sestávajím ze čtyř diod jejichž úkolem je signalizovat uživateli stav zařízení. Jednotlivé stavy spolu s~popisem diod jsou zobrazeny na obr.~\ref{fig:stavove-led-mainboard}. Každý task, který je součástí procesu diagnostiky má svou vlastní globální proměnnou do které ukládá svůj stav. Dvakrát za vteřinu se pak spustí jednoduchá diagnostická funkce (běží v~rámci vlastního tasku), která jednotlivé stavové proměnné přečte, vyhodnotí celkový stav zařízení a aktualizuje barvu stavových \acs{led}. 
+        Šasi řídicí jednotky je vybaveno adresovatelným barevným \acs{led} páskem sestávajím ze čtyř diod jejichž úkolem je signalizovat uživateli stav zařízení. Jednotlivé stavy spolu s~popisem diod jsou zobrazeny na obr.~\ref{fig:stavove-led-mainboard}. Každý task, který je součástí procesu diagnostiky má svou vlastní globální proměnnou do které ukládá svůj stav. Dvakrát za vteřinu se pak spustí jednoduchá diagnostická funkce (běží v~rámci vlastního tasku). Ta jednotlivé stavové proměnné přečte, vyhodnotí celkový stav zařízení a aktualizuje barvu stavových \acs{led}. 
         \begin{figure}[h!]
             \centering
             \begin{tikzpicture}
@@ -152,7 +152,7 @@
         \end{figure}
 
     \subsection{Popis jednotlivých tasků}
-        Řídicí jednotka vykonává současně několik funkcí. Komunikuje s~periferiemi skrze sběrnci CAN, ovládá připojená relé a stavové diody. Kromě toho také komunikuje s~webovým serverem prostřednictvím WiFi. Jednotlivé úlohy je třeba vykonávat periodicky, ovšem každou s~jinou prioritou. Kód je proto rozdělen do několika tasků podle své funkce a priority. 
+        Řídicí jednotka vykonává současně několik funkcí. Komunikuje s~periferiemi skrze sběrnci CAN, ovládá připojená relé a stavové diody, kromě toho také komunikuje s~webovým serverem prostřednictvím WiFi. Jednotlivé úlohy je třeba vykonávat periodicky, ovšem každou s~jinou prioritou. Kód je proto rozdělen do několika tasků podle své funkce a priority. 
 
         K~synchronizaci tasků jsou využity binární semafory. K~převzetí semaforu ve {FreeRTOS} slouží funkce \texttt{xSemaphoreTake( xSemaphore, xBlockTime )}. Na řádku s~touto funkcí kód čeká až do přijetí semaforu odeslaného jiným taskem nebo do vypršení času stanoveného druhým parametrem. 
 
@@ -185,11 +185,6 @@
 
         \subsubsection{Obsluha sběrnice CAN --  \texttt{can\_bus\_task}}
             Inicializuje potřebné GPIO piny a připraví potřebné proměnné. Ve smyčce pak pravidelně kontroluje příchozí zprávy na sběrnici (zejména typu Broadcast, které mohou být odeslány periferiemi bez vyzvání). Příchozí zprávy filtruje a pomocí front předává dalším taskům. Na začátku vždy čeká na kontrolní semafor značící požadavek na vyčtení sběrnice. Pokud není vyslán požadavek, čekání na semafor vyprší a sběrnice je zkontrolována s~danou periodou.
-
-            \subsubsection{Obsluha WiFi --  \texttt{wifi\_task}}
-            V~inicializační fázi tohoto tasku je vznešen požadavek na připojení k~síti WiFi. V~případě selhání nebo pozdějšího odpojení je pokus automaticky opakován. 
-            
-            V~nekonečné smyčce pak task periodicky kontroluje dostupnost internetového připojení, dotazuje se serveru na poslední dostupnou verzi konfigurace a aktualizuje údaj o~reálném čase (ten je následně uchován vnitřním \acs{rtc} časovačem mikrokontroléru).
 
         \subsubsection{Indikace stavu --  \texttt{status\_update\_task}}
             Zpracovává stavové proměnné ostatních tasků a na základě těchto dat vyhodnocuje stav zařízení. Tento stav následně indikuje za pomoci stavových diod, jak bylo popsáno v~kapitole~\ref{kap:indikace-stavu-ridici-jednoty}.
@@ -236,7 +231,7 @@
 \subsection{Zpracování příkazů CAN}
     Jako základ je využit kód vytvořený modulem Microchip Code Configurator. Jedná se o~užitečný nástroj, který předpřipraví kód nutný k~nastavení konkrétních registrů. Také obsahuje funkce úrovně HAL, aby nebylo nutné dále pracovat přímo s~registry. Vygenerovaý kód je přitom krátký a snadno čitelný. Veškeré generované nastavení bylo následně kontrolováno s~katalogovým listem procesoru a v~případě potřeby upraveno. 
 
-    Na rozdíl od procesoru řídicí jednotky, PIC18F26 obsahuje v~periferii CAN až 11 různých filtrů příchozích zpráv~\cite{PIC18F26Q83}. Již na úrovni hardwaru jsou tak zprávy rozděleny dle typu. Zprávy určené periferiím (TS - To Slave) jsou řazeny do jedné fronty, zprávy určené všem (BR - Broadcast) pak do druhé fronty. Ostatní zprávy nejsou zpracovány vůbec. Při přijetí zprávy je vyvoláno přerušení a kód přečte zprávu z~dané fronty. Pokud je to potřeba, odešle vlastní zprávu jako odpověď. První bajt datového pole zprávy vždy identifikuje daný příkaz. 
+    Na rozdíl od procesoru řídicí jednotky, PIC18F26 obsahuje v~periferii CAN až 11 různých filtrů příchozích zpráv~\cite{PIC18F26Q83}. Již na úrovni hardwaru jsou tak zprávy rozděleny dle typu. Zprávy určené periferiím (TS - To Slave) jsou řazeny do jedné fronty, zprávy určené všem (BR - Broadcast) pak do druhé fronty. Ostatní zprávy nejsou zpracovány vůbec. Při přijetí zprávy je vyvoláno přerušení a kód přečte zprávu z~dané fronty. Pokud je to potřeba, odešle vlastní zprávu jako odpověď. První bajt datového pole zprávy vždy identifikuje daný příkaz. V elektronické příloze této práce se také nachází dokument, kde je struktura jednotlivých příkazů rozpracována podrobněji.
 
 \subsection{Smyčka programu}
     Jelikož zpracování příkazů ze sběrnice CAN probíhá vždy jako obsluha přerušení, samotná smyčka programu je velmi jednoduchá.  V~případě sensorů ji lze rozdělit do tří kroků. Nejprve jsou vyčtena surová data ze sensorů a uložena do vhodných proměnných. Ve druhém kroku jsou data zpracována -- je vyhodnocena jejich správnost, provedena korekce nebo přepočet, případně jsou data průměrována z~více opakování měření. Ve třetím kroku jsou zpracovaná data uložena do globální promměnné. Pokud přišel po sběrnici CAN požadavek na odeslání dat, jsou mu předána tato data. 
@@ -247,19 +242,19 @@
 
 
 
-
+\clearpage
 \section{Webové rozhraní}
     Aby bylo možné systém konfigurovat a monitorovat, bylo zapotřebí navrhnout a vytvořit webové rozhraní. Důležitým krokem v~rozhodování byla volba, zda bude \acs{mcu} řídicí jednotky sloužit přímo jako webový server nebo pouze jako klient. První scénář klade podstatně vyšší nároky na zatížení a paměť \acs{mcu}, výhodou je ale velmi jednoduchý systém, který funguje samostetně bez nutnosti externího serveru případně také bez připojení k~internetu (ESP32 může sloužit přímo jako přístupový bod). Výhodou druhé varianty je větší flexibilita, externí server má nesrovnatelně vyšší výkon a kapacitu úložiště a umožní tak tvorbu mnohem komplexnější webové stránky, která bude (v~případě připojení serveru do internetu) dostupná odkudkoliv. Server zároveň může ukládat měřená data a ta tedy budou dostupná i v~případě, že samotné zařízení je mimo provoz nebo není připojeno k~síti.
 
-    V~rámci realizace této práce byla zvolena varianta externího serveru. Jádro vytvořené webové aplikace tvoří program v~jazyce PHP, který zpracovává jak požadavky uživatele, tak i samotného zařízení. Na pozadí dále běží databázový server s~otevřeným systémem MySQL, sloužící k~uchování provozních dat. V~databázi jsou uloženy údaje o~uživatelích, systémech akvárií (tedy řídicí jednotka a k~ní připojené periferie) a jejich konfiguraci. Také jsou zde ukládána data ze senzorů. V~záznamu odpovídajícímu danému systému akvária je uložen číselný údaj o~aktuální verzi konfigurace. Pokud uživatel změní některé nastavení, toto číslo se inkrementuje. Na verzi konfigurace se zařízení pravidelně dotazuje a v~případě změny si následně stáhne zažádá o~celou novou konfiguraci.
+    V~rámci realizace této práce byla zvolena varianta externího serveru. Jádro vytvořené webové aplikace tvoří program v~jazyce PHP, který zpracovává jak požadavky uživatele, tak i samotného zařízení. Na pozadí dále běží databázový server s~otevřeným systémem MySQL, sloužící k~uchování provozních dat. V~databázi jsou uloženy údaje o~uživatelích, systémech akvárií (tedy řídicí jednotka a k~ní připojené periferie) a jejich konfiguraci. Také jsou zde ukládána data ze senzorů. V~záznamu odpovídajícímu danému systému akvária je uložen číselný údaj o~aktuální verzi konfigurace. Pokud uživatel změní některé nastavení, toto číslo se inkrementuje. Na verzi konfigurace se zařízení pravidelně dotazuje a v~případě změny si následně ze serveru stáhne celou novou konfiguraci.
 
     \subsection{API rozhraní -- komunikace z~pohledu zařízení}
-    Zařízení komunikuje s~webem pomocí aplikačního rozhraní (API), které tvoří nenáročný způsob komunikace využívající formát JSON. Jednotlivé adresy API rozhraní jsou přehledně popsány v~tab.~\ref{TODO}. 
+    Zařízení komunikuje s~webem pomocí aplikačního rozhraní (API), které tvoří nenáročný způsob komunikace využívající formát JSON. Jednotlivé adresy API rozhraní jsou přehledně popsány v~tab.~\ref{tab:prehled-api-adres}. 
 
     \begin{table}[h]
         \centering
-        \caption{Přehled periferií.}
-        \label{tab:prehled-periferii}
+        \caption{Přehled adres aplikačního rozhraní.}
+        \label{tab:prehled-api-adres}
         \begin{tabular}{|l|l|l|l|}
             \hline
             Adresa & Funkce & Odchozí data\(^{*}\)  & Příchozí data\(^{*}\)  \\ \hline\hline
@@ -285,8 +280,6 @@
     \subsection{Uživatelská aplikace}
         Z~pohledu uživatele je možnost se na webu registrovat a přihlásit. Teprve po přihlášení je zobrazeno grafické menu. Webová aplikace slouží dvěma hlavním funkcím, kterým odpovídají také položky menu. 
         
-        První položkou je zobrazení stavu zařízení. Kliknutí na odkaz přivede uživatele na podstránku zobrazující grafy všech dostupných dat jeho akvarijního systému. V~grafech je v~tuto chvíli zobrazeno vždy 100 posledních hodnot. 
-
         \begin{figure}[h!]
             \centering
             \includegraphics[width=\textwidth]{obrazky/web.png}
@@ -294,7 +287,9 @@
             \label{fig:obrazky-web.png}
         \end{figure}
         
+        První položkou je zobrazení stavu zařízení. Kliknutí na odkaz přivede uživatele na podstránku zobrazující grafy všech dostupných dat jeho akvarijního systému. V~grafech je v~tuto chvíli zobrazeno vždy 100 posledních hodnot. 
 
-        Druhou položka je zde nazvaná jako \uv{Scénáře} a nachází se v~ní konfigurace systému a nastavení jednotlivých modulů. Pro sensory lze nastavit úrovně, které má systém vyhodnotit jako alarmující. Pro každou síťovou zásuvku je pak možné přepnout mezi dvěma režimi. V~manuálním režimu uživatel přímo nastaví sepnutí nebo rozepnutí zásuvky, druhým režimeme je pak časovač, kdy lze nastavit pravidelné časy vypnutí a zapnutí.
 
-        Pro představu o~vzhledu webu je zde přiložen obr.~\ref{TODO screenshot}, v~elektronické příloze je pak snímků více.
+        Druhá položka je nazvaná jako \uv{Scénáře} a nachází se v~ní konfigurace systému a nastavení jednotlivých modulů. Pro sensory lze nastavit úrovně, které má systém vyhodnotit jako alarmující. Pro každou síťovou zásuvku je pak možné přepnout mezi dvěma režimy. V~manuálním režimu uživatel přímo nastaví sepnutí nebo rozepnutí zásuvky, druhým režimem je pak časovač, kdy lze nastavit pravidelné časy vypnutí a zapnutí.
+
+        Pro představu o~vzhledu webu je zde přiložen obr.~\ref{fig:obrazky-web.png}, v~elektronické příloze je pak snímků více.

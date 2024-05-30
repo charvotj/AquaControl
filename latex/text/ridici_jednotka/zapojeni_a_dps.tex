@@ -162,7 +162,7 @@
             \label{fig:ridici-jednotka-dps-popis}
         \end{figure}
 
-        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z~hlediska \acs{EMC}. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s~jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v~přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
+        Prvním krokem návrhu je volba počtu vrstev a jejich funkce. Vyšší počet vrstev nabízí více prostoru pro vedení cest a také umožňuje vedení napájecích napětí pomocí rozlitých měděných polygonů, čímž se zároveň zlepší vlastnosti zařízení z~hlediska \acs{emc}. Zvolený výrobce (JLC PCB~\cite{jlcpcb}) nabízí výrobu desek s~jednou až dvaceti vrstvami mědi. Byla zvolena čtyřvrstvá deska, která je pro danou aplikaci dostatečná a stále se nachází v~přijatelné cenové skupině výrobce. Rozložení a funkce vrstev jsou vyobrazeny na obr.~\ref{fig:ridici-jednotka-stackup-dps}.
 
         Pro optimální fukci Wi-Fi antény výrobce doporučuje umístit ESP32 modul do pravého horního rohu \acs{dps} tak, aby se pod anténou nenacházela vrsta mědi a nejlépe ani samotná deska~\cite{esp32-hw-guidelines}. Na obr.~\ref{fig:ridici-jednotka-dps-popis} je zobrazen výsledný návrh \acs{dps}, kde v~modře vyznačené oblasti lze vidět, že tyto požadavky byly splněny. Vedle ESP32 modulu se nachází související součástky popsané v~kapitole~\ref{sec:ridici-jendotka-esp32-modul}.
 
@@ -223,8 +223,6 @@
     \section{Konektivita}
         Řídicí jednotka je vybavena několika konektory, jak je opět možno vidět na obr.~\ref{fig:ridici-jednotka-dps-popis}. Na levé straně \acs{dps} (značeno 1.) se nachází konektory pro připojení periferií připravené pro montáž do panelu, kde pak budou přístupné uživateli. Ostatní vyznačené konektory slouží pro připojení externích modulů v~rámci hlavního šasi (viz blokové schéma na obr.~\ref{fig:blokove-schema}) popř. pro programování a testování, nebudou tedy volně přístupné uživateli.
 
-        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu~\cite{altium-circuit-protection}. Jak je vidět na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný \acs{can} řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky s~napájením či zemí, tak proti ESD~\cite{ata-datasheet}. 
-
         \begin{figure}[h!]
             \centering
             % trim=left bottom right top
@@ -238,6 +236,8 @@
             \caption{Zapojení a ochrana konektorů. Vytvořeno v~KiCad 7.0.}
             \label{fig:ridici-jednotka-konektory}
         \end{figure}
+        
+        Abychom předešli poškození zařízení při nevhodném zacházení uživatelem, je potřeba pro volně dostupné konektory přidat dodatečnou ochranu~\cite{altium-circuit-protection}. Jak je vidět na obr.~\ref{fig:komunikacni-rozhr-dsub-pinout}, konektor pro periferie sdružuje jak datovou komunikaci, tak i napájení. Ochranu diferenční datové linky zajistí samotný \acs{can} řadič, který je určen pro průmyslové použití a obsahuje zabudovanou ochranu jak proti zkratu datové linky s~napájením či zemí, tak proti ESD~\cite{ata-datasheet}. 
 
         Co se týče napájecích vodičů, každý z~nich je ošetřen vratnou pojistkou (ang. polyfuse) dimenzovanou podle předpokládaného maximálního odběru zařízení. Při překročení tohoto proudu, např. z~důvodu zkratu v~některé z~periferií, pojistka sepne a proud v~obvodu omezí na minimum. Schéma zapojení konektorů spolu s~hodnotami vratných pojistek se nachází na obr.~\ref{fig:ridici-jednotka-konektory}.
 

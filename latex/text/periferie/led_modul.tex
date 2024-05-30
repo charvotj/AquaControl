@@ -11,9 +11,7 @@
 
     Jelikož se jedná o~dceřinnou desku pro obecný modul, rozměr výsledné \acs{dps} je omezen a část plochy je navíc využita konektory pro vsazení do obecného modulu. Je tedy potřeba zvolit co nejvíce integrované řešení, které současně slibuje dobrou účinnost a tedy co nejnižší ohřev zařízení během provozu.
 
-    Pro řízení \acs{led} osvětlení je často používán proudový zdroj, který umožňuje lineárně regulovat výstupní proud a tím i intenzitu osvětlení. Na trhu existuje opět celá řada čipů určena přímo k~ovládání \acs{led} pásků~\cite{TI_\acs{led}_Drivers}, problém je zde ale v~tom, že uživatel velmi pravděpodobně připojí pásek s~nižším, předem neznámým příkonem. Maximální proud je tedy specifický danému \acs{led} pásku a proudový zdroj by musel zároveň spolehlivě zaručit, že nebude překročeno napětí \(U_{out} =\qty{12}{V} \).
-
-    Touto funkcí většina čipů nedisponuje a pokud ano, nejsou dostatečně integrované pro použití v~této aplikaci. Po důkladné rešerši a několika iteracích návrhu se nakonec jeví jako nejlepší možnost použití napěťového měniče typu buck spolu se zesilovačem pro snímání proudu. Snímaný proud je následně zpracován mikrokontrolérem a jsou upraveny poměry ve zpětné vazbě měniče, aby napětí odpovídalo požadovanému proudu.
+    Pro řízení \acs{led} osvětlení je často používán proudový zdroj, který umožňuje lineárně regulovat výstupní proud a tím i intenzitu osvětlení. Na trhu existuje opět celá řada čipů určena přímo k~ovládání \acs{led} pásků~\cite{TI_LED_Drivers}, problém je zde ale v~tom, že uživatel velmi pravděpodobně připojí pásek s~nižším, předem neznámým příkonem. Maximální proud je tedy specifický danému \acs{led} pásku a proudový zdroj by musel zároveň spolehlivě zaručit, že nebude překročeno napětí \(U_{out} =\qty{12}{V} \).
 
     \begin{figure}[h!]
         \centering
@@ -28,6 +26,8 @@
         \caption{Zjednodušené schéma ovladače \acs{led}. Vytvořeno v~KiCad 7.0.}
         \label{fig:led-board-simp-schema}
     \end{figure}
+    
+    Touto funkcí většina čipů nedisponuje a pokud ano, nejsou dostatečně integrované pro použití v~této aplikaci. Po důkladné rešerši a několika iteracích návrhu se nakonec jeví jako nejlepší možnost použití napěťového měniče typu buck spolu se zesilovačem pro snímání proudu. Snímaný proud je následně zpracován mikrokontrolérem a jsou upraveny poměry ve zpětné vazbě měniče, aby napětí odpovídalo požadovanému proudu.
 
     
 \subsubsection{Popis schématu a výpočty hodnot součástek}
