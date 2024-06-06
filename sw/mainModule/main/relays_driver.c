@@ -14,10 +14,6 @@ esp_err_t relays_init()
     memset(&pcf8574, 0, sizeof(i2c_dev_t));
     st |= pcf8574_init_desc(&pcf8574, 0x23, 0, I2C_SDA_GPIO, I2C_SCL_GPIO);
 
-    vTaskDelay (200 / portTICK_PERIOD_MS);
-    st |= relays_set_all_force(0x00,true);
-    vTaskDelay (2000 / portTICK_PERIOD_MS);
-    st |= relays_set_all_force(0xff,true);
     vTaskDelay (2000 / portTICK_PERIOD_MS);
     st |= relays_set_all_force(0x00,true);
 
@@ -92,3 +88,25 @@ esp_err_t relays_set_state(relay_num_t relay_num, bool relay_st)
     return pcf8574_port_write(&pcf8574, ~relays_state);
 }
 
+
+esp_err_t relays_process_config(config_relay_t* relays_cfg, simple_time_t time, bool use_rtc)
+{
+    esp_err_t ret = ESP_OK;
+
+    if(NULL == relays_cfg)
+        return ESP_FAIL;
+
+    for(uint8_t i=0; i< RELAYS_NUM;i++)
+    {
+        if(relays_cfg[i].manual)
+        {
+            ESP_LOGI(TAG,"Setting rel %u to %u",i,relays_cfg[i].manual_state);
+            relays_set_state((relay_num_t)i, relays_cfg[i].manual_state);
+        }
+        else
+        {
+            // timing
+        }
+    }
+    return ret;
+}

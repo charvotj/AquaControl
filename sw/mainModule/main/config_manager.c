@@ -45,8 +45,8 @@ static esp_err_t parse_relays_cfg(cJSON* relaysConfig, config_relay_t* rel_cfg_a
         cJSON* timerOff = cJSON_GetObjectItem(relay, "timerOff");
         cJSON* manualState = cJSON_GetObjectItem(relay, "manualState");
         if(NULL == manual || NULL == timerOn || NULL == timerOff || NULL == manualState) goto jsonError; // prevent memory leak
-        rel_cfg_arr[i].manual               = (bool)manualState->valueint;
-        rel_cfg_arr[i].manual_state         = (bool)manual->valueint;
+        rel_cfg_arr[i].manual               = (bool)manual->valueint;
+        rel_cfg_arr[i].manual_state         = (bool)manualState->valueint;
         if(ESP_OK != parse_time_hhmm(timerOn->valuestring,
             &(rel_cfg_arr[i].timer_on_hours),
             &(rel_cfg_arr[i].timer_on_minutes))) goto jsonError;

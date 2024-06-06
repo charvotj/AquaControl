@@ -36,6 +36,10 @@
 
 #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
 
+// PR register = 355 (0x163)
+#define LED_PWM_MIN 100
+#define LED_PWM_MAX 355
+
 typedef enum
 {
     LED_CH_0 = 0,
@@ -45,6 +49,13 @@ typedef enum
 void led_enable_channel(led_channel_t channel);
 void led_disable_channel(led_channel_t channel);
 void led_set_brightness(led_channel_t channel, uint8_t brightness);
+
+void led_board_init(void);
+
+void led_board_can_ch0_set_brightness(uint8_t brightness);
+void led_board_can_ch1_set_brightness(uint8_t brightness);
+
+node_status_t led_board_routine(void);
 
 
 

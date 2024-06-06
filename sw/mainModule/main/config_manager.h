@@ -18,7 +18,6 @@
 #include "pins.h"
 #include "status_control.h"
 #include "wifi_driver.h"
-#include "relays_driver.h"
 
 #define NVS_NAMESPACE_MODULE_CONFIG "modulecfg"
 #define NVS_NAMESPACE_SYSTEM_CONFIG "syscfg"

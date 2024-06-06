@@ -58,13 +58,7 @@ void main(void)
     }
 
     
-//    led_disable_channel(LED_CH_0);
-//    led_enable_channel(LED_CH_1);
-//    
-    
-    
 
-    
 
     
     
@@ -77,14 +71,18 @@ void main(void)
 //    INTERRUPT_GalobalInterruptEnable(); 
 //    LED_PIN_Toggle();
     
-    uint16_t raw_temp = 0;
-    char formattedData[20]; // Adjust the buffer size as needed
+    #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+        led_board_init();
+    #endif
+    
+
     
     
     while(1)
     {
         #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
-            #
+            GLOBAL_device_status = led_board_routine();
+            __delay_ms(400); // for accurate intensity switch
         #elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
             GLOBAL_device_status = temp_sensor_routine();
             __delay_ms(1000);

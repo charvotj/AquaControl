@@ -16,10 +16,10 @@
 
 #include "pins.h"
 #include "status_control.h"
-#include"../../shared/common_types.h"
+#include "config_manager.h"
+#include "time_driver.h"
+#include "../../shared/common_types.h"
 
-
-#define RELAYS_NUM  4u   // number of relays available
 
 // Relays are numbered "human readably" to be consistent with GUI, but internally are indexed from 0
 typedef enum
@@ -44,6 +44,7 @@ esp_err_t relays_set_all_force(uint8_t relays_st, bool force);
 esp_err_t relays_get_state(relay_num_t relay_num, bool* relay_st);
 esp_err_t relays_set_state(relay_num_t relay_num, bool relay_st);
 
+esp_err_t relays_process_config(config_relay_t* relays_cfg, simple_time_t time, bool use_rtc);
 
 
 

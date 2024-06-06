@@ -190,8 +190,9 @@ esp_err_t print_nodes_data()
     return ret;
 }
 
-esp_err_t process_config()
+static esp_err_t update_config()
 {
+    // if it is neccesarry, upadate config from web
     if(config_is_obsolete())
     {
         if(WIFIST_ONLINE == STATUS_wifi && ESP_OK == config_update_from_web())
@@ -201,28 +202,69 @@ esp_err_t process_config()
             if(ESP_OK != config_load_nvm_all(&system_config, &can_connected_nodes[0],can_num_address_given))
             {
                 ESP_LOGE(TAG,"load config from nvm failed ...");
+                return ESP_FAIL;
             }
         }
         else
         {
             ESP_LOGE(TAG,"config update from web failed \n");
+            return ESP_FAIL;
+        }
+    }
+    return ESP_OK;
+}
+
+esp_err_t process_config()
+{
+    // get RTC if possible
+    simple_time_t time_now;
+    bool use_rtc = false;
+    if(ESP_OK == is_time_set() && ESP_OK == time_now_simple(&time_now))
+    {
+        // double check for sure...
+        if(1900 + time_now.year > 2020)
+        {
+            use_rtc = true;
         }
     }
 
-    printf("Processing config, eg: \n");
-    if( can_connected_nodes[1].node_type == 3 && NULL != can_connected_nodes[1].config)
+    esp_err_t ret = ESP_OK;
+    alarm_status_t alarm1_flag = ALARMST_OK;
+    alarm_status_t alarm2_flag = ALARMST_OK;
+    // process config for aech connected node
+    for(uint8_t i = 0; i < can_num_address_given;i++)
     {
-        config_module_temp_sens_t* cfg = (config_module_temp_sens_t*)can_connected_nodes[1].config; 
-        printf("Max valeu %f \n",cfg->alarm_cfg.max_value);
-        printf("StartTime hours %u \n",system_config.relays[0].timer_on_hours);
+        if(NULL != can_connected_nodes[i].config)
+        {
+            switch (can_connected_nodes[i].node_type)
+            {
+                case NODE_TYPE_LED_BOARD:
+                    /* code */
+                    break;
+                case NODE_TYPE_PH_SENSOR:
+                    /* code */
+                    break;
+                case NODE_TYPE_TEMP_SENSOR:
+                    temp_sensor_process_config(&(can_connected_nodes[i]),&alarm1_flag,&alarm2_flag);
+                    break;
+                case NODE_TYPE_WATER_LEVEL_SENSOR:
+                    /* code */
+                    break;
+                        
+                default:
+                    ret |=ESP_FAIL;
+                    break;
+            }
+        }
     }
-    else
-    {
-        ESP_LOGE(TAG, "You fucked up\n");
-    }
+    // update alarms 
+    STATUS_alarm1 = alarm1_flag;
+    STATUS_alarm2 = alarm2_flag;
 
+    //process relays 
+    ret |= relays_process_config(system_config.relays,time_now, use_rtc);
 
-    return ESP_OK;
+    return ret;
 }
 
 
@@ -231,14 +273,15 @@ esp_err_t control_routine()
     /*
     STAGES:
         - wait for period start
-        - process system config 
+        - update entire system config (if neccesarry)
         - poll modules status 
         - poll modules data
         - send data to web 
-        - get RTC 
         - process modules configs 
-        - set or unset alarms
-        - update relays state
+            - get RTC
+            - set or unset alarms
+        - process system config 
+            - update relays state
 
     */
     
@@ -246,9 +289,9 @@ esp_err_t control_routine()
     waitForPeriodPrecise(control_routine_last, control_routine_period);
     control_routine_last = xTaskGetTickCount();
     
-    // - process system config 
-    if(ESP_OK != process_config())
-        ESP_LOGE(TAG,"processing config failed ...");
+    // - update entire system config (if neccesarry)
+    if(ESP_OK != update_config())
+        ESP_LOGE(TAG,"update config failed ...");
     // - poll modules status 
     if(ESP_OK != can_poll_nodes_status(&can_connected_nodes[0],can_num_address_given))
         ESP_LOGE(TAG,"polling status failed ...");
@@ -268,10 +311,13 @@ esp_err_t control_routine()
                 ESP_LOGE(TAG,"Sending data to web failed ...");
         }
     }
-    // - get RTC 
     // - process modules configs 
-    // - set or unset alarms
-    // - update relays state
+    //     - get RTC
+    //     - set or unset alarms
+    // - process system config 
+    //     - update relays state
+    if(ESP_OK != process_config())
+        ESP_LOGE(TAG,"Processing config failed ...");
 
     return ESP_OK;
 }

@@ -152,6 +152,23 @@ void CAN1_RX_TS_FIFOHandler(void)
                     case CAN_TS_WATER_LVL_SENS_GET_LVL:
                         water_level_can_send_data();
                         break;
+                    #elif DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+                    case CAN_TS_LED_BOARD_CH0_SET_BRIGHTNESS:
+                        // check DLC (minimum for this command is 2)
+                        if(rxMessage.field.dlc < 2)
+                            return;
+                
+                        uint8_t br0 = rxMessage.data[1];
+                        led_board_can_ch0_set_brightness(br0);
+                        break;
+                    case CAN_TS_LED_BOARD_CH1_SET_BRIGHTNESS:
+                        // check DLC (minimum for this command is 2)
+                        if(rxMessage.field.dlc < 2)
+                            return;
+                
+                        uint8_t br1 = rxMessage.data[1];
+                        led_board_can_ch1_set_brightness(br1);
+                        break;
                     #endif
 
                     default:

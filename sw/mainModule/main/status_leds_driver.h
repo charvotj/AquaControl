@@ -29,8 +29,8 @@ typedef struct {
 typedef enum {
     POWER_LED = 0,
     WIFI_LED,
-    ALARM_LED,
-    USER_LED
+    ALARM1_LED,
+    ALARM2_LED
 } status_leds_t;
 
 static const led_color_t COLOR_RED = {255, 0, 0};

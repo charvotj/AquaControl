@@ -126,6 +126,14 @@ void PIN_MANAGER_Initialize(void)
     CANRXPPS = 0xB; //RB3->CAN1:CANRX;
     RC3PPS = 0x20;  //RC3->UART1:TX1;
     RB4PPS = 0x46;  //RB4->CAN1:CANTX;
+    
+#ifndef DEVICE_TYPE
+    #error "Device type not defined in this context"
+#endif
+#if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
+    RA3PPS = 0x1E;  //RA3->PWM4_16BIT:PWM41;
+    RA1PPS = 0x1F;  //RA1->PWM4_16BIT:PWM42;
+#endif
 
    /**
     IOCx registers 

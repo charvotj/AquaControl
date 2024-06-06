@@ -112,9 +112,41 @@ esp_err_t status_leds_update()
         return ESP_FAIL;
     }
 
-    // default
-    status_leds_set_color(ALARM_LED,COLOR_BLACK);
-    status_leds_set_color(USER_LED,COLOR_BLACK);
+    switch (STATUS_alarm1)
+    {
+    case ALARMST_OK:
+        status_leds_set_color(ALARM1_LED,COLOR_BLACK);
+        break;
+    case ALARMST_WARNING:
+        status_leds_set_color(ALARM1_LED,COLOR_ORANGE);
+        break;
+    case ALARMST_ALARM:
+        status_leds_set_color(ALARM1_LED,COLOR_RED);
+        break;
+    case ALARMST_UNDEFINED:
+        status_leds_set_color(ALARM1_LED, COLOR_BLUE);
+        break;
+    default:
+        return ESP_FAIL;
+    }
+
+    switch (STATUS_alarm2)
+    {
+    case ALARMST_OK:
+        status_leds_set_color(ALARM2_LED,COLOR_BLACK);
+        break;
+    case ALARMST_WARNING:
+        status_leds_set_color(ALARM2_LED,COLOR_ORANGE);
+        break;
+    case ALARMST_ALARM:
+        status_leds_set_color(ALARM2_LED,COLOR_RED);
+        break;
+    case ALARMST_UNDEFINED:
+        status_leds_set_color(ALARM2_LED, COLOR_BLUE);
+        break;
+    default:
+        return ESP_FAIL;
+    }
 
     /* Refresh the strip to send data */
     return led_strip_refresh(led_strip);

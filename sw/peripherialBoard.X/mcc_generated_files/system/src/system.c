@@ -55,7 +55,7 @@ void SYSTEM_Initialize(void)
     #error "Device type not defined in this context"
 #endif
 #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
-    DAC1_Initialize();
+    LED_PWM_Initialize();
 #elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
     WaterLevelADC_Initialize();
 #endif

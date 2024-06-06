@@ -55,7 +55,7 @@
     #error "Device type not defined in this context"
 #endif
 #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
-    #include "../dac/dac1.h"
+    #include "../pwm/pwm4_16bit.h"
 #elif DEVICE_TYPE == DEVICE_TYPE_WATER_LEVEL_SENSOR
     #include "../adc/adc.h"
 #endif

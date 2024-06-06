@@ -38,6 +38,15 @@ typedef enum {
 } wifi_status_t;
 
 typedef enum {
+    ALARMST_UNDEFINED = -1,
+    ALARMST_OK = 0,
+    ALARMST_WARNING = 1,
+    ALARMST_ALARM = 3 // in bits, error status contains warning but not OK
+} alarm_status_t;
+
+
+
+typedef enum {
     MODST_STARTUP,
     MODST_READY,
     MODST_ERROR,
@@ -48,6 +57,8 @@ typedef enum {
 
 extern device_status_t STATUS_device;
 extern wifi_status_t STATUS_wifi;
+extern alarm_status_t STATUS_alarm1;
+extern alarm_status_t STATUS_alarm2;
 
 // Update NUMBER_OF_STATUS_MODULES if add new module
 extern module_status_t STATUS_module_can;

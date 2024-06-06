@@ -56,6 +56,17 @@
 // TO MASTER COMMANDS - cmd number for response is the same, only command type is changing
 #define CAN_TM_WATER_LVL_SENS_GET_LVL_RES        CAN_TS_WATER_LVL_SENS_GET_LVL
 
+/********************************************
+ *  PERIPHERIAL SPECIFIC COMMANDS - led board
+*********************************************/
+// TO SLAVE COMMANDS
+#define CAN_TS_LED_BOARD_CH0_SET_BRIGHTNESS            (uint8_t)0x80
+#define CAN_TS_LED_BOARD_CH1_SET_BRIGHTNESS            (uint8_t)0x81
+
+
+// TO MASTER COMMANDS - cmd number for response is the same, only command type is changing
+#define CAN_TM_LED_BOARD_CH0_SET_BRIGHTNESS_RES        CAN_TS_LED_BOARD_CH0_SET_BRIGHTNESS
+#define CAN_TM_LED_BOARD_CH1_SET_BRIGHTNESS_RES        CAN_TS_LED_BOARD_CH1_SET_BRIGHTNESS
 
 
 

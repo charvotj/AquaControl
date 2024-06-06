@@ -42,3 +42,34 @@ esp_err_t temp_sensor_get_temperature(can_node_t* node_handle, float* temperatur
     *temperature = ((int16_t)(rx_data[1] << 8) | (rx_data[0])) / 16.0;
     return ESP_OK;
 }
+
+esp_err_t temp_sensor_process_config(can_node_t* node, alarm_status_t* alarm1_flag, alarm_status_t* alarm2_flag)
+{
+    uint8_t TEMP_SENSOR_DATA_LEN = 1u;
+
+    if(NODE_TYPE_TEMP_SENSOR != node->node_type)
+        return ESP_FAIL;
+    // if node isnt in normal state, skip config process 
+    if(NODEST_NORMAL != node->status)
+        return ESP_OK;
+    
+    if(NULL == node->config || NULL == node->data.data_p || TEMP_SENSOR_DATA_LEN != node->data.data_len)
+        return ESP_FAIL;
+
+    // proccess config
+    config_module_temp_sens_t* cfg = (config_module_temp_sens_t*)(node->config);
+
+    // 1. set alarm 
+    if(cfg->alarm_cfg.active)
+    {
+        float curr_temp = node->data.data_p[0];
+
+        if(curr_temp < cfg->alarm_cfg.min_value || curr_temp > cfg->alarm_cfg.max_value)
+        {
+            // set alarm 1
+            *alarm1_flag |= ALARMST_ALARM;
+        }
+    }
+
+    return ESP_OK;
+}

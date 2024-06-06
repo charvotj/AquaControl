@@ -81,7 +81,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
             ESP_LOGI(TAG, "HTTP_EVENT_REDIRECT");
             break;
     }
-    #endif WIFI_DEBUG_PRINT_HTTP
+    #endif // WIFI_DEBUG_PRINT_HTTP
     switch(evt->event_id) {
         case HTTP_EVENT_ON_DATA:
             if (!esp_http_client_is_chunked_response(evt->client)) {

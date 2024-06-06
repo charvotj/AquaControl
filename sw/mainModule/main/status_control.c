@@ -11,6 +11,8 @@ module_status_t* all_modules_status[NUMBER_OF_STATUS_MODULES];
 
 device_status_t STATUS_device           = (device_status_t)DEVST_UNDEFINED;
 wifi_status_t STATUS_wifi               = (wifi_status_t)WIFIST_UNDEFINED;
+alarm_status_t STATUS_alarm1            = (alarm_status_t)ALARMST_UNDEFINED;
+alarm_status_t STATUS_alarm2            = (alarm_status_t)ALARMST_UNDEFINED;
 
 // Update NUMBER_OF_STATUS_MODULES if add new module and add it with extern to the header
 module_status_t STATUS_module_can       = (module_status_t)MODST_UNDEFINED;
