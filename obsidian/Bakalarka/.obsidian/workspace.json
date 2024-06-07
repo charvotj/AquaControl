@@ -40,7 +40,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Bakalárka Check list.md",
+                "file": "Notes/Puvodni.md",
                 "mode": "source",
                 "source": false
               }
@@ -131,7 +131,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Bakalárka Check list.md",
+                "file": "Notes/Puvodni.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -148,7 +148,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Bakalárka Check list.md",
+                "file": "Notes/Puvodni.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -171,7 +171,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Bakalárka Check list.md"
+                "file": "Notes/Puvodni.md"
               }
             }
           }
@@ -194,14 +194,14 @@
   },
   "active": "d1de93b125fb7060",
   "lastOpenFiles": [
+    "Notes/Random notes.md",
+    "Bakalárka Check list.md",
     "Notes/Web server.md",
     "Text prace/Bakalarka Obsah.md",
     "Text prace/Semestralka Obsah.md",
     "Canvases/Main box.canvas",
-    "Bakalárka Check list.md",
     "Notes/CAN.md",
     "Notes/Nákupní seznam.md",
-    "Notes/Random notes.md",
     "Pasted image 20240426132611.png",
     "Main board/Main board FW.md",
     "Canvases/block schematic.canvas",
