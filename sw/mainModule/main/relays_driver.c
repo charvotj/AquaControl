@@ -96,16 +96,38 @@ esp_err_t relays_process_config(config_relay_t* relays_cfg, simple_time_t time, 
     if(NULL == relays_cfg)
         return ESP_FAIL;
 
+    if(use_rtc)
+        ESP_LOGI(TAG,"Using RTC with time %u:%u",time.h,time.m);
+    else
+        ESP_LOGI(TAG,"Not using RTC with time %u:%u",time.h,time.m);
+
     for(uint8_t i=0; i< RELAYS_NUM;i++)
     {
-        if(relays_cfg[i].manual)
+        if(relays_cfg[i].manual || !use_rtc)
         {
-            ESP_LOGI(TAG,"Setting rel %u to %u",i,relays_cfg[i].manual_state);
+            ESP_LOGI(TAG,"Setting rel %u to %u - manual",i,relays_cfg[i].manual_state);
             relays_set_state((relay_num_t)i, relays_cfg[i].manual_state);
         }
         else
         {
             // timing
+            // check turn off (before start, after end)
+            bool state = false;
+            if(relays_cfg->timer_on_hours > time.h || (relays_cfg->timer_on_hours == time.h && relays_cfg->timer_on_minutes > time.m))
+            {
+                state = false;
+            }
+            else if(relays_cfg->timer_off_hours < time.h || (relays_cfg->timer_off_hours == time.h && relays_cfg->timer_off_minutes <= time.m))
+            {
+                state = false;
+            }
+            else
+            {
+                state = true;
+            }
+
+            ESP_LOGI(TAG,"Setting rel %u to %u -rtc",i, state);
+            ret |= relays_set_state((relay_num_t)i, state);
         }
     }
     return ret;

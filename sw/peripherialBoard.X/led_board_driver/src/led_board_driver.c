@@ -9,10 +9,10 @@
 #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
 
 static uint8_t ch0_curr_brightness = 0;
-static uint8_t ch0_desired_brightness = 255;
+static uint8_t ch0_desired_brightness = 0;
 
 static uint8_t ch1_curr_brightness = 0;
-static uint8_t ch1_desired_brightness = 255;
+static uint8_t ch1_desired_brightness = 0;
 
 void led_enable_channel(led_channel_t channel)
 {
@@ -37,6 +37,20 @@ void led_set_brightness(led_channel_t channel, uint8_t brightness)
 //    if(value_to_set < LED_PWM_MIN)
 //        value_to_set = LED_PWM_MIN;
     
+//    char formattedData[20]; // Adjust the buffer size as needed
+//    sprintf(formattedData, "CH%u: %u", channel,brightness);
+//    CAN_SendDebugPrint(formattedData);
+//    
+    // turn off buck if 0 is set
+    if(0 == brightness)
+    {
+        led_disable_channel(channel);
+    }
+    else
+    {
+        led_enable_channel(channel);
+    }
+    
     
     uint16_t value_to_set = LED_PWM_MAX - brightness;
     
@@ -59,10 +73,6 @@ void led_board_init(void)
     // prepare pwm to minimum
     led_set_brightness(LED_CH_0,ch0_curr_brightness);
     led_set_brightness(LED_CH_1,ch1_curr_brightness);
-    
-    // turn on leds on minimum intensity
-    led_enable_channel(LED_CH_0);
-    led_enable_channel(LED_CH_1);
 }
 
 node_status_t led_board_routine(void)
@@ -77,6 +87,7 @@ node_status_t led_board_routine(void)
         led_set_brightness(LED_CH_1, ch1_curr_brightness + 1);
     else if(ch1_desired_brightness < ch1_curr_brightness)
         led_set_brightness(LED_CH_1, ch1_curr_brightness - 1);
+    
     
     
     return NODEST_NORMAL;
@@ -95,7 +106,7 @@ void led_board_can_ch0_set_brightness(uint8_t brightness)
         st = CANST_OK;
     }
 
-    CAN_SendTMCmd(CAN_TS_LED_BOARD_CH1_SET_BRIGHTNESS,st,data_len,data);
+    CAN_SendTMCmd(CAN_TS_LED_BOARD_CH0_SET_BRIGHTNESS,st,data_len,data);
 }
 
 void led_board_can_ch1_set_brightness(uint8_t brightness)

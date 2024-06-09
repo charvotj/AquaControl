@@ -97,7 +97,7 @@ esp_err_t can_tx_cmd_broadcast(uint8_t cmd_number, uint8_t dlc, uint8_t data[TWA
     return status;
 }
 
-esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t tx_data_len, uint8_t tx_data[TWAI_FRAME_MAX_DLC-1], can_cmd_status* rx_status, uint8_t* rx_data_len, uint8_t* rx_data)
+esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t tx_data_len, uint8_t* tx_data, can_cmd_status* rx_status, uint8_t* rx_data_len, uint8_t* rx_data)
 {
     // check params
     if(tx_data_len > TWAI_FRAME_MAX_DLC-1 || tx_data == NULL)
@@ -112,7 +112,7 @@ esp_err_t can_tx_cmd_to_slave(uint8_t slave_address, uint8_t cmd_number, uint8_t
     tx_message.data[0] = cmd_number;
     // rest is command specific
     if(tx_data_len > 0)
-        memcpy(tx_message.data[0], tx_data, tx_data_len);
+        memcpy(&(tx_message.data[1]), tx_data, tx_data_len);
 
     // wait for transmit mutex -- only one tx+rx command at the time is supproted
     xSemaphoreTake(can_tx_mutex, portMAX_DELAY);   
@@ -183,7 +183,7 @@ esp_err_t can_slave_reset(uint8_t slave_address)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_RST,tx_data_len , tx_data,  &rx_status,&rx_data_len, &rx_data);
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_RST,tx_data_len , &tx_data[0],  &rx_status,&rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_restore_defaults(uint8_t slave_address)
@@ -194,7 +194,7 @@ esp_err_t can_slave_restore_defaults(uint8_t slave_address)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_RES_DEF, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_RES_DEF, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_mute(uint8_t slave_address, u_int8_t time_s)
@@ -207,7 +207,7 @@ esp_err_t can_slave_mute(uint8_t slave_address, u_int8_t time_s)
     tx_data[0] = time_s;
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_MUTE, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_MUTE, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_ping(uint8_t slave_address)
@@ -218,7 +218,7 @@ esp_err_t can_slave_ping(uint8_t slave_address)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_PING, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_PING, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_SN(uint8_t slave_address, node_sn_t* sn)
@@ -229,7 +229,7 @@ esp_err_t can_slave_get_SN(uint8_t slave_address, node_sn_t* sn)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_SN, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data))
+    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_SN, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data))
     {
         ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_GET_SN\n");
         return ESP_FAIL;
@@ -260,7 +260,7 @@ esp_err_t can_slave_get_node_type(uint8_t slave_address, node_type_t* node_type)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_NODE_TYPE, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data))
+    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_NODE_TYPE, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data))
     {
         ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_GET_NODE_TYPE\n");
         return ESP_FAIL;
@@ -291,7 +291,7 @@ esp_err_t can_slave_get_node_status(uint8_t slave_address, node_status_t* status
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_STATUS, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data))
+    if(ESP_OK != can_tx_cmd_to_slave(slave_address, CAN_TS_GET_STATUS, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data))
     {
         ESP_LOGE(TAG,"Failed to transmit or receive CAN_TS_GET_STATUS\n");
         return ESP_FAIL;
@@ -322,7 +322,7 @@ uint8_t tx_data_len = 0u;
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_TEMP, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_TEMP, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data);
 }
 
 esp_err_t can_slave_get_uptime(uint8_t slave_address, node_uptime_t* uptime)
@@ -333,7 +333,7 @@ esp_err_t can_slave_get_uptime(uint8_t slave_address, node_uptime_t* uptime)
     uint8_t rx_data[TWAI_FRAME_MAX_DLC-2] = {0u};
     can_cmd_status rx_status = CANST_GENERAL_ERROR;
     
-    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_UPTIME, tx_data_len, tx_data, &rx_status, &rx_data_len, &rx_data);
+    return can_tx_cmd_to_slave(slave_address, CAN_TS_GET_UPTIME, tx_data_len, &tx_data[0], &rx_status, &rx_data_len, &rx_data);
 }
 
 // HELPERS

@@ -20,6 +20,7 @@
 #include "CAN_driver.h"
 #include "temp_sensor_driver.h"
 #include "water_level_sensor_driver.h"
+#include "led_board_driver.h"
 
 
 esp_err_t control_prepare_can_modules(TickType_t timeout_for_can);

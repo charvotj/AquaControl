@@ -142,6 +142,7 @@ esp_err_t poll_nodes_data()
 
             case NODE_TYPE_LED_BOARD:
             case NODE_TYPE_PH_SENSOR:
+                break;
         
             default:
                 ESP_LOGE(TAG,"Cannot poll data from module with type %d \n", can_connected_nodes[index].node_type);
@@ -239,7 +240,7 @@ esp_err_t process_config()
             switch (can_connected_nodes[i].node_type)
             {
                 case NODE_TYPE_LED_BOARD:
-                    /* code */
+                    led_board_process_config(&(can_connected_nodes[i]),time_now, use_rtc);
                     break;
                 case NODE_TYPE_PH_SENSOR:
                     /* code */

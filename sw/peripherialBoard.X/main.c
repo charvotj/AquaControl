@@ -82,7 +82,7 @@ void main(void)
     {
         #if DEVICE_TYPE == DEVICE_TYPE_LED_BOARD
             GLOBAL_device_status = led_board_routine();
-            __delay_ms(400); // for accurate intensity switch
+            __delay_ms(200); // for accurate intensity switch
         #elif DEVICE_TYPE == DEVICE_TYPE_TEMP_SENSOR
             GLOBAL_device_status = temp_sensor_routine();
             __delay_ms(1000);

@@ -10,6 +10,8 @@ esp_err_t is_time_set(void)
     time(&now);
     localtime_r(&now, &timeinfo);
 
+    print_time();
+
     return ((timeinfo.tm_year + 1900) > 2023)? ESP_OK : ESP_FAIL;
 }
 
@@ -66,7 +68,7 @@ esp_err_t time_now_simple(simple_time_t* now_simple)
     time(&now);
     localtime_r(&now, &timeinfo);
 
-    if(timeinfo.tm_year <= 2023)
+    if((1900 + timeinfo.tm_year) <= 2023)
         return ESP_FAIL;
     
     now_simple->s = timeinfo.tm_sec;
